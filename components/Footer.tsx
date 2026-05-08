@@ -1,3 +1,5 @@
+"use client";
+
 export default function Footer() {
   return (
     <footer
@@ -23,6 +25,32 @@ export default function Footer() {
       >
         ALEXANDRA × NIKA
       </div>
+
+      {/* Back to top */}
+      <button
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        style={{
+          position: 'absolute',
+          bottom: 32,
+          right: 32,
+          width: 48,
+          height: 48,
+          background: '#111',
+          color: '#EAE6DD',
+          border: 'none',
+          borderRadius: '50%',
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontSize: 20,
+          transition: 'background 0.3s ease',
+        }}
+        onMouseEnter={e => (e.currentTarget.style.background = '#F05235')}
+        onMouseLeave={e => (e.currentTarget.style.background = '#111')}
+      >
+        ↑
+      </button>
 
       {/* Bottom row */}
       <div

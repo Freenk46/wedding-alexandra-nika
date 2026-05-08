@@ -1,9 +1,9 @@
 import HeroSection from "@/components/HeroSection";
 import StorySection from "@/components/StorySection";
 import GallerySection from "@/components/GallerySection";
-import ProgramSection from "@/components/ProgramSection";
-import LocationSection from "@/components/LocationSection";
+import JourneySection from "@/components/JourneySection";
 import RsvpSection from "@/components/RsvpSection";
+import DividerMarquee from "@/components/DividerMarquee";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 
@@ -34,12 +34,23 @@ export default function HomePage() {
         }}>
           <GallerySection />
         </div>
+        <DividerMarquee />
       </div>
 
       <div style={{ position: 'relative', zIndex: 4 }}>
-        <ProgramSection />
-        <LocationSection />
+        <JourneySection />
+
+        {/* Divider top */}
+        <div style={{ padding: '0 32px', background: '#EAE6DD' }}>
+          <div style={{ height: '1px', background: '#111' }} />
+        </div>
+
         <RsvpSection />
+
+        {/* Divider bottom */}
+        <div style={{ padding: '0 32px', background: '#EAE6DD' }}>
+          <div style={{ height: '1px', background: '#111' }} />
+        </div>
         <Footer />
       </div>
     </main>
