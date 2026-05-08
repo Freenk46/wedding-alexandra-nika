@@ -36,3 +36,189 @@
     clip-path: polygon(0 0, 100% 0, 100% 92%, 0 100%);
   }
 }
+
+/* ─── Navbar ──────────────────────────────────────────── */
+
+/* Fallback: if GSAP fails mid-animation, elements stay visible */
+.nav-logo, .nav-link, .lang-switcher, .rsvp-btn {
+  visibility: visible !important;
+}
+
+/* Logo SVG text */
+.logo-svg-text {
+  fill: #111111;
+  stroke: #111111;
+  stroke-width: 1.5px;
+  font-family: var(--font-bebas), "Bebas Neue", sans-serif;
+  font-size: 48px;
+  letter-spacing: 0.1em;
+  transition: fill 0.2s ease, stroke 0.2s ease;
+}
+
+.nav-logo-svg {
+  transition: transform 0.2s ease;
+}
+.nav-logo-svg:hover {
+  transform: scale(1.05);
+}
+
+@keyframes logo-flash {
+  0%   { fill: #111111; stroke: #111111; }
+  45%  { fill: #F05235; stroke: #F05235; }
+  100% { fill: #111111; stroke: #111111; }
+}
+.nav-logo-svg:hover .logo-svg-text {
+  animation: logo-flash 0.5s ease forwards;
+}
+
+/* Nav link slide-up duplicate effect */
+.nav-link {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+  line-height: 1.3;
+  font-family: var(--font-dm-sans), sans-serif;
+  font-size: 14px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #111111;
+  text-decoration: none;
+}
+.nav-link > span {
+  display: block;
+  transition: transform 0.3s cubic-bezier(0.76, 0, 0.24, 1);
+}
+.nav-link::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 100%;
+  left: 0;
+  white-space: nowrap;
+  font-family: var(--font-dm-sans), sans-serif;
+  font-size: 14px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  transition: transform 0.3s cubic-bezier(0.76, 0, 0.24, 1);
+}
+.nav-link:hover > span,
+.nav-link:hover::after {
+  transform: translateY(-100%);
+}
+
+/* Hide nav links on mobile */
+@media (max-width: 767px) {
+  .nav-links-row {
+    display: none !important;
+  }
+}
+
+/* Language switcher */
+.lang-switcher {
+  position: relative;
+}
+.lang-trigger {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 0;
+  font-family: var(--font-dm-sans), sans-serif;
+  font-size: 14px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #111111;
+}
+.lang-arrow {
+  font-size: 7px;
+  margin-left: 3px;
+  display: inline-block;
+  transition: transform 0.25s ease;
+}
+.lang-arrow.open {
+  transform: rotate(180deg);
+}
+.lang-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  border-radius: 8px;
+  overflow: hidden;
+  min-width: 96px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.09);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.lang-dropdown.open {
+  opacity: 1;
+  pointer-events: all;
+  transform: translateX(-50%) translateY(0);
+}
+.lang-option {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  width: 100%;
+  padding: 9px 14px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-dm-sans), sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #111111;
+  text-align: left;
+  position: relative;
+  transition: background 0.15s ease;
+}
+.lang-option:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+.lang-option.active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1.5px;
+  background: #F05235;
+}
+
+/* RSVP button */
+.rsvp-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #111111;
+  color: #ffffff;
+  text-decoration: none;
+  padding: 10px 22px;
+  border-radius: 100px;
+  font-family: var(--font-dm-sans), sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.rsvp-btn:hover {
+  background: #F05235;
+}
+.rsvp-icon {
+  width: 20px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  flex-shrink: 0;
+}

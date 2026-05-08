@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { fireConfetti } from "@/lib/confetti";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -30,6 +31,25 @@ export default function RsvpSection() {
     }, sectionRef);
 
     return () => ctx.revert();
+  }, []);
+
+  // Confetti when section enters viewport (fires once)
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          fireConfetti();
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    observer.observe(section);
+    return () => observer.disconnect();
   }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

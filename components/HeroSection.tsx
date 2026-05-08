@@ -29,25 +29,25 @@ export default function HeroSection() {
         lastY = y;
 
         const yes = document.createElement('div');
-        const size  = Math.random() * 44 + 28;
-        const tilt  = Math.random() * 70 - 35;
-        const offX  = Math.random() * 56 - 28;
-        const fall  = Math.random() * 80 + 80;
+        const size = Math.random() * 44 + 28;
+        const tilt = Math.random() * 70 - 35;
+        const offX = Math.random() * 56 - 28;
+        const fall = Math.random() * 80 + 80;
         const delay = Math.random() * 500 + 600;
 
         Object.assign(yes.style, {
-          position:      'absolute',
-          left:          `${x + offX}px`,
-          top:           `${y}px`,
-          transform:     `translate(-50%,-50%) rotate(${tilt}deg) scale(0)`,
-          fontFamily:    'Caveat, cursive',
-          fontSize:      `${size}px`,
-          color:         '#F05235',
+          position: 'absolute',
+          left: `${x + offX}px`,
+          top: `${y}px`,
+          transform: `translate(-50%,-50%) rotate(${tilt}deg) scale(0)`,
+          fontFamily: 'Caveat, cursive',
+          fontSize: `${size}px`,
+          color: '#F05235',
           pointerEvents: 'none',
-          zIndex:        '400',
-          opacity:       '0',
-          willChange:    'transform, opacity',
-          transition:    'transform 0.25s cubic-bezier(0.34,1.56,0.64,1), opacity 0.2s ease',
+          zIndex: '400',
+          opacity: '0',
+          willChange: 'transform, opacity',
+          transition: 'transform 0.25s cubic-bezier(0.34,1.56,0.64,1), opacity 0.2s ease',
         });
         yes.textContent = 'YES!';
         el.appendChild(yes);
@@ -55,14 +55,14 @@ export default function HeroSection() {
         requestAnimationFrame(() => {
           requestAnimationFrame(() => {
             yes.style.transform = `translate(-50%,-50%) rotate(${tilt}deg) scale(1)`;
-            yes.style.opacity   = '1';
+            yes.style.opacity = '1';
           });
         });
 
         setTimeout(() => {
           yes.style.transition = `transform 0.7s cubic-bezier(0.2,0,0.6,1), opacity 0.7s ease`;
-          yes.style.transform  = `translate(-50%,${fall}px) rotate(${tilt}deg) scale(0.4)`;
-          yes.style.opacity    = '0';
+          yes.style.transform = `translate(-50%,${fall}px) rotate(${tilt}deg) scale(0.4)`;
+          yes.style.opacity = '0';
           setTimeout(() => yes.remove(), 800);
         }, delay);
       }
@@ -99,7 +99,7 @@ export default function HeroSection() {
         }}
       />
 
-{/* Row 1: ALEXANDRA × NIKA — behind photo */}
+      {/* Row 1: ALEXANDRA × NIKA — behind photo */}
       <div
         className="absolute inset-x-0 top-[12%] px-4 text-center"
         style={{ zIndex: 2 }}

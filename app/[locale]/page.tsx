@@ -4,6 +4,7 @@ import GallerySection from "@/components/GallerySection";
 import ProgramSection from "@/components/ProgramSection";
 import LocationSection from "@/components/LocationSection";
 import RsvpSection from "@/components/RsvpSection";
+import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 
 export default function HomePage() {
@@ -39,6 +40,7 @@ export default function HomePage() {
         <ProgramSection />
         <LocationSection />
         <RsvpSection />
+        <Footer />
       </div>
     </main>
   );
