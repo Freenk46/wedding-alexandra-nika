@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: #EAE6DD;
+    --foreground: #111111;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: #EAE6DD;
+    color: #111111;
+  }
+
+  ::selection {
+    background-color: #F05235;
+    color: #EAE6DD;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .section-padding {
+    @apply px-6 md:px-12 lg:px-24;
+  }
+
+  .clip-diagonal {
+    clip-path: polygon(0 0, 100% 0, 100% 92%, 0 100%);
+  }
+}

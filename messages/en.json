@@ -1,0 +1,56 @@
+{
+  "nav": {
+    "story": "Our Story",
+    "gallery": "Gallery",
+    "program": "Program",
+    "location": "Location",
+    "rsvp": "RSVP"
+  },
+  "hero": {
+    "join": "Join us to celebrate",
+    "date": "October 21, 2026",
+    "time": "18:00",
+    "countdown": {
+      "days": "Days",
+      "hours": "Hours",
+      "minutes": "Minutes",
+      "seconds": "Seconds"
+    }
+  },
+  "story": {
+    "title": "Our Story",
+    "content": "Two souls, one journey. From the first glance to forever — our love story is written in the stars and sealed in Batumi."
+  },
+  "gallery": {
+    "title": "Gallery"
+  },
+  "program": {
+    "title": "Event Program",
+    "items": [
+      { "time": "18:00", "label": "Guest Arrival & Cocktails" },
+      { "time": "19:00", "label": "Ceremony" },
+      { "time": "20:00", "label": "Dinner & Celebrations" },
+      { "time": "23:00", "label": "Dancing & Festivities" }
+    ]
+  },
+  "location": {
+    "title": "Location",
+    "venue": "Restaurant ERA",
+    "address": "Afsarosis 41, Batumi, Georgia",
+    "directions": "Get Directions"
+  },
+  "rsvp": {
+    "title": "RSVP",
+    "subtitle": "Please confirm your attendance by September 1, 2026",
+    "name": "Full Name",
+    "guests": "Number of Guests",
+    "attending": "Will you attend?",
+    "yes": "Joyfully Accept",
+    "no": "Regretfully Decline",
+    "dietary": "Dietary Requirements",
+    "message": "Message to the Couple",
+    "submit": "Send RSVP",
+    "success": "Thank you! We can't wait to celebrate with you.",
+    "error": "Something went wrong. Please try again."
+  }
+}
