@@ -207,7 +207,7 @@ export default function StorySection() {
       <div
         ref={titleRef}
         style={{
-          position: 'absolute', top: 0, left: 0, right: 0,
+          position: 'absolute', top: '8vh', left: 0, right: 0,
           fontFamily: 'Bebas Neue, sans-serif',
           fontSize: 'clamp(80px, 20vw, 280px)',
           lineHeight: 0.85, letterSpacing: '-0.01em',
@@ -279,12 +279,14 @@ export default function StorySection() {
         position: 'relative', zIndex: 3,
         display: 'flex', justifyContent: 'center',
         perspective: '600px', perspectiveOrigin: '50% 50%',
+        paddingTop: '28vh',
       }}>
         <div
           ref={photoRef}
           className="story-polaroid"
           style={{
             background: '#fff',
+            width: 'clamp(240px, 28vw, 380px)',
             padding: '16px 16px 56px',
             boxShadow: '6px 12px 40px rgba(0,0,0,0.18)',
             transformStyle: 'preserve-3d',

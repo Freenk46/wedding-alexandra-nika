@@ -322,14 +322,14 @@
 }
 
 /* Story */
-.story-section { min-height: 140vh; padding: 80px 0 160px; }
+.story-section { min-height: 160vh; padding: 80px 0 200px; }
 .story-grid {
   position: relative;
   z-index: 3;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 60px;
-  padding: 100px 6% 0;
+  padding: 120px 6% 0;
   align-items: start;
 }
 @media (max-width: 767px) {

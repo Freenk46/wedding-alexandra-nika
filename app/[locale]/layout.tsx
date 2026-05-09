@@ -4,6 +4,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
+import MusicPlayer from "@/components/MusicPlayer";
 import "../globals.css";
 
 const bebasNeue = Bebas_Neue({
@@ -50,6 +51,7 @@ export default async function LocaleLayout({
       <body className="bg-cream text-black antialiased">
         <NextIntlClientProvider messages={messages}>
           {children}
+          <MusicPlayer />
         </NextIntlClientProvider>
       </body>
     </html>
