@@ -12,6 +12,7 @@ export default function Footer() {
     >
       {/* Giant name — full width */}
       <div
+        className="footer-name"
         style={{
           fontFamily: "var(--font-bebas), 'Bebas Neue', sans-serif",
           fontSize: "clamp(36px, 10vw, 200px)",
@@ -28,6 +29,7 @@ export default function Footer() {
 
       {/* Back to top */}
       <button
+        className="footer-back-btn"
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         style={{
           position: "absolute",
@@ -57,6 +59,7 @@ export default function Footer() {
 
       {/* Bottom row */}
       <div
+        className="footer-bottom"
         style={{
           display: "flex",
           flexDirection: "row",

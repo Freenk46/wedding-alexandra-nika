@@ -30,6 +30,9 @@ export default function StorySection() {
 
   useEffect(() => {
     const mobile = window.innerWidth < 768;
+    const maxRotX = mobile ? 8 : 12;
+    const maxRotY = mobile ? 12 : 18;
+    const tiltMult = mobile ? 0.6 : 1;
 
     const ctx = gsap.context(() => {
 
@@ -54,6 +57,7 @@ export default function StorySection() {
 
       floatingRefs.current.forEach((el, i) => {
         if (!el) return;
+        if (mobile) gsap.set(el, { scale: 0.8 });
         gsap.to(el, {
           y: i % 2 === 0 ? -12 : 12,
           x: i % 3 === 0 ? 6 : -6,
@@ -65,88 +69,120 @@ export default function StorySection() {
         });
       });
 
-      // DrawSVG and mouse interactions only on desktop
-      if (!mobile) {
-        gsap.from([svgPath1Ref.current, svgArrow1Ref.current], {
-          drawSVG: '0%', duration: 1, ease: 'power2.out', stagger: 0.3,
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top 70%', toggleActions: 'play none none reverse',
-          },
+      gsap.from([svgPath1Ref.current, svgArrow1Ref.current], {
+        drawSVG: '0%', duration: 1, ease: 'power2.out', stagger: 0.3,
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top 70%', toggleActions: 'play none none reverse',
+        },
+      });
+
+      gsap.from(svgPath2Ref.current, {
+        drawSVG: '0%', duration: 1.2, ease: 'power2.out',
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top 50%', toggleActions: 'play none none reverse',
+        },
+      });
+
+      gsap.from(svgPath3Ref.current, {
+        drawSVG: '0%', duration: 0.8, ease: 'power2.out',
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top 60%', toggleActions: 'play none none reverse',
+        },
+      });
+
+      gsap.from(svgCircleRef.current, {
+        drawSVG: '0%', duration: 2, ease: 'power1.out',
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top 80%', toggleActions: 'play none none reverse',
+        },
+      });
+
+      const section = sectionRef.current;
+      const photo = photoRef.current;
+      if (!section || !photo) return;
+
+      const onPointerMove = (clientX: number, clientY: number) => {
+        const rect = photo.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        const dx = (clientX - centerX) / (rect.width / 2);
+        const dy = (clientY - centerY) / (rect.height / 2);
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        gsap.to(photo, {
+          rotateX: Math.max(-maxRotX, Math.min(maxRotX, -dy * 25 * tiltMult)),
+          rotateY: Math.max(-maxRotY, Math.min(maxRotY, dx * 35 * tiltMult)),
+          rotateZ: 0, scale: 1.04,
+          boxShadow: `${-dx * 20}px ${-dy * 20}px 60px rgba(0,0,0,${0.2 + dist * 0.15})`,
+          duration: 0.5, ease: 'power2.out',
         });
 
-        gsap.from(svgPath2Ref.current, {
-          drawSVG: '0%', duration: 1.2, ease: 'power2.out',
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top 50%', toggleActions: 'play none none reverse',
-          },
+        const cx = window.innerWidth / 2;
+        const cy = window.innerHeight / 2;
+        const fx = (clientX - cx) / cx;
+        const fy = (clientY - cy) / cy;
+
+        floatingRefs.current.forEach((el, i) => {
+          if (!el) return;
+          const depth = 0.5 + (i % 3) * 0.3;
+          gsap.to(el, { x: fx * 20 * depth, y: fy * 15 * depth, duration: 0.8, ease: 'power2.out' });
         });
+      };
 
-        gsap.from(svgPath3Ref.current, {
-          drawSVG: '0%', duration: 0.8, ease: 'power2.out',
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top 60%', toggleActions: 'play none none reverse',
-          },
+      const onPointerLeave = () => {
+        gsap.to(photo, {
+          rotateX: 0, rotateY: 0, rotateZ: -8, scale: 1,
+          boxShadow: '6px 12px 40px rgba(0,0,0,0.18)',
+          duration: 1.4, ease: 'elastic.out(1, 0.4)',
         });
+      };
 
-        gsap.from(svgCircleRef.current, {
-          drawSVG: '0%', duration: 2, ease: 'power1.out',
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top 80%', toggleActions: 'play none none reverse',
-          },
-        });
+      const onMouseMove  = (e: MouseEvent)  => onPointerMove(e.clientX, e.clientY);
+      const onMouseLeave = ()               => onPointerLeave();
+      const onTouchMove  = (e: TouchEvent)  => {
+        const touch = e.touches[0];
+        if (!touch) return;
+        onPointerMove(touch.clientX, touch.clientY);
+      };
+      const onTouchEnd = () => onPointerLeave();
 
-        const section = sectionRef.current;
-        const photo = photoRef.current;
-        if (!section || !photo) return;
+      section.addEventListener('mousemove', onMouseMove);
+      section.addEventListener('mouseleave', onMouseLeave);
+      section.addEventListener('touchmove', onTouchMove, { passive: true });
+      section.addEventListener('touchend', onTouchEnd);
 
-        const onMouseMove = (e: MouseEvent) => {
-          const rect = photo.getBoundingClientRect();
-          const centerX = rect.left + rect.width / 2;
-          const centerY = rect.top + rect.height / 2;
-          const dx = (e.clientX - centerX) / (rect.width / 2);
-          const dy = (e.clientY - centerY) / (rect.height / 2);
-          const dist = Math.sqrt(dx * dx + dy * dy);
-
+      let deviceOrientationHandler: ((e: DeviceOrientationEvent) => void) | null = null;
+      if (mobile && typeof DeviceOrientationEvent !== 'undefined') {
+        deviceOrientationHandler = (e: DeviceOrientationEvent) => {
+          const x = (e.gamma ?? 0) / 90;
+          const y = Math.min(Math.max((e.beta ?? 0) - 45, -45), 45) / 45;
           gsap.to(photo, {
-            rotateX: Math.max(-12, Math.min(12, -dy * 25)),
-            rotateY: Math.max(-18, Math.min(18, dx * 35)),
-            rotateZ: 0, scale: 1.04,
-            boxShadow: `${-dx * 20}px ${-dy * 20}px 60px rgba(0,0,0,${0.2 + dist * 0.15})`,
-            duration: 0.5, ease: 'power2.out',
+            rotateX: Math.max(-maxRotX, Math.min(maxRotX, y * maxRotX)),
+            rotateY: Math.max(-maxRotY, Math.min(maxRotY, x * maxRotY)),
+            duration: 0.8, ease: 'power2.out',
           });
-
-          const cx = window.innerWidth / 2;
-          const cy = window.innerHeight / 2;
-          const fx = (e.clientX - cx) / cx;
-          const fy = (e.clientY - cy) / cy;
-
           floatingRefs.current.forEach((el, i) => {
             if (!el) return;
             const depth = 0.5 + (i % 3) * 0.3;
-            gsap.to(el, { x: fx * 20 * depth, y: fy * 15 * depth, duration: 0.8, ease: 'power2.out' });
+            gsap.to(el, { x: x * 15 * depth, y: y * 10 * depth, duration: 0.8, ease: 'power2.out' });
           });
         };
-
-        const onMouseLeave = () => {
-          gsap.to(photo, {
-            rotateX: 0, rotateY: 0, rotateZ: -8, scale: 1,
-            boxShadow: '6px 12px 40px rgba(0,0,0,0.18)',
-            duration: 1.4, ease: 'elastic.out(1, 0.4)',
-          });
-        };
-
-        section.addEventListener('mousemove', onMouseMove);
-        section.addEventListener('mouseleave', onMouseLeave);
-
-        return () => {
-          section.removeEventListener('mousemove', onMouseMove);
-          section.removeEventListener('mouseleave', onMouseLeave);
-        };
+        window.addEventListener('deviceorientation', deviceOrientationHandler);
       }
+
+      return () => {
+        section.removeEventListener('mousemove', onMouseMove);
+        section.removeEventListener('mouseleave', onMouseLeave);
+        section.removeEventListener('touchmove', onTouchMove);
+        section.removeEventListener('touchend', onTouchEnd);
+        if (deviceOrientationHandler) {
+          window.removeEventListener('deviceorientation', deviceOrientationHandler);
+        }
+      };
 
     }, sectionRef);
     return () => ctx.revert();
@@ -182,7 +218,7 @@ export default function StorySection() {
         <div style={{ WebkitTextStroke: '2px #111', color: 'transparent' }}>STORY</div>
       </div>
 
-      {/* Accent circles — hidden on mobile via .story-deco */}
+      {/* Accent circles */}
       <div className="story-deco" style={{
         position: 'absolute', top: '50%', left: '50%',
         transform: 'translate(-50%, -45%)',
@@ -198,9 +234,9 @@ export default function StorySection() {
         zIndex: 2, pointerEvents: 'none',
       }} />
 
-      {/* SVG decorations — hidden on mobile via .story-deco */}
+      {/* SVG decorations */}
       <svg
-        className="story-deco"
+        className="story-svg-deco"
         style={{
           position: 'absolute', top: '10%', left: '50%',
           transform: 'translateX(-50%)',
@@ -274,7 +310,7 @@ export default function StorySection() {
         </div>
       </div>
 
-      {/* Text columns — CSS handles 1-col on mobile */}
+      {/* Text columns */}
       <div className="story-grid">
 
         <div>

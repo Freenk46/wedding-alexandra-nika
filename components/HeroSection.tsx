@@ -1,10 +1,9 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
-import { isTouchDevice } from "@/lib/device";
 
 gsap.registerPlugin(SplitText);
 
@@ -14,9 +13,6 @@ let lastX = 0, lastY = 0;
 export default function HeroSection() {
   const heroRef = useRef<HTMLElement>(null);
   const dotRef  = useRef<HTMLDivElement>(null);
-  const [isTouch, setIsTouch] = useState(false);
-
-  useEffect(() => { setIsTouch(isTouchDevice()); }, []);
 
   // Mouse trail + touch tap → spawn YES!
   useEffect(() => {
@@ -179,12 +175,7 @@ export default function HeroSection() {
         className="hero-photo absolute inset-0 flex items-center justify-center"
         style={{ zIndex: 3 }}
       >
-        <div style={{
-          position: "relative",
-          width: isTouch ? "70vw" : "clamp(180px, 35vw, 420px)",
-          height: isTouch ? "auto" : "clamp(280px, 58vw, 620px)",
-          aspectRatio: isTouch ? "4/5" : undefined,
-        }}>
+        <div className="hero-photo-wrap" style={{ position: "relative" }}>
           <Image
             src="/img/1.png"
             alt="Alexandra and Nika"

@@ -56,11 +56,15 @@ export default function MobileMenu({ open, onClose, locale, onLocaleSwitch }: Mo
   if (!mounted) return null;
 
   const handleLinkClick = (href: string) => {
-    onClose();
-    setTimeout(() => {
-      const el = document.querySelector(href);
-      el?.scrollIntoView({ behavior: "smooth" });
-    }, 300);
+    gsap.to(linksRef.current.filter(Boolean), {
+      y: -40, opacity: 0, stagger: 0.05, duration: 0.3, ease: 'power2.in',
+      onComplete: () => {
+        onClose();
+        setTimeout(() => {
+          document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+        }, 300);
+      },
+    });
   };
 
   return (

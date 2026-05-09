@@ -278,9 +278,14 @@
 
 /* Hero: custom cursor — hide on touch/mobile */
 #hero { cursor: none; }
+.hero-photo-wrap {
+  width: clamp(180px, 35vw, 420px);
+  height: clamp(280px, 58vw, 620px);
+}
 @media (max-width: 767px) {
   #hero { cursor: default !important; }
   .hero-cursor-dot { display: none !important; }
+  .hero-photo-wrap { width: 70vw !important; height: auto !important; aspect-ratio: 4/5; }
 }
 
 /* RSVP */

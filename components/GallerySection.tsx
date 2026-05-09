@@ -29,44 +29,58 @@ export default function GallerySection() {
   }, []);
 
   useEffect(() => {
-    const mobile = window.innerWidth < 768;
-
     const ctx = gsap.context(() => {
-      if (mobile) {
-        // Simple fade-in on mobile
-        itemRefs.current.forEach((el) => {
-          if (!el) return;
-          gsap.fromTo(el,
-            { opacity: 0, y: 40 },
-            {
-              opacity: 1, y: 0, duration: 0.7, ease: 'power2.out',
-              scrollTrigger: {
-                trigger: el,
-                start: 'top 85%',
-                toggleActions: 'play none none reverse',
-              },
-            }
-          );
-        });
-      } else {
-        // Desktop: parallax deco lines
-        images.forEach((_, i) => {
-          const deco = document.querySelector(`.deco-lines-${i}`);
-          if (!deco) return;
-          gsap.fromTo(deco,
-            { y: -120 },
-            {
-              y: 60, ease: 'none',
-              scrollTrigger: {
-                trigger: deco,
-                start: 'top bottom', end: 'bottom center', scrub: 0.8,
-              },
-            }
-          );
-        });
-      }
+      // Deco parallax — all devices
+      images.forEach((_, i) => {
+        const deco = document.querySelector(`.deco-lines-${i}`);
+        if (!deco) return;
+        gsap.fromTo(deco,
+          { y: -120 },
+          {
+            y: 60, ease: 'none',
+            scrollTrigger: {
+              trigger: deco,
+              start: 'top bottom', end: 'bottom center', scrub: 0.8,
+            },
+          }
+        );
+      });
+
+      // Fade in on scroll — all devices
+      itemRefs.current.forEach((el) => {
+        if (!el) return;
+        gsap.fromTo(el,
+          { opacity: 0, y: 40 },
+          {
+            opacity: 1, y: 0, duration: 0.7, ease: 'power2.out',
+            scrollTrigger: {
+              trigger: el,
+              start: 'top 85%',
+              toggleActions: 'play none none reverse',
+            },
+          }
+        );
+      });
     }, sectionRef);
-    return () => ctx.revert();
+
+    // Touch press animations
+    const cleanups: (() => void)[] = [];
+    itemRefs.current.forEach((el) => {
+      if (!el) return;
+      const onTouchStart = () => gsap.to(el, { scale: 0.97, duration: 0.2, ease: 'power2.out' });
+      const onTouchEnd   = () => gsap.to(el, { scale: 1, duration: 0.6, ease: 'elastic.out(1, 0.4)' });
+      el.addEventListener('touchstart', onTouchStart, { passive: true });
+      el.addEventListener('touchend', onTouchEnd);
+      cleanups.push(() => {
+        el.removeEventListener('touchstart', onTouchStart);
+        el.removeEventListener('touchend', onTouchEnd);
+      });
+    });
+
+    return () => {
+      ctx.revert();
+      cleanups.forEach(fn => fn());
+    };
   }, []);
 
   return (

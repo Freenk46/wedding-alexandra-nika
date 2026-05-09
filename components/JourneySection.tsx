@@ -54,9 +54,6 @@ export default function JourneySection() {
   const btnRefs      = useRef<HTMLAnchorElement[]>([]);
 
   useEffect(() => {
-    // Skip GSAP animations on mobile — CSS handles the layout
-    if (window.innerWidth < 768) return;
-
     const ctx = gsap.context(() => {
       LOCATIONS.forEach((_, i) => {
         const loc      = locRefs.current[i];
@@ -152,6 +149,7 @@ export default function JourneySection() {
             >
               <p
                 ref={(el) => { if (el) typeRefs.current[i] = el; }}
+                className="journey-type-label"
                 style={{
                   fontFamily: "var(--font-dm-sans), DM Sans, sans-serif",
                   fontSize: 11, letterSpacing: "0.22em", textTransform: "uppercase",
@@ -162,6 +160,7 @@ export default function JourneySection() {
               </p>
               <h2
                 ref={(el) => { if (el) nameRefs.current[i] = el; }}
+                className="journey-name-label"
                 style={{
                   fontFamily: "var(--font-bebas), 'Bebas Neue', sans-serif",
                   fontSize: "clamp(28px, 3.5vw, 52px)",
@@ -172,6 +171,7 @@ export default function JourneySection() {
               </h2>
               <p
                 ref={(el) => { if (el) timeRefs.current[i] = el; }}
+                className="journey-time-label"
                 style={{
                   fontFamily: "var(--font-caveat), 'Caveat', cursive",
                   fontSize: 26, color: "#F05235", marginBottom: 20,
@@ -184,6 +184,7 @@ export default function JourneySection() {
                 href={loc.maps}
                 target="_blank"
                 rel="noopener noreferrer"
+                className="journey-map-btn"
                 style={{
                   fontFamily: "var(--font-dm-sans), DM Sans, sans-serif",
                   fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase",
