@@ -14,7 +14,7 @@ export default function Footer() {
       <div
         style={{
           fontFamily: "var(--font-bebas), 'Bebas Neue', sans-serif",
-          fontSize: "clamp(72px, 13vw, 200px)",
+          fontSize: "clamp(36px, 10vw, 200px)",
           lineHeight: 0.9,
           color: "#111111",
           letterSpacing: "-0.01em",
@@ -28,26 +28,29 @@ export default function Footer() {
 
       {/* Back to top */}
       <button
-        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         style={{
-          position: 'absolute',
+          position: "absolute",
           bottom: 32,
           right: 32,
-          width: 48,
-          height: 48,
-          background: '#111',
-          color: '#EAE6DD',
-          border: 'none',
-          borderRadius: '50%',
-          cursor: 'pointer',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: 20,
-          transition: 'background 0.3s ease',
+          width: 40,
+          height: 40,
+          background: "#111",
+          color: "#EAE6DD",
+          border: "none",
+          borderRadius: "50%",
+          cursor: "pointer",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontSize: 18,
+          transition: "background 0.3s ease",
+          minHeight: 44,
+          minWidth: 44,
         }}
-        onMouseEnter={e => (e.currentTarget.style.background = '#F05235')}
-        onMouseLeave={e => (e.currentTarget.style.background = '#111')}
+        onMouseEnter={(e) => (e.currentTarget.style.background = "#F05235")}
+        onMouseLeave={(e) => (e.currentTarget.style.background = "#111")}
+        aria-label="Back to top"
       >
         ↑
       </button>
@@ -56,12 +59,16 @@ export default function Footer() {
       <div
         style={{
           display: "flex",
+          flexDirection: "row",
+          flexWrap: "wrap",
           justifyContent: "space-between",
           alignItems: "flex-end",
+          gap: 8,
           fontFamily: "var(--font-dm-sans), 'DM Sans', sans-serif",
           fontSize: 13,
           color: "#111111",
           opacity: 0.7,
+          paddingRight: 56,
         }}
       >
         <span>©2026 Alexandra &amp; Nika</span>

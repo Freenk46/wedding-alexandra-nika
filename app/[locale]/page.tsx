@@ -16,7 +16,7 @@ export default function HomePage() {
         <HeroSection />
       </div>
 
-      <div style={{ position: 'relative', zIndex: 2 }}>
+      <div style={{ position: 'relative', zIndex: 2, backgroundColor: '#EAE6DD' }}>
         <div style={{
           borderRadius: '20px 20px 0 0',
           overflow: 'hidden',
@@ -26,7 +26,7 @@ export default function HomePage() {
         </div>
       </div>
 
-      <div style={{ position: 'relative', zIndex: 3 }}>
+      <div style={{ position: 'relative', zIndex: 3, backgroundColor: '#111' }}>
         <div style={{
           borderRadius: '20px 20px 0 0',
           overflow: 'hidden',
@@ -34,23 +34,18 @@ export default function HomePage() {
         }}>
           <GallerySection />
         </div>
-        <DividerMarquee />
       </div>
 
-      <div style={{ position: 'relative', zIndex: 4 }}>
+      <div style={{ position: 'relative', zIndex: 4, backgroundColor: '#EAE6DD' }}>
         <JourneySection />
+      </div>
 
-        {/* Divider top */}
-        <div style={{ padding: '0 32px', background: '#EAE6DD' }}>
-          <div style={{ height: '1px', background: '#111' }} />
-        </div>
-
+      <div style={{ position: 'relative', zIndex: 5, backgroundColor: '#EAE6DD' }}>
+        <DividerMarquee />
         <RsvpSection />
+      </div>
 
-        {/* Divider bottom */}
-        <div style={{ padding: '0 32px', background: '#EAE6DD' }}>
-          <div style={{ height: '1px', background: '#111' }} />
-        </div>
+      <div style={{ position: 'relative', zIndex: 6, backgroundColor: '#EAE6DD' }}>
         <Footer />
       </div>
     </main>

@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useTranslations } from "next-intl";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { fireConfetti } from "@/lib/confetti";
@@ -12,42 +11,68 @@ const GOOGLE_SCRIPT_URL = process.env.NEXT_PUBLIC_GOOGLE_SCRIPT_URL ?? "";
 
 type FormState = "idle" | "submitting" | "success" | "error";
 
+const BASE_FIELD: React.CSSProperties = {
+  width: "100%",
+  background: "transparent",
+  border: "none",
+  borderBottom: "1px solid rgba(17,17,17,0.3)",
+  padding: "12px 0",
+  fontFamily: "var(--font-dm-sans), DM Sans, sans-serif",
+  fontSize: 15,
+  color: "#111",
+  outline: "none",
+};
+
 export default function RsvpSection() {
-  const t = useTranslations("rsvp");
   const sectionRef = useRef<HTMLElement>(null);
-  const formRef = useRef<HTMLFormElement>(null);
-  const [attending, setAttending] = useState<"yes" | "no" | null>(null);
-  const [status, setStatus] = useState<FormState>("idle");
+  const titleRef   = useRef<HTMLHeadingElement>(null);
+  const formRef    = useRef<HTMLFormElement>(null);
+  const fieldRefs  = useRef<(HTMLInputElement | HTMLTextAreaElement)[]>([]);
+  const [attending, setAttending]     = useState<"yes" | "no" | null>(null);
+  const [status, setStatus]           = useState<FormState>("idle");
+  const [submitHover, setSubmitHover] = useState(false);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.from(formRef.current, {
-        scrollTrigger: { trigger: formRef.current, start: "top 80%" },
-        y: 50,
-        opacity: 0,
-        duration: 1,
-        ease: "power3.out",
+      gsap.from(titleRef.current, {
+        x: -60, opacity: 0, duration: 0.9, ease: "power3.out",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 70%",
+          toggleActions: "play none none reverse",
+        },
+      });
+
+      gsap.from(fieldRefs.current.filter(Boolean), {
+        x: 40, opacity: 0, duration: 0.6, ease: "power3.out", stagger: 0.1,
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 60%",
+          toggleActions: "play none none reverse",
+        },
+      });
+
+      fieldRefs.current.forEach((field) => {
+        if (!field) return;
+        field.addEventListener("focus", () =>
+          gsap.to(field, { borderBottomColor: "#F05235", duration: 0.3 })
+        );
+        field.addEventListener("blur", () =>
+          gsap.to(field, { borderBottomColor: "rgba(17,17,17,0.3)", duration: 0.3 })
+        );
       });
     }, sectionRef);
 
     return () => ctx.revert();
   }, []);
 
-  // Confetti when section enters viewport (fires once)
   useEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
-
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          fireConfetti();
-          observer.disconnect();
-        }
-      },
+      ([entry]) => { if (entry.isIntersecting) { fireConfetti(); observer.disconnect(); } },
       { threshold: 0.3 }
     );
-
     observer.observe(section);
     return () => observer.disconnect();
   }, []);
@@ -55,117 +80,227 @@ export default function RsvpSection() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!GOOGLE_SCRIPT_URL) return;
-
     setStatus("submitting");
-    const form = e.currentTarget;
-    const data = new FormData(form);
+    const data    = new FormData(e.currentTarget);
     const payload = Object.fromEntries(data.entries());
-
     try {
       await fetch(GOOGLE_SCRIPT_URL, {
-        method: "POST",
-        mode: "no-cors",
+        method: "POST", mode: "no-cors",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
       setStatus("success");
-      form.reset();
+      e.currentTarget.reset();
       setAttending(null);
     } catch {
       setStatus("error");
     }
   };
 
-  const inputClass =
-    "w-full bg-transparent border border-white/20 text-cream placeholder-cream/30 font-body px-4 py-3 focus:outline-none focus:border-accent transition-colors";
+  const addFieldRef = (el: HTMLInputElement | HTMLTextAreaElement | null, i: number) => {
+    if (el) fieldRefs.current[i] = el;
+  };
 
   return (
-    <section
-      id="rsvp"
-      ref={sectionRef}
-      className="bg-cream section-padding py-24"
-    >
-      <div className="max-w-2xl mx-auto">
-        <h2 className="font-display text-[clamp(3rem,8vw,7rem)] uppercase leading-none mb-4 text-black">
-          {t("title")}
-        </h2>
-        <p className="font-body text-black/60 mb-12">{t("subtitle")}</p>
+    <section id="rsvp" ref={sectionRef} className="rsvp-section">
 
+      {/* ── LEFT — title side ──────────────────────────── */}
+      <div className="rsvp-left">
+        {/* Dot grid */}
+        <div style={{
+          position: "absolute", inset: 0,
+          backgroundImage: "radial-gradient(circle, rgba(234,230,221,0.15) 1px, transparent 1px)",
+          backgroundSize: "28px 28px",
+          pointerEvents: "none",
+        }} />
+
+        {/* Ghost RSVP — hidden on mobile via .rsvp-deco */}
+        <div className="rsvp-deco" style={{
+          position: "absolute", bottom: -20, left: -10,
+          fontFamily: "var(--font-bebas), 'Bebas Neue', sans-serif",
+          fontSize: "clamp(140px, 22vw, 300px)",
+          lineHeight: 0.85,
+          color: "rgba(255,255,255,0.04)",
+          userSelect: "none", pointerEvents: "none",
+        }}>
+          RSVP
+        </div>
+
+        {/* Rotated watermark — hidden on mobile */}
+        <span className="rsvp-deco" style={{
+          position: "absolute", top: "40%", right: 24,
+          fontFamily: "var(--font-caveat), 'Caveat', cursive",
+          fontSize: 18, color: "rgba(234,230,221,0.15)",
+          transform: "rotate(90deg)", letterSpacing: "0.1em",
+          whiteSpace: "nowrap", pointerEvents: "none",
+        }}>
+          ALEXANDRA × NIKA × 2026
+        </span>
+
+        {/* Top label — hidden on mobile */}
+        <p className="rsvp-deco" style={{
+          fontFamily: "var(--font-dm-sans), DM Sans, sans-serif",
+          fontSize: 11, letterSpacing: "0.25em", textTransform: "uppercase",
+          color: "#F05235", position: "relative",
+        }}>
+          21 · 10 · 2026
+        </p>
+
+        {/* Main title */}
+        <div style={{ position: "relative" }}>
+          <h2 ref={titleRef} className="rsvp-h2" style={{
+            fontFamily: "var(--font-bebas), 'Bebas Neue', sans-serif",
+            fontSize: "clamp(64px, 8vw, 110px)",
+            lineHeight: 0.9, color: "#EAE6DD",
+            letterSpacing: "-0.01em", marginBottom: 24,
+          }}>
+            დაადასტურე<br />დასწრება
+          </h2>
+          <p style={{
+            fontFamily: "var(--font-caveat), 'Caveat', cursive",
+            fontSize: 22, color: "#F05235",
+          }}>
+            გელოდებით! ♡
+          </p>
+        </div>
+
+        {/* Venue info — hidden on mobile */}
+        <div className="rsvp-deco" style={{ position: "relative" }}>
+          <p style={{
+            fontFamily: "var(--font-dm-sans), DM Sans, sans-serif",
+            fontSize: 13, color: "rgba(234,230,221,0.5)", lineHeight: 1.7,
+          }}>
+            ERA Hall · ბათუმი<br />
+            აფსაროსის 41
+          </p>
+        </div>
+      </div>
+
+      {/* ── RIGHT — form side ──────────────────────────── */}
+      <div className="rsvp-right">
         {status === "success" ? (
-          <div className="bg-black text-cream p-12 text-center">
-            <span className="font-hand text-accent text-4xl block mb-4">✓</span>
-            <p className="font-body text-lg">{t("success")}</p>
+          <div style={{
+            display: "flex", flexDirection: "column",
+            alignItems: "center", justifyContent: "center",
+            height: "100%", gap: 24,
+          }}>
+            <span style={{
+              fontFamily: "var(--font-caveat), 'Caveat', cursive",
+              fontSize: 80, color: "#F05235",
+            }}>
+              YES!
+            </span>
+            <p style={{
+              fontFamily: "var(--font-bebas), 'Bebas Neue', sans-serif",
+              fontSize: 32, color: "#111", letterSpacing: "0.05em",
+            }}>
+              გელოდებით!
+            </p>
+            <p style={{
+              fontFamily: "var(--font-dm-sans), DM Sans, sans-serif",
+              fontSize: 14, color: "rgba(17,17,17,0.6)", textAlign: "center",
+            }}>
+              ERA Hall · 21 ოქტომბერი 2026
+            </p>
           </div>
         ) : (
-          <form
-            ref={formRef}
-            onSubmit={handleSubmit}
-            className="bg-black text-cream p-8 md:p-12 space-y-6"
-          >
+          <form ref={formRef} onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 32 }}>
+
             <input
-              name="name"
-              required
-              placeholder={t("name")}
-              className={inputClass}
+              ref={(el) => addFieldRef(el, 0)}
+              name="name" required
+              placeholder="სახელი და გვარი"
+              style={BASE_FIELD}
             />
 
             <input
-              name="guests"
-              type="number"
-              min="1"
-              max="10"
-              defaultValue={1}
-              placeholder={t("guests")}
-              className={inputClass}
+              ref={(el) => addFieldRef(el, 1)}
+              name="guests" type="number" min="1" max="10" defaultValue={1}
+              placeholder="სტუმართა რაოდენობა"
+              style={BASE_FIELD}
             />
 
-            <div className="space-y-3">
-              <p className="font-body text-sm tracking-widest uppercase text-cream/60">
-                {t("attending")}
+            <div>
+              <p style={{
+                fontFamily: "var(--font-dm-sans), DM Sans, sans-serif",
+                fontSize: 11, letterSpacing: "0.22em", textTransform: "uppercase",
+                color: "rgba(17,17,17,0.5)", marginBottom: 12,
+              }}>
+                დავესწრები?
               </p>
-              <div className="flex gap-4">
-                {(["yes", "no"] as const).map((val) => (
-                  <button
-                    key={val}
-                    type="button"
-                    onClick={() => setAttending(val)}
-                    className={`flex-1 py-3 font-body text-sm tracking-wider uppercase border transition-all duration-200 ${
-                      attending === val
-                        ? "bg-accent border-accent text-cream"
-                        : "border-white/20 text-cream/60 hover:border-cream/50"
-                    }`}
-                  >
-                    {t(val)}
-                  </button>
-                ))}
+              <div style={{ display: "flex", gap: 12 }}>
+                {(["yes", "no"] as const).map((val) => {
+                  const sel = attending === val;
+                  return (
+                    <button
+                      key={val}
+                      type="button"
+                      onClick={() => setAttending(val)}
+                      style={{
+                        flex: 1, padding: "14px", minHeight: 56,
+                        fontFamily: "var(--font-bebas), 'Bebas Neue', sans-serif",
+                        fontSize: 28,
+                        background: sel ? (val === "yes" ? "#111" : "#F05235") : "transparent",
+                        border:     sel ? (val === "yes" ? "1px solid #111" : "1px solid #F05235") : "1px solid rgba(17,17,17,0.3)",
+                        color:      sel ? (val === "yes" ? "#EAE6DD" : "#fff") : "rgba(17,17,17,0.5)",
+                        cursor: "pointer",
+                        transition: "all 0.25s ease",
+                      }}
+                    >
+                      {val === "yes" ? "დიახ" : "ვერა"}
+                    </button>
+                  );
+                })}
                 <input type="hidden" name="attending" value={attending ?? ""} />
               </div>
             </div>
 
             <input
+              ref={(el) => addFieldRef(el, 2)}
               name="dietary"
-              placeholder={t("dietary")}
-              className={inputClass}
+              placeholder="დიეტური მოთხოვნები"
+              style={BASE_FIELD}
             />
 
             <textarea
-              name="message"
-              rows={3}
-              placeholder={t("message")}
-              className={inputClass + " resize-none"}
+              ref={(el) => addFieldRef(el, 3)}
+              name="message" rows={3}
+              placeholder="შეტყობინება წყვილს"
+              style={{ ...BASE_FIELD, resize: "none" }}
             />
 
             {status === "error" && (
-              <p className="font-body text-accent text-sm">{t("error")}</p>
+              <p style={{
+                fontFamily: "var(--font-dm-sans), DM Sans, sans-serif",
+                fontSize: 13, color: "#F05235",
+              }}>
+                შეცდომა. სცადე თავიდან.
+              </p>
             )}
 
             <button
               type="submit"
               disabled={!attending || status === "submitting"}
-              className="w-full bg-accent text-cream font-body text-sm tracking-widest uppercase py-4 hover:bg-accent/90 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              onMouseEnter={() => setSubmitHover(true)}
+              onMouseLeave={() => setSubmitHover(false)}
+              style={{
+                width: "100%",
+                background: submitHover ? "#F05235" : "#111",
+                color: "#EAE6DD",
+                border: "none",
+                padding: "18px",
+                minHeight: 56,
+                fontFamily: "var(--font-dm-sans), DM Sans, sans-serif",
+                fontSize: 11, letterSpacing: "0.25em", textTransform: "uppercase",
+                cursor: !attending || status === "submitting" ? "not-allowed" : "pointer",
+                opacity: !attending || status === "submitting" ? 0.4 : 1,
+                transition: "background 0.3s",
+                marginTop: 8,
+              }}
             >
-              {status === "submitting" ? "..." : t("submit")}
+              {status === "submitting" ? "..." : "გამოგზავნა"}
             </button>
+
           </form>
         )}
       </div>
