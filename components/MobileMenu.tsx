@@ -1,14 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import gsap from "gsap";
-
-const NAV_ITEMS = [
-  { href: "#story",   label: "ისტორია" },
-  { href: "#gallery", label: "გალერეა" },
-  { href: "#journey", label: "მოგზაურობა" },
-  { href: "#rsvp",    label: "RSVP" },
-];
 
 const LOCALES = [
   { code: "ka", flag: "🇬🇪", label: "KA" },
@@ -24,9 +18,17 @@ interface MobileMenuProps {
 }
 
 export default function MobileMenu({ open, onClose, locale, onLocaleSwitch }: MobileMenuProps) {
+  const t = useTranslations("nav");
   const overlayRef = useRef<HTMLDivElement>(null);
   const linksRef   = useRef<HTMLAnchorElement[]>([]);
   const [mounted, setMounted] = useState(false);
+
+  const navItems = [
+    { href: "#story",   label: t("story")   },
+    { href: "#gallery", label: t("gallery") },
+    { href: "#journey", label: t("journey") },
+    { href: "#rsvp",    label: t("rsvp")    },
+  ];
 
   useEffect(() => { setMounted(true); }, []);
 
@@ -74,7 +76,7 @@ export default function MobileMenu({ open, onClose, locale, onLocaleSwitch }: Mo
         display: "none",
         position: "fixed",
         inset: 0,
-        background: "#111",
+        background: "var(--bg-primary)",
         zIndex: 200,
         flexDirection: "column",
         alignItems: "center",
@@ -87,7 +89,7 @@ export default function MobileMenu({ open, onClose, locale, onLocaleSwitch }: Mo
         style={{
           position: "absolute", top: 20, right: 32,
           background: "none", border: "none",
-          color: "#EAE6DD", fontSize: 32, cursor: "pointer",
+          color: "var(--text-primary)", fontSize: 32, cursor: "pointer",
           lineHeight: 1, minHeight: 44, minWidth: 44,
           display: "flex", alignItems: "center", justifyContent: "center",
         }}
@@ -96,7 +98,7 @@ export default function MobileMenu({ open, onClose, locale, onLocaleSwitch }: Mo
         ✕
       </button>
 
-      {NAV_ITEMS.map((item, i) => (
+      {navItems.map((item, i) => (
         <a
           key={item.href}
           ref={(el) => { if (el) linksRef.current[i] = el; }}
@@ -105,7 +107,7 @@ export default function MobileMenu({ open, onClose, locale, onLocaleSwitch }: Mo
           style={{
             fontFamily: "var(--font-bebas), 'Bebas Neue', sans-serif",
             fontSize: "clamp(48px, 16vw, 72px)",
-            color: "#EAE6DD", textDecoration: "none",
+            color: "var(--text-primary)", textDecoration: "none",
             letterSpacing: "0.02em", lineHeight: 1.1,
             textTransform: "uppercase", padding: "4px 0",
           }}
@@ -120,9 +122,9 @@ export default function MobileMenu({ open, onClose, locale, onLocaleSwitch }: Mo
             key={loc.code}
             onClick={() => { onLocaleSwitch(loc.code); onClose(); }}
             style={{
-              background: locale === loc.code ? "#F05235" : "transparent",
-              border: `1px solid ${locale === loc.code ? "#F05235" : "rgba(234,230,221,0.3)"}`,
-              color: "#EAE6DD",
+              background: locale === loc.code ? "var(--accent)" : "transparent",
+              border: `1px solid ${locale === loc.code ? "var(--accent)" : "var(--border-color)"}`,
+              color: locale === loc.code ? "var(--text-inverted)" : "var(--text-primary)",
               fontFamily: "var(--font-dm-sans), sans-serif",
               fontSize: 11, letterSpacing: "0.15em",
               padding: "8px 16px", cursor: "pointer",

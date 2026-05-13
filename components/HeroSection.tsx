@@ -2,30 +2,34 @@
 
 import { useEffect, useLayoutEffect, useRef } from "react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
 
 gsap.registerPlugin(SplitText);
 
 const THRESHOLD = 90;
-let lastX = 0, lastY = 0;
 
 export default function HeroSection() {
+  const t = useTranslations("hero");
   const heroRef = useRef<HTMLElement>(null);
-  const dotRef  = useRef<HTMLDivElement>(null);
+  const dotRef = useRef<HTMLDivElement>(null);
+  const scrollCueRef = useRef<HTMLDivElement>(null);
 
   // Mouse trail + touch tap → spawn YES!
   useEffect(() => {
-    const el  = heroRef.current;
+    const el = heroRef.current;
     const dot = dotRef.current;
     if (!el) return;
 
+    let lastX = 0, lastY = 0;
+
     const spawnYes = (x: number, y: number) => {
-      const yes   = document.createElement("div");
-      const size  = Math.random() * 44 + 28;
-      const tilt  = Math.random() * 70 - 35;
-      const offX  = Math.random() * 56 - 28;
-      const fall  = Math.random() * 80 + 80;
+      const yes = document.createElement("div");
+      const size = Math.random() * 44 + 28;
+      const tilt = Math.random() * 70 - 35;
+      const offX = Math.random() * 56 - 28;
+      const fall = Math.random() * 80 + 80;
       const delay = Math.random() * 500 + 600;
 
       Object.assign(yes.style, {
@@ -33,9 +37,10 @@ export default function HeroSection() {
         left: `${x + offX}px`,
         top: `${y}px`,
         transform: `translate(-50%,-50%) rotate(${tilt}deg) scale(0)`,
-        fontFamily: "Caveat, cursive",
+        fontFamily: "var(--font-great-vibes), cursive",
         fontSize: `${size}px`,
-        color: "#F05235",
+        color: "var(--accent)",
+        textShadow: "0 0 12px var(--accent-glow)",
         pointerEvents: "none",
         zIndex: "400",
         opacity: "0",
@@ -54,8 +59,8 @@ export default function HeroSection() {
 
       setTimeout(() => {
         yes.style.transition = "transform 0.7s cubic-bezier(0.2,0,0.6,1), opacity 0.7s ease";
-        yes.style.transform  = `translate(-50%,${fall}px) rotate(${tilt}deg) scale(0.4)`;
-        yes.style.opacity    = "0";
+        yes.style.transform = `translate(-50%,${fall}px) rotate(${tilt}deg) scale(0.4)`;
+        yes.style.opacity = "0";
         setTimeout(() => yes.remove(), 800);
       }, delay);
     };
@@ -89,6 +94,21 @@ export default function HeroSection() {
       el.removeEventListener("mousemove", onMove);
       el.removeEventListener("touchstart", onTouchStart);
     };
+  }, []);
+
+  // Fade out scroll cue once the user starts scrolling
+  useEffect(() => {
+    const cue = scrollCueRef.current;
+    if (!cue) return;
+    const onScroll = () => {
+      const y = window.scrollY;
+      const opacity = Math.max(0, 1 - y / 120);
+      cue.style.opacity = String(opacity);
+      cue.style.pointerEvents = opacity < 0.05 ? "none" : "auto";
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   // Page-load animation
@@ -137,9 +157,9 @@ export default function HeroSection() {
     <section
       ref={heroRef}
       id="hero"
-      className="relative h-screen overflow-hidden"
+      className="relative h-screen overflow-hidden bg-bgPrimary transition-colors duration-300"
       style={{
-        background: "linear-gradient(to bottom, #EAE6DD 0%, #EAE6DD 45%, #F05235 100%)",
+        background: "radial-gradient(circle at center, var(--bg-secondary) 0%, var(--bg-primary) 100%)",
         perspective: "1000px",
         cursor: "none",
       }}
@@ -150,7 +170,8 @@ export default function HeroSection() {
         className="hero-cursor-dot pointer-events-none absolute"
         style={{
           top: 0, left: 0, width: 10, height: 10,
-          borderRadius: "50%", backgroundColor: "#111111",
+          borderRadius: "50%", backgroundColor: "var(--accent)",
+          boxShadow: "0 0 10px var(--accent-glow)",
           transform: "translate(-100px, -100px)",
           zIndex: 52, willChange: "transform",
         }}
@@ -163,8 +184,8 @@ export default function HeroSection() {
       >
         <h1
           suppressHydrationWarning
-          className="font-display leading-none tracking-widest uppercase text-black whitespace-nowrap"
-          style={{ fontSize: "clamp(1.4rem, 7vw, 16rem)" }}
+          className="font-display leading-none tracking-widest uppercase text-accent whitespace-nowrap drop-shadow-md"
+          style={{ fontSize: "clamp(2.1rem, 9vw, 16rem)" }}
         >
           ALEXANDRA × NIKA
         </h1>
@@ -194,15 +215,15 @@ export default function HeroSection() {
       >
         <span
           suppressHydrationWarning
-          className="font-display leading-none tracking-widest uppercase text-black whitespace-nowrap"
-          style={{ fontSize: "clamp(1.2rem, 6.5vw, 13rem)" }}
+          className="font-display leading-none tracking-widest uppercase text-textPrimary whitespace-nowrap drop-shadow-md"
+          style={{ fontSize: "clamp(1.8rem, 8vw, 13rem)" }}
         >
           ARE SAYING
         </span>
         <span
           suppressHydrationWarning
-          className="font-hand font-bold leading-none"
-          style={{ fontSize: "clamp(1.2rem, 6vw, 11rem)", color: "#F05235" }}
+          className="font-hand leading-none drop-shadow-lg"
+          style={{ fontSize: "clamp(1.8rem, 7.5vw, 11rem)", color: "var(--accent)" }}
         >
           YES!
         </span>
@@ -214,21 +235,50 @@ export default function HeroSection() {
         style={{ bottom: "8%", zIndex: 4, transformStyle: "preserve-3d", overflow: "hidden" }}
       >
         <p
-          className="font-body uppercase text-black/40"
+          className="font-body uppercase text-textSecondary"
           style={{ fontSize: "clamp(0.5rem, 1.2vw, 0.875rem)", letterSpacing: "0.25em" }}
         >
           21 · 10 · 2026 · ERA HALL · BATUMI
         </p>
+        <a
+          href="/alexandra-nika-2026.ics"
+          download="alexandra-nika-2026.ics"
+          className="font-body uppercase"
+          style={{
+            display: "inline-block",
+            marginTop: 10,
+            fontSize: "clamp(0.55rem, 0.9vw, 0.7rem)",
+            letterSpacing: "0.3em",
+            color: "var(--text-secondary)",
+            textDecoration: "none",
+            borderBottom: "1px solid var(--border-color)",
+            paddingBottom: 2,
+            transition: "color 0.2s, border-color 0.2s, text-shadow 0.2s",
+          }}
+          onMouseEnter={(e) => { e.currentTarget.style.color = "var(--accent)"; e.currentTarget.style.borderColor = "var(--accent)"; e.currentTarget.style.textShadow = "0 0 8px var(--accent-glow)"; }}
+          onMouseLeave={(e) => { e.currentTarget.style.color = "var(--text-secondary)"; e.currentTarget.style.borderColor = "var(--border-color)"; e.currentTarget.style.textShadow = "none"; }}
+        >
+          ♡ {t("addToCalendar")}
+        </a>
       </div>
 
-      {/* Bottom bar */}
-      <div className="hero-bottom absolute inset-x-0 flex justify-center" style={{ bottom: "2%", zIndex: 4 }}>
-        <p className="font-body uppercase" style={{
-          fontSize: "clamp(0.5rem, 1vw, 0.7rem)",
-          letterSpacing: "0.35em", color: "rgba(17,17,17,0.3)",
-        }}>
-          scroll ↓
-        </p>
+      {/* Animated scroll cue — fades out as user scrolls */}
+      <div
+        ref={scrollCueRef}
+        className="hero-bottom hero-scroll-cue absolute inset-x-0 flex flex-col items-center"
+        style={{ bottom: "2%", zIndex: 4, gap: 10, transition: "opacity 0.3s ease" }}
+      >
+        <span
+          className="font-body uppercase"
+          style={{
+            fontSize: "clamp(0.55rem, 0.9vw, 0.7rem)",
+            letterSpacing: "0.35em",
+            color: "rgba(234,230,221,0.75)",
+          }}
+        >
+          scroll
+        </span>
+        <span className="hero-scroll-line" aria-hidden />
       </div>
     </section>
   );

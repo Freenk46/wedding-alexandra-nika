@@ -4,7 +4,7 @@ export default function Footer() {
   return (
     <footer
       style={{
-        background: "linear-gradient(to bottom, #EAE6DD 0%, #e8856a 50%, #F05235 100%)",
+        background: "linear-gradient(to bottom, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-primary) 100%)",
         padding: "80px 32px 32px",
         position: "relative",
         overflow: "hidden",
@@ -14,10 +14,11 @@ export default function Footer() {
       <div
         className="footer-name"
         style={{
-          fontFamily: "var(--font-bebas), 'Bebas Neue', sans-serif",
+          fontFamily: "var(--font-playfair), serif",
           fontSize: "clamp(36px, 10vw, 200px)",
           lineHeight: 0.9,
-          color: "#111111",
+          color: "var(--border-subtle)",
+          WebkitTextStroke: "1px var(--border-color)",
           letterSpacing: "-0.01em",
           whiteSpace: "nowrap",
           overflow: "hidden",
@@ -37,21 +38,21 @@ export default function Footer() {
           right: 32,
           width: 40,
           height: 40,
-          background: "#111",
-          color: "#EAE6DD",
-          border: "none",
+          background: "var(--bg-secondary)",
+          color: "var(--accent)",
+          border: "1px solid var(--border-color)",
           borderRadius: "50%",
           cursor: "pointer",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           fontSize: 18,
-          transition: "background 0.3s ease",
+          transition: "background 0.3s ease, color 0.3s ease",
           minHeight: 44,
           minWidth: 44,
         }}
-        onMouseEnter={(e) => (e.currentTarget.style.background = "#F05235")}
-        onMouseLeave={(e) => (e.currentTarget.style.background = "#111")}
+        onMouseEnter={(e) => { e.currentTarget.style.background = "var(--accent)"; e.currentTarget.style.color = "var(--text-inverted)"; }}
+        onMouseLeave={(e) => { e.currentTarget.style.background = "var(--bg-secondary)"; e.currentTarget.style.color = "var(--accent)"; }}
         aria-label="Back to top"
       >
         ↑
@@ -67,9 +68,9 @@ export default function Footer() {
           justifyContent: "space-between",
           alignItems: "flex-end",
           gap: 8,
-          fontFamily: "var(--font-dm-sans), 'DM Sans', sans-serif",
+          fontFamily: "var(--font-montserrat), sans-serif",
           fontSize: 13,
-          color: "#111111",
+          color: "var(--text-primary)",
           opacity: 0.7,
           paddingRight: 56,
         }}
@@ -79,8 +80,8 @@ export default function Footer() {
           From Batumi with love{" "}
           <span
             style={{
-              color: "#F05235",
-              fontFamily: "var(--font-caveat), 'Caveat', cursive",
+              color: "var(--accent)",
+              fontFamily: "var(--font-great-vibes), cursive",
               fontSize: 18,
               opacity: 1,
             }}

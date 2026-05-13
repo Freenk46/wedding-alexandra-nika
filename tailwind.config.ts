@@ -6,6 +6,7 @@ const config: Config = {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  darkMode: "class",
   theme: {
     screens: {
       xs:  "375px",
@@ -19,14 +20,25 @@ const config: Config = {
     },
     extend: {
       colors: {
+        bgPrimary: "var(--bg-primary)",
+        bgSecondary: "var(--bg-secondary)",
+        textPrimary: "var(--text-primary)",
+        textSecondary: "var(--text-secondary)",
+        textMuted: "var(--text-muted)",
+        accent: "var(--accent)",
+        glassBg: "var(--glass-bg)",
+        glassBorder: "var(--border-color)",
         cream: "#EAE6DD",
         black: "#111111",
-        accent: "#F05235",
+        obsidian: "#0A0A0A",
+        midnight: "#13151A",
+        champagne: "#D4AF37",
+        rosegold: "#E0BFB8",
       },
       fontFamily: {
-        display: ["var(--font-bebas)", "sans-serif"],
-        body: ["var(--font-dm-sans)", "sans-serif"],
-        hand: ["var(--font-caveat)", "cursive"],
+        display: ["var(--font-playfair)", "serif"],
+        body: ["var(--font-montserrat)", "sans-serif"],
+        hand: ["var(--font-great-vibes)", "cursive"],
       },
       letterSpacing: {
         widest2: "0.2em",

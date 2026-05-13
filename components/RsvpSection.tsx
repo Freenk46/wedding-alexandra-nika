@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { fireConfetti } from "@/lib/confetti";
@@ -15,21 +16,24 @@ const BASE_FIELD: React.CSSProperties = {
   width: "100%",
   background: "transparent",
   border: "none",
-  borderBottom: "1px solid rgba(17,17,17,0.3)",
+  borderBottom: "1px solid var(--border-color)",
   padding: "12px 0",
-  fontFamily: "var(--font-dm-sans), DM Sans, sans-serif",
+  fontFamily: "var(--font-montserrat), sans-serif",
   fontSize: 15,
-  color: "#111",
+  color: "var(--text-primary)",
   outline: "none",
 };
 
 export default function RsvpSection() {
+  const t = useTranslations("rsvp");
+  const tHero = useTranslations("hero");
+  const tLoc = useTranslations("location");
   const sectionRef = useRef<HTMLElement>(null);
-  const titleRef   = useRef<HTMLHeadingElement>(null);
-  const formRef    = useRef<HTMLFormElement>(null);
-  const fieldRefs  = useRef<(HTMLInputElement | HTMLTextAreaElement)[]>([]);
-  const [attending, setAttending]     = useState<"yes" | "no" | null>(null);
-  const [status, setStatus]           = useState<FormState>("idle");
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
+  const fieldRefs = useRef<(HTMLInputElement | HTMLTextAreaElement)[]>([]);
+  const [attending, setAttending] = useState<"yes" | "no" | null>(null);
+  const [status, setStatus] = useState<FormState>("idle");
   const [submitHover, setSubmitHover] = useState(false);
 
   useEffect(() => {
@@ -55,10 +59,10 @@ export default function RsvpSection() {
       fieldRefs.current.forEach((field) => {
         if (!field) return;
         field.addEventListener("focus", () =>
-          gsap.to(field, { borderBottomColor: "#F05235", duration: 0.3 })
+          gsap.to(field, { borderBottomColor: "var(--accent)", duration: 0.3 })
         );
         field.addEventListener("blur", () =>
-          gsap.to(field, { borderBottomColor: "rgba(17,17,17,0.3)", duration: 0.3 })
+          gsap.to(field, { borderBottomColor: "var(--border-color)", duration: 0.3 })
         );
       });
     }, sectionRef);
@@ -79,9 +83,13 @@ export default function RsvpSection() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!GOOGLE_SCRIPT_URL) return;
+    if (!GOOGLE_SCRIPT_URL) {
+      setStatus("error");
+      return;
+    }
     setStatus("submitting");
-    const data    = new FormData(e.currentTarget);
+    const form = e.currentTarget;
+    const data = new FormData(form);
     const payload = Object.fromEntries(data.entries());
     try {
       await fetch(GOOGLE_SCRIPT_URL, {
@@ -90,7 +98,7 @@ export default function RsvpSection() {
         body: JSON.stringify(payload),
       });
       setStatus("success");
-      e.currentTarget.reset();
+      form.reset();
       setAttending(null);
     } catch {
       setStatus("error");
@@ -109,7 +117,7 @@ export default function RsvpSection() {
         {/* Dot grid */}
         <div style={{
           position: "absolute", inset: 0,
-          backgroundImage: "radial-gradient(circle, rgba(234,230,221,0.15) 1px, transparent 1px)",
+          backgroundImage: "radial-gradient(circle, var(--border-color) 1px, transparent 1px)",
           backgroundSize: "28px 28px",
           pointerEvents: "none",
         }} />
@@ -117,20 +125,19 @@ export default function RsvpSection() {
         {/* Ghost RSVP — hidden on mobile via .rsvp-deco */}
         <div className="rsvp-deco" style={{
           position: "absolute", bottom: -20, left: -10,
-          fontFamily: "var(--font-bebas), 'Bebas Neue', sans-serif",
+          fontFamily: "var(--font-playfair), serif",
           fontSize: "clamp(140px, 22vw, 300px)",
           lineHeight: 0.85,
-          color: "rgba(255,255,255,0.04)",
+          color: "var(--border-subtle)",
           userSelect: "none", pointerEvents: "none",
         }}>
-          RSVP
         </div>
 
         {/* Rotated watermark — hidden on mobile */}
         <span className="rsvp-deco" style={{
           position: "absolute", top: "40%", right: 24,
-          fontFamily: "var(--font-caveat), 'Caveat', cursive",
-          fontSize: 18, color: "rgba(234,230,221,0.15)",
+          fontFamily: "var(--font-great-vibes), cursive",
+          fontSize: 24, color: "var(--border-color)",
           transform: "rotate(90deg)", letterSpacing: "0.1em",
           whiteSpace: "nowrap", pointerEvents: "none",
         }}>
@@ -139,9 +146,9 @@ export default function RsvpSection() {
 
         {/* Top label — hidden on mobile */}
         <p className="rsvp-deco" style={{
-          fontFamily: "var(--font-dm-sans), DM Sans, sans-serif",
+          fontFamily: "var(--font-montserrat), sans-serif",
           fontSize: 11, letterSpacing: "0.25em", textTransform: "uppercase",
-          color: "#F05235", position: "relative",
+          color: "var(--accent)", position: "relative",
         }}>
           21 · 10 · 2026
         </p>
@@ -149,29 +156,30 @@ export default function RsvpSection() {
         {/* Main title */}
         <div style={{ position: "relative" }}>
           <h2 ref={titleRef} className="rsvp-h2" style={{
-            fontFamily: "var(--font-bebas), 'Bebas Neue', sans-serif",
+            fontFamily: "var(--font-playfair), serif",
             fontSize: "clamp(64px, 8vw, 110px)",
-            lineHeight: 0.9, color: "#EAE6DD",
+            lineHeight: 0.9, color: "var(--text-primary)",
             letterSpacing: "-0.01em", marginBottom: 24,
+            whiteSpace: "pre-line", textShadow: "0 2px 10px rgba(0,0,0,0.1)",
           }}>
-            დაადასტურე<br />დასწრება
+            {t("headline")}
           </h2>
           <p style={{
-            fontFamily: "var(--font-caveat), 'Caveat', cursive",
-            fontSize: 22, color: "#F05235",
+            fontFamily: "var(--font-great-vibes), cursive",
+            fontSize: 32, color: "var(--accent)", textShadow: "0 2px 8px rgba(0,0,0,0.1)",
           }}>
-            გელოდებით! ♡
+            {t("tagline")}
           </p>
         </div>
 
         {/* Venue info — hidden on mobile */}
         <div className="rsvp-deco" style={{ position: "relative" }}>
           <p style={{
-            fontFamily: "var(--font-dm-sans), DM Sans, sans-serif",
-            fontSize: 13, color: "rgba(234,230,221,0.5)", lineHeight: 1.7,
+            fontFamily: "var(--font-montserrat), sans-serif",
+            fontSize: 13, color: "var(--text-secondary)", lineHeight: 1.7,
           }}>
-            ERA Hall · ბათუმი<br />
-            აფსაროსის 41
+            {tLoc("venue")}<br />
+            {tLoc("address")}
           </p>
         </div>
       </div>
@@ -185,23 +193,43 @@ export default function RsvpSection() {
             height: "100%", gap: 24,
           }}>
             <span style={{
-              fontFamily: "var(--font-caveat), 'Caveat', cursive",
-              fontSize: 80, color: "#F05235",
+              fontFamily: "var(--font-great-vibes), cursive",
+              fontSize: 90, color: "var(--accent)", textShadow: "0 0 16px var(--accent-glow)",
             }}>
               YES!
             </span>
             <p style={{
-              fontFamily: "var(--font-bebas), 'Bebas Neue', sans-serif",
-              fontSize: 32, color: "#111", letterSpacing: "0.05em",
+              fontFamily: "var(--font-playfair), serif",
+              fontSize: 32, color: "var(--text-primary)", letterSpacing: "0.05em",
+              textAlign: "center",
             }}>
-              გელოდებით!
+              {t("tagline").replace(/[♡]/g, "").trim()}
             </p>
             <p style={{
-              fontFamily: "var(--font-dm-sans), DM Sans, sans-serif",
-              fontSize: 14, color: "rgba(17,17,17,0.6)", textAlign: "center",
+              fontFamily: "var(--font-montserrat), sans-serif",
+              fontSize: 14, color: "var(--text-secondary)", textAlign: "center",
             }}>
-              ERA Hall · 21 ოქტომბერი 2026
+              {tLoc("venue")} · {tHero("date")}
             </p>
+            <a
+              href="/alexandra-nika-2026.ics"
+              download="alexandra-nika-2026.ics"
+              style={{
+                display: "inline-flex", alignItems: "center", gap: 8,
+                marginTop: 8,
+                fontFamily: "var(--font-montserrat), sans-serif",
+                fontSize: 11, letterSpacing: "0.22em", textTransform: "uppercase",
+                color: "var(--accent)", textDecoration: "none",
+                border: "1px solid var(--border-color)",
+                padding: "12px 20px",
+                minHeight: 44,
+                transition: "background 0.25s, color 0.25s",
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = "var(--accent)"; e.currentTarget.style.color = "var(--text-inverted)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "var(--accent)"; }}
+            >
+              ♡ {tHero("addToCalendar")}
+            </a>
           </div>
         ) : (
           <form ref={formRef} onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 32 }}>
@@ -209,24 +237,26 @@ export default function RsvpSection() {
             <input
               ref={(el) => addFieldRef(el, 0)}
               name="name" required
-              placeholder="სახელი და გვარი"
+              aria-label={t("name")}
+              placeholder={t("name")}
               style={BASE_FIELD}
             />
 
             <input
               ref={(el) => addFieldRef(el, 1)}
               name="guests" type="number" min="1" max="10" defaultValue={1}
-              placeholder="სტუმართა რაოდენობა"
+              aria-label={t("guests")}
+              placeholder={t("guests")}
               style={BASE_FIELD}
             />
 
             <div>
               <p style={{
-                fontFamily: "var(--font-dm-sans), DM Sans, sans-serif",
+                fontFamily: "var(--font-montserrat), sans-serif",
                 fontSize: 11, letterSpacing: "0.22em", textTransform: "uppercase",
-                color: "rgba(17,17,17,0.5)", marginBottom: 12,
+                color: "var(--text-secondary)", marginBottom: 12,
               }}>
-                დავესწრები?
+                {t("attending")}
               </p>
               <div style={{ display: "flex", gap: 12 }}>
                 {(["yes", "no"] as const).map((val) => {
@@ -236,18 +266,24 @@ export default function RsvpSection() {
                       key={val}
                       type="button"
                       onClick={() => setAttending(val)}
+                      aria-pressed={sel}
                       style={{
-                        flex: 1, padding: "14px", minHeight: 56,
-                        fontFamily: "var(--font-bebas), 'Bebas Neue', sans-serif",
-                        fontSize: 28,
-                        background: sel ? (val === "yes" ? "#111" : "#F05235") : "transparent",
-                        border:     sel ? (val === "yes" ? "1px solid #111" : "1px solid #F05235") : "1px solid rgba(17,17,17,0.3)",
-                        color:      sel ? (val === "yes" ? "#EAE6DD" : "#fff") : "rgba(17,17,17,0.5)",
+                        flex: 1,
+                        padding: "18px 12px",
+                        minHeight: 64,
+                        fontFamily: "var(--font-montserrat), sans-serif",
+                        fontSize: 11,
+                        letterSpacing: "0.22em",
+                        textTransform: "uppercase",
+                        lineHeight: 1.4,
+                        background: sel ? (val === "yes" ? "var(--accent)" : "transparent") : "transparent",
+                        border: sel ? (val === "yes" ? "1px solid var(--accent)" : "1px solid var(--text-secondary)") : "1px solid var(--border-color)",
+                        color: sel ? (val === "yes" ? "var(--text-inverted)" : "var(--text-primary)") : "var(--text-secondary)",
                         cursor: "pointer",
                         transition: "all 0.25s ease",
                       }}
                     >
-                      {val === "yes" ? "დიახ" : "ვერა"}
+                      {val === "yes" ? t("yes") : t("no")}
                     </button>
                   );
                 })}
@@ -258,23 +294,25 @@ export default function RsvpSection() {
             <input
               ref={(el) => addFieldRef(el, 2)}
               name="dietary"
-              placeholder="დიეტური მოთხოვნები"
+              aria-label={t("dietary")}
+              placeholder={t("dietary")}
               style={BASE_FIELD}
             />
 
             <textarea
               ref={(el) => addFieldRef(el, 3)}
               name="message" rows={3}
-              placeholder="შეტყობინება წყვილს"
+              aria-label={t("message")}
+              placeholder={t("message")}
               style={{ ...BASE_FIELD, resize: "none" }}
             />
 
             {status === "error" && (
               <p style={{
-                fontFamily: "var(--font-dm-sans), DM Sans, sans-serif",
+                fontFamily: "var(--font-montserrat), sans-serif",
                 fontSize: 13, color: "#F05235",
               }}>
-                შეცდომა. სცადე თავიდან.
+                {t("error")}
               </p>
             )}
 
@@ -285,20 +323,20 @@ export default function RsvpSection() {
               onMouseLeave={() => setSubmitHover(false)}
               style={{
                 width: "100%",
-                background: submitHover ? "#F05235" : "#111",
-                color: "#EAE6DD",
-                border: "none",
+                background: submitHover && attending ? "var(--accent)" : "transparent",
+                color: submitHover && attending ? "var(--text-inverted)" : "var(--accent)",
+                border: "1px solid var(--border-color)",
                 padding: "18px",
                 minHeight: 56,
-                fontFamily: "var(--font-dm-sans), DM Sans, sans-serif",
+                fontFamily: "var(--font-montserrat), sans-serif",
                 fontSize: 11, letterSpacing: "0.25em", textTransform: "uppercase",
                 cursor: !attending || status === "submitting" ? "not-allowed" : "pointer",
                 opacity: !attending || status === "submitting" ? 0.4 : 1,
-                transition: "background 0.3s",
+                transition: "background 0.3s, color 0.3s",
                 marginTop: 8,
               }}
             >
-              {status === "submitting" ? "..." : "გამოგზავნა"}
+              {status === "submitting" ? "..." : t("submit")}
             </button>
 
           </form>

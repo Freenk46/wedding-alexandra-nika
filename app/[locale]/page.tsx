@@ -16,7 +16,7 @@ export default function HomePage() {
         <HeroSection />
       </div>
 
-      <div style={{ position: 'relative', zIndex: 2, backgroundColor: '#EAE6DD' }}>
+      <div style={{ position: 'relative', zIndex: 2, backgroundColor: 'var(--bg-primary)', transition: 'background-color 0.3s' }}>
         <div style={{
           borderRadius: '20px 20px 0 0',
           overflow: 'hidden',
@@ -26,7 +26,7 @@ export default function HomePage() {
         </div>
       </div>
 
-      <div style={{ position: 'relative', zIndex: 3, backgroundColor: '#111' }}>
+      <div style={{ position: 'relative', zIndex: 3, backgroundColor: 'var(--bg-secondary)', transition: 'background-color 0.3s' }}>
         <div style={{
           borderRadius: '20px 20px 0 0',
           overflow: 'hidden',
@@ -36,16 +36,16 @@ export default function HomePage() {
         </div>
       </div>
 
-      <div style={{ position: 'relative', zIndex: 4, backgroundColor: '#EAE6DD' }}>
+      <div style={{ position: 'relative', zIndex: 4, backgroundColor: 'var(--bg-primary)', transition: 'background-color 0.3s' }}>
         <JourneySection />
       </div>
 
-      <div style={{ position: 'relative', zIndex: 5, backgroundColor: '#EAE6DD' }}>
+      <div style={{ position: 'relative', zIndex: 5, backgroundColor: 'var(--bg-primary)', transition: 'background-color 0.3s' }}>
         <DividerMarquee />
         <RsvpSection />
       </div>
 
-      <div style={{ position: 'relative', zIndex: 6, backgroundColor: '#EAE6DD' }}>
+      <div style={{ position: 'relative', zIndex: 6, backgroundColor: 'var(--bg-primary)', transition: 'background-color 0.3s' }}>
         <Footer />
       </div>
     </main>

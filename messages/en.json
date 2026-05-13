@@ -2,6 +2,7 @@
   "nav": {
     "story": "Our Story",
     "gallery": "Gallery",
+    "journey": "Journey",
     "program": "Program",
     "location": "Location",
     "rsvp": "RSVP"
@@ -10,6 +11,7 @@
     "join": "Join us to celebrate",
     "date": "October 21, 2026",
     "time": "18:00",
+    "addToCalendar": "Add to Calendar",
     "countdown": {
       "days": "Days",
       "hours": "Hours",
@@ -41,6 +43,8 @@
   },
   "rsvp": {
     "title": "RSVP",
+    "headline": "Save\nour Day",
+    "tagline": "Can't wait! ♡",
     "subtitle": "Please confirm your attendance by September 1, 2026",
     "name": "Full Name",
     "guests": "Number of Guests",

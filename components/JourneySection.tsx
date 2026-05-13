@@ -13,7 +13,7 @@ const LOCATIONS = [
     time: "~15:00",
     maps: "https://maps.app.goo.gl/zpWN6SAa7FiaXdBm9",
     src: "/Journey/eklesia.jpg",
-    bg: "#EAE6DD", textColor: "#111", muted: "#888",
+    bg: "var(--bg-primary)", textColor: "var(--text-primary)", muted: "var(--text-secondary)",
   },
   {
     type: "ფოტო სესია I",
@@ -21,7 +21,7 @@ const LOCATIONS = [
     time: "~17:00",
     maps: "https://maps.app.goo.gl/Cg2xViNGKYmCi6au6",
     src: "/Journey/cixisdziri.jpg",
-    bg: "#F05235", textColor: "#fff", muted: "rgba(255,255,255,0.6)",
+    bg: "var(--bg-secondary)", textColor: "var(--text-primary)", muted: "var(--text-secondary)",
   },
   {
     type: "ფოტო სესია II",
@@ -29,7 +29,7 @@ const LOCATIONS = [
     time: "~18:30",
     maps: "https://maps.app.goo.gl/JWPuTw5xxHXmffJg9",
     src: "/Journey/petra.jpg",
-    bg: "#111", textColor: "#EAE6DD", muted: "rgba(234,230,221,0.5)",
+    bg: "var(--bg-primary)", textColor: "var(--text-primary)", muted: "var(--text-secondary)",
   },
   {
     type: "ვახშამი და გართობა",
@@ -37,7 +37,7 @@ const LOCATIONS = [
     time: "~20:00",
     maps: "https://www.google.com/maps/place/Era+Banquet+Hall/@41.5816842,41.5785035,18z",
     src: "/Journey/Era.jpg",
-    bg: "#EAE6DD", textColor: "#111", muted: "#888",
+    bg: "var(--bg-secondary)", textColor: "var(--text-primary)", muted: "var(--text-secondary)",
   },
 ];
 
@@ -86,7 +86,7 @@ export default function JourneySection() {
         });
 
         tl.to(img,      { width: "100%", duration: 1, ease: "power2.inOut" }, 0);
-        tl.to(text,     { width: "0%", opacity: 0, duration: 0.8, ease: "power2.in" }, 0);
+        tl.to(text,     { opacity: 0, duration: 0.8, ease: "power2.in" }, 0);
         tl.to(gradient, { opacity: 1, duration: 0.5 }, 0.3);
         tl.to(overlay,  { opacity: 1, duration: 0.5 }, 0.5);
       });
@@ -104,17 +104,17 @@ export default function JourneySection() {
       <div id="location" style={{ position: "absolute", top: "50%" }} />
 
       {/* Section header */}
-      <div style={{ padding: "80px 32px 48px", background: "#EAE6DD" }}>
+      <div style={{ padding: "80px 32px 48px", background: "var(--bg-primary)", transition: "background 0.3s" }}>
         <p style={{
           fontSize: 11, letterSpacing: "0.25em", textTransform: "uppercase",
-          color: "#F05235", fontFamily: "var(--font-dm-sans), sans-serif", marginBottom: 16,
+          color: "var(--accent)", fontFamily: "var(--font-montserrat), sans-serif", marginBottom: 16,
         }}>
           21 · 10 · 2026
         </p>
         <h2 style={{
-          fontFamily: "var(--font-bebas), 'Bebas Neue', sans-serif",
+          fontFamily: "var(--font-playfair), serif",
           fontSize: "clamp(60px, 12vw, 160px)",
-          lineHeight: 0.9, color: "#111111", letterSpacing: "-0.01em",
+          lineHeight: 0.9, color: "var(--text-primary)", letterSpacing: "-0.01em",
           fontWeight: 400, margin: 0,
         }}>
           THE<br />JOURNEY
@@ -127,7 +127,7 @@ export default function JourneySection() {
           ref={(el) => { if (el) locRefs.current[i] = el; }}
           className="journey-loc"
         >
-          <div className="journey-panel" style={{ background: loc.bg }}>
+          <div className="journey-panel transition-colors duration-300" style={{ background: loc.bg }}>
 
             {/* IMAGE — 70% desktop, 100% mobile via CSS */}
             <div
@@ -151,7 +151,7 @@ export default function JourneySection() {
                 ref={(el) => { if (el) typeRefs.current[i] = el; }}
                 className="journey-type-label"
                 style={{
-                  fontFamily: "var(--font-dm-sans), DM Sans, sans-serif",
+                  fontFamily: "var(--font-montserrat), sans-serif",
                   fontSize: 11, letterSpacing: "0.22em", textTransform: "uppercase",
                   color: loc.muted, marginBottom: 12,
                 }}
@@ -162,7 +162,7 @@ export default function JourneySection() {
                 ref={(el) => { if (el) nameRefs.current[i] = el; }}
                 className="journey-name-label"
                 style={{
-                  fontFamily: "var(--font-bebas), 'Bebas Neue', sans-serif",
+                  fontFamily: "var(--font-playfair), serif",
                   fontSize: "clamp(28px, 3.5vw, 52px)",
                   color: loc.textColor, lineHeight: 1, marginBottom: 16,
                 }}
@@ -173,8 +173,8 @@ export default function JourneySection() {
                 ref={(el) => { if (el) timeRefs.current[i] = el; }}
                 className="journey-time-label"
                 style={{
-                  fontFamily: "var(--font-caveat), 'Caveat', cursive",
-                  fontSize: 26, color: "#F05235", marginBottom: 20,
+                  fontFamily: "var(--font-great-vibes), cursive",
+                  fontSize: 32, color: "var(--accent)", marginBottom: 20,
                 }}
               >
                 {loc.time}
@@ -186,13 +186,17 @@ export default function JourneySection() {
                 rel="noopener noreferrer"
                 className="journey-map-btn"
                 style={{
-                  fontFamily: "var(--font-dm-sans), DM Sans, sans-serif",
+                  fontFamily: "var(--font-montserrat), sans-serif",
                   fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase",
-                  border: "1px solid currentColor",
-                  color: loc.textColor,
+                  border: "1px solid var(--border-color)",
+                  color: "var(--accent)",
                   padding: "8px 16px", textDecoration: "none",
                   display: "inline-block", width: "fit-content",
+                  whiteSpace: "nowrap",
+                  transition: "background 0.3s, color 0.3s",
                 }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = "var(--accent)"; e.currentTarget.style.color = "var(--text-inverted)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "var(--accent)"; }}
               >
                 VIEW ON MAP →
               </a>
@@ -201,24 +205,25 @@ export default function JourneySection() {
             {/* OVERLAY — desktop: fades in on scroll / mobile: always visible via CSS */}
             <div
               ref={(el) => { if (el) overlayRefs.current[i] = el; }}
-              className="journey-overlay-panel"
+              className="journey-overlay-panel glass-panel"
+              style={{ padding: "24px", borderRadius: "12px", bottom: "30px", left: "30px" }}
             >
               <p style={{
-                fontFamily: "var(--font-dm-sans), DM Sans, sans-serif",
+                fontFamily: "var(--font-montserrat), sans-serif",
                 fontSize: 11, letterSpacing: "0.22em", textTransform: "uppercase",
-                color: "rgba(255,255,255,0.6)", marginBottom: 8,
+                color: "var(--text-secondary)", marginBottom: 8,
               }}>
                 {loc.type}
               </p>
               <h2 style={{
-                fontFamily: "var(--font-bebas), 'Bebas Neue', sans-serif",
-                fontSize: 48, color: "#fff", lineHeight: 1, marginBottom: 10,
+                fontFamily: "var(--font-playfair), serif",
+                fontSize: 42, color: "var(--text-primary)", lineHeight: 1, marginBottom: 10, textShadow: "0 2px 10px rgba(0,0,0,0.2)",
               }}>
                 {loc.name}
               </h2>
               <p style={{
-                fontFamily: "var(--font-caveat), 'Caveat', cursive",
-                fontSize: 26, color: "#F05235", marginBottom: 14,
+                fontFamily: "var(--font-great-vibes), cursive",
+                fontSize: 32, color: "var(--accent)", marginBottom: 14, textShadow: "0 2px 10px rgba(0,0,0,0.2)",
               }}>
                 {loc.time}
               </p>
@@ -227,12 +232,15 @@ export default function JourneySection() {
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
-                  fontFamily: "var(--font-dm-sans), DM Sans, sans-serif",
+                  fontFamily: "var(--font-montserrat), sans-serif",
                   fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase",
-                  color: "#fff", border: "1px solid rgba(255,255,255,0.5)",
+                  color: "var(--accent)", border: "1px solid var(--border-color)",
                   padding: "8px 16px", textDecoration: "none",
                   display: "inline-block", pointerEvents: "auto",
+                  transition: "background 0.3s, color 0.3s",
                 }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = "var(--accent)"; e.currentTarget.style.color = "var(--text-inverted)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "var(--accent)"; }}
               >
                 VIEW ON MAP →
               </a>

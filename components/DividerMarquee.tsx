@@ -3,7 +3,7 @@ export default function DividerMarquee() {
     <div style={{
       width: '100%',
       height: 56,
-      background: '#111',
+      background: 'var(--bg-secondary)',
       overflow: 'hidden',
       display: 'flex',
       alignItems: 'center',
@@ -14,7 +14,7 @@ export default function DividerMarquee() {
         animation: 'marquee 14s linear infinite',
         fontFamily: 'Bebas Neue, sans-serif',
         fontSize: 20,
-        color: '#F05235',
+        color: 'var(--accent)',
         letterSpacing: '0.14em',
       }}>
         {Array(6).fill('ALEXANDRA × NIKA × 21.10.2026 × ERA HALL × BATUMI × ').join('')}

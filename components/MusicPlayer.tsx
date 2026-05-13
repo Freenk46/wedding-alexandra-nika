@@ -5,11 +5,10 @@ import gsap from 'gsap';
 export default function MusicPlayer() {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [playing, setPlaying] = useState(false);
-  const [volume, setVolume] = useState(0.4);
-  const [showVolume, setShowVolume] = useState(false);
+  const [volume] = useState(0.4);
   const [mounted, setMounted] = useState(false);
   const playerRef = useRef<HTMLDivElement>(null);
-  const barsRef = useRef<HTMLDivElement[]>([]);
+  const recordRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -39,7 +38,6 @@ export default function MusicPlayer() {
       audio.play()
         .then(() => {
           setPlaying(true);
-          animateBars(true);
         })
         .catch(() => {
           // Autoplay blocked — user must press play manually
@@ -55,30 +53,21 @@ export default function MusicPlayer() {
       document.removeEventListener('touchstart', startMusic);
       document.removeEventListener('scroll', startMusic);
     };
-  }, [mounted]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [mounted, playing, volume]);
 
-  const animateBars = (start: boolean) => {
-    barsRef.current.forEach((bar, i) => {
-      if (!bar) return;
-      if (start) {
-        gsap.to(bar, {
-          scaleY: () => 0.3 + Math.random() * 0.7,
-          duration: 0.3 + Math.random() * 0.3,
-          ease: 'power1.inOut',
-          yoyo: true,
-          repeat: -1,
-          delay: i * 0.08,
-        });
-      } else {
-        gsap.killTweensOf(bar);
-        gsap.to(bar, {
-          scaleY: 0.2,
-          duration: 0.3,
-          ease: 'power2.out',
-        });
-      }
-    });
-  };
+  // Vinyl Spin Animation
+  useEffect(() => {
+    if (playing) {
+      gsap.to(recordRef.current, {
+        rotation: 360,
+        duration: 4,
+        repeat: -1,
+        ease: 'none',
+      });
+    } else {
+      gsap.killTweensOf(recordRef.current);
+    }
+  }, [playing]);
 
   const togglePlay = () => {
     const audio = audioRef.current;
@@ -87,19 +76,11 @@ export default function MusicPlayer() {
     if (playing) {
       audio.pause();
       setPlaying(false);
-      animateBars(false);
     } else {
       audio.volume = volume;
       audio.play();
       setPlaying(true);
-      animateBars(true);
     }
-  };
-
-  const handleVolume = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = parseFloat(e.target.value);
-    setVolume(val);
-    if (audioRef.current) audioRef.current.volume = val;
   };
 
   if (!mounted) return null;
@@ -115,124 +96,88 @@ export default function MusicPlayer() {
 
       <div
         ref={playerRef}
+        onClick={togglePlay}
         style={{
           position: 'fixed',
-          bottom: 32,
-          left: 32,
+          bottom: 48,
+          right: 24,
           zIndex: 999,
           display: 'flex',
           alignItems: 'center',
-          gap: 12,
-          background: 'rgba(17,17,17,0.85)',
-          backdropFilter: 'blur(12px)',
-          WebkitBackdropFilter: 'blur(12px)',
-          padding: '10px 16px',
-          borderRadius: 2,
-          border: '1px solid rgba(255,255,255,0.08)',
+          background: 'var(--glass-bg)',
+          backdropFilter: 'blur(16px)',
+          WebkitBackdropFilter: 'blur(16px)',
+          padding: '8px 16px 8px 8px',
+          borderRadius: 100,
+          border: '1px solid var(--border-color)',
+          boxShadow: '0 10px 30px rgba(0,0,0,0.15)',
+          cursor: 'pointer',
+          transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = 'translateY(-2px)';
+          e.currentTarget.style.boxShadow = '0 12px 40px rgba(0,0,0,0.2)';
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = 'translateY(0)';
+          e.currentTarget.style.boxShadow = '0 10px 30px rgba(0,0,0,0.15)';
         }}
       >
-        {/* Play/Pause */}
-        <button
-          onClick={togglePlay}
-          aria-label={playing ? 'Pause music' : 'Play music'}
+        {/* Spinning Record */}
+        <div
+          ref={recordRef}
           style={{
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            padding: 0,
-            color: '#EAE6DD',
+            width: 36,
+            height: 36,
+            borderRadius: '50%',
+            background: 'conic-gradient(from 0deg, #111, #333, #111, #333, #111)',
+            border: '2px solid var(--accent)',
             display: 'flex',
             alignItems: 'center',
-            minWidth: 20,
-            minHeight: 20,
+            justifyContent: 'center',
+            flexShrink: 0,
+            boxShadow: '0 2px 10px rgba(0,0,0,0.3)',
+            marginRight: 12,
           }}
         >
-          {playing ? (
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-              <rect x="3" y="2" width="4" height="12" rx="1"/>
-              <rect x="9" y="2" width="4" height="12" rx="1"/>
-            </svg>
-          ) : (
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-              <path d="M3 2l11 6-11 6V2z"/>
-            </svg>
-          )}
-        </button>
-
-        {/* Equalizer bars */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 2, height: 20 }}>
-          {[...Array(5)].map((_, i) => (
-            <div
-              key={i}
-              ref={(el) => { if (el) barsRef.current[i] = el; }}
-              style={{
-                width: 3,
-                height: 16,
-                background: '#F05235',
-                borderRadius: 2,
-                transformOrigin: 'bottom',
-                transform: 'scaleY(0.2)',
-                opacity: playing ? 1 : 0.4,
-                transition: 'opacity 0.3s',
-              }}
-            />
-          ))}
+          <div style={{ width: 10, height: 10, borderRadius: '50%', background: 'var(--accent)', border: '2px solid #111' }} />
         </div>
 
-        {/* Volume icon */}
-        <button
-          onClick={() => setShowVolume(!showVolume)}
-          aria-label="Toggle volume"
-          style={{
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            padding: 0,
-            color: '#EAE6DD',
-            opacity: 0.6,
-            display: 'flex',
-            alignItems: 'center',
-            minHeight: 20,
-          }}
-        >
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-            <path d="M8 2L4 6H1v4h3l4 4V2z"/>
-            {volume > 0 && (
-              <path d="M11 5.5a4 4 0 010 5" stroke="currentColor" strokeWidth="1.2" fill="none" strokeLinecap="round"/>
-            )}
-            {volume > 0.5 && (
-              <path d="M13 3.5a7 7 0 010 9" stroke="currentColor" strokeWidth="1.2" fill="none" strokeLinecap="round"/>
-            )}
-          </svg>
-        </button>
+        {/* Track Info */}
+        <div style={{ display: 'flex', flexDirection: 'column', marginRight: 16 }}>
+           <span style={{ fontFamily: 'var(--font-montserrat), sans-serif', fontSize: 9, letterSpacing: '0.15em', color: 'var(--text-secondary)', textTransform: 'uppercase', marginBottom: 2 }}>
+             {playing ? 'Now Playing' : 'Paused'}
+           </span>
+           <span style={{ fontFamily: 'var(--font-playfair), serif', fontSize: 13, color: 'var(--text-primary)', letterSpacing: '0.05em' }}>
+             A × N Wedding
+           </span>
+        </div>
 
-        {/* Volume slider */}
-        {showVolume && (
-          <input
-            type="range"
-            min="0"
-            max="1"
-            step="0.05"
-            value={volume}
-            onChange={handleVolume}
-            aria-label="Volume"
-            style={{
-              width: 72,
-              accentColor: '#F05235',
-              cursor: 'pointer',
-            }}
-          />
-        )}
+        {/* Equalizer */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 3, height: 16 }}>
+           {[0.6, 0.9, 0.5, 0.8].map((dur, i) => (
+              <div
+                key={i}
+                style={{
+                  width: 2,
+                  height: '100%',
+                  background: 'var(--accent)',
+                  borderRadius: 2,
+                  transformOrigin: 'bottom',
+                  animation: playing ? `eq ${dur}s ease-in-out infinite alternate ${i * 0.1}s` : 'none',
+                  transform: playing ? 'scaleY(0.3)' : 'scaleY(0.2)',
+                  opacity: playing ? 1 : 0.4,
+                }}
+              />
+           ))}
+        </div>
 
-        {/* Label */}
-        <span style={{
-          fontFamily: 'Caveat, cursive',
-          fontSize: 13,
-          color: 'rgba(234,230,221,0.5)',
-          whiteSpace: 'nowrap',
-        }}>
-          A × N
-        </span>
+        <style>{`
+          @keyframes eq {
+            0% { transform: scaleY(0.3); }
+            100% { transform: scaleY(1); }
+          }
+        `}</style>
       </div>
     </>
   );

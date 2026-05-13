@@ -93,25 +93,25 @@ export default function GallerySection() {
       }}>
         <p style={{
           fontSize: 11, letterSpacing: '0.28em',
-          color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase',
-          fontFamily: 'DM Sans, sans-serif', marginBottom: 16,
+          color: 'var(--text-muted)', textTransform: 'uppercase',
+          fontFamily: 'var(--font-montserrat), sans-serif', marginBottom: 16,
         }}>
           WHAT SAYING{' '}
-          <span style={{ color: '#F05235', fontFamily: 'Caveat', fontSize: 20 }}>
+          <span style={{ color: 'var(--accent)', fontFamily: 'var(--font-great-vibes), cursive', fontSize: 26, textShadow: '0 0 10px var(--accent-glow)' }}>
             &ldquo;YES!&rdquo;
           </span>
           {' '}LOOKS LIKE
         </p>
         <h2 style={{
-          fontFamily: 'Bebas Neue, sans-serif',
+          fontFamily: 'var(--font-playfair), serif',
           fontSize: 'clamp(48px, 10vw, 140px)',
-          color: '#fff', lineHeight: 0.9, letterSpacing: '-0.01em',
+          color: 'var(--text-primary)', lineHeight: 0.9, letterSpacing: '-0.01em', textShadow: '0 4px 20px rgba(0,0,0,0.8)',
         }}>
           OUR<br />MOMENTS
         </h2>
       </div>
 
-      <section ref={sectionRef} style={{ background: '#111', padding: '0 0 80px' }}>
+      <section ref={sectionRef} className="bg-bgPrimary transition-colors duration-300" style={{ padding: '0 0 80px' }}>
         <div className="gallery-content">
           {images.map((img, i) => (
             <div
@@ -136,8 +136,9 @@ export default function GallerySection() {
                 />
                 <div style={{
                   position: 'absolute', top: 16, left: 20,
-                  fontFamily: 'Bebas Neue, sans-serif', fontSize: 13,
-                  color: 'rgba(255,255,255,0.4)', letterSpacing: '0.15em',
+                  fontFamily: 'var(--font-playfair), serif', fontSize: 16,
+                  color: 'var(--text-secondary)', letterSpacing: '0.15em',
+                  textShadow: '0 2px 4px rgba(0,0,0,0.8)',
                 }}>
                   {String(i + 1).padStart(2, '0')}
                 </div>
@@ -156,7 +157,7 @@ export default function GallerySection() {
                 >
                   {[190, 140, 210, 100, 160].map((h, j) => (
                     <div key={j} style={{
-                      width: '3px', height: h, background: '#FFFFFF',
+                      width: '1px', height: h, background: 'var(--border-color)',
                       marginTop: [0, 50, 10, 90, 35][j], flexShrink: 0,
                     }} />
                   ))}

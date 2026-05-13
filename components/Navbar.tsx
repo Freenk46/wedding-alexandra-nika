@@ -3,6 +3,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
+import { useTheme } from "next-themes";
 import gsap from "gsap";
 import { fireConfetti } from "@/lib/confetti";
 import MobileMenu from "./MobileMenu";
@@ -22,8 +23,13 @@ export default function Navbar() {
   const router = useRouter();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
   const logoRef = useRef<SVGTextElement>(null);
   const switcherRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => setMounted(true), []);
 
   const switchLocale = (next: string) => {
     const segments = pathname.split("/");
@@ -33,10 +39,10 @@ export default function Navbar() {
   };
 
   const navItems = [
-    { href: "#story",   label: t("story")   },
+    { href: "#story", label: t("story") },
     { href: "#gallery", label: t("gallery") },
-    { href: "#journey", label: "მოგზაურობა" },
-    { href: "#rsvp",    label: "RSVP"       },
+    { href: "#journey", label: t("journey") },
+    { href: "#rsvp", label: t("rsvp") },
   ];
 
   const currentLocale = LOCALES.find((l) => l.code === locale) ?? LOCALES[0];
@@ -57,6 +63,14 @@ export default function Navbar() {
     return () => { document.body.style.overflow = ""; };
   }, [menuOpen]);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   useLayoutEffect(() => {
     const logoText = logoRef.current;
     if (!logoText) return;
@@ -64,8 +78,8 @@ export default function Navbar() {
     const ctx = gsap.context(() => {
       gsap.set(logoText, {
         fill: "transparent",
-        stroke: "#111111",
-        strokeWidth: 1.5,
+        stroke: "#D4AF37",
+        strokeWidth: "1px",
         strokeDasharray: 1000,
         strokeDashoffset: 1000,
       });
@@ -77,7 +91,7 @@ export default function Navbar() {
       tl.to(
         logoText,
         {
-          fill: "#111111",
+          fill: "var(--accent)",
           duration: 0.3,
           ease: "none",
           onComplete: () => gsap.set(logoText, { clearProps: "all" }),
@@ -85,10 +99,11 @@ export default function Navbar() {
         0.9
       );
 
-      tl.from(".nav-link", { autoAlpha: 0, y: -15, duration: 0.4, ease: "power3.out", stagger: 0.07 }, 0.2);
-      tl.from(".lang-switcher", { autoAlpha: 0, y: -15, duration: 0.35 }, 0.56);
-      tl.from(".rsvp-btn", { autoAlpha: 0, y: -15, duration: 0.35 }, 0.66);
-      tl.from(".hamburger-btn", { autoAlpha: 0, y: -15, duration: 0.35 }, 0.56);
+      tl.from(".nav-link", { autoAlpha: 0, y: -15, duration: 0.4, ease: "power3.out", stagger: 0.07, clearProps: "all" }, 0.2);
+      tl.from(".lang-switcher", { autoAlpha: 0, y: -15, duration: 0.35, clearProps: "all" }, 0.56);
+      tl.from(".rsvp-btn", { autoAlpha: 0, y: -15, duration: 0.35, clearProps: "all" }, 0.66);
+      tl.from(".hamburger-btn", { autoAlpha: 0, y: -15, duration: 0.35, clearProps: "all" }, 0.56);
+      tl.from(".theme-toggle", { autoAlpha: 0, y: -15, duration: 0.35, clearProps: "all" }, 0.56);
     });
 
     return () => ctx.revert();
@@ -98,7 +113,7 @@ export default function Navbar() {
     <>
       <header
         style={{
-          position: "absolute",
+          position: "fixed",
           top: 0,
           left: 0,
           right: 0,
@@ -107,7 +122,11 @@ export default function Navbar() {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          background: "transparent",
+          background: scrolled ? "var(--glass-bg)" : "transparent",
+          backdropFilter: scrolled ? "blur(16px)" : "none",
+          WebkitBackdropFilter: scrolled ? "blur(16px)" : "none",
+          borderBottom: scrolled ? "1px solid var(--border-color)" : "1px solid transparent",
+          transition: "all 0.3s ease",
         }}
       >
         {/* ── Logo ─────────────────────────────── */}
@@ -139,6 +158,27 @@ export default function Navbar() {
 
         {/* ── Right group ──────────────────────── */}
         <div style={{ display: "flex", alignItems: "center", gap: "24px" }}>
+
+          {/* Theme Switcher */}
+          <button
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            className="theme-toggle"
+            aria-label="Toggle Theme"
+            style={{
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              padding: "4px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "var(--text-primary)",
+              fontSize: "18px",
+            }}
+          >
+            {mounted ? (theme === "dark" ? "☀️" : "🌙") : " "}
+          </button>
+
           {/* Language switcher (desktop) */}
           <div className="lang-switcher" ref={switcherRef}>
             <button
@@ -190,9 +230,9 @@ export default function Navbar() {
               gap: 5,
             }}
           >
-            <span style={{ display: "block", width: 24, height: 2, background: "#111" }} />
-            <span style={{ display: "block", width: 24, height: 2, background: "#111" }} />
-            <span style={{ display: "block", width: 16, height: 2, background: "#111" }} />
+            <span style={{ display: "block", width: 24, height: 2, background: "var(--text-primary)" }} />
+            <span style={{ display: "block", width: 24, height: 2, background: "var(--text-primary)" }} />
+            <span style={{ display: "block", width: 16, height: 2, background: "var(--text-primary)" }} />
           </button>
         </div>
       </header>
