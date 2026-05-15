@@ -112,15 +112,15 @@ export default function Navbar() {
         {mounted ? (theme === "dark" ? "☀️" : "🌙") : " "}
       </button>
 
-      {/* Nav links — center */}
-      <nav style={{ display: "flex", gap: "clamp(12px, 3vw, 32px)", alignItems: "center" }}>
+      {/* Nav links — center, desktop only */}
+      <nav className="nav-desktop-links" style={{ display: "flex", gap: "clamp(12px, 3vw, 32px)", alignItems: "center" }}>
         <a href="#story" className="nav-link" style={linkStyle}>{t("story")}</a>
         <a href="#gallery" className="nav-link" style={linkStyle}>{t("gallery")}</a>
         <a href="#journey" className="nav-link" style={linkStyle}>{t("journey")}</a>
       </nav>
 
-      {/* Right group: lang switcher + RSVP */}
-      <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+      {/* Right group: lang switcher + RSVP, desktop only */}
+      <div className="nav-desktop-right" style={{ display: "flex", alignItems: "center", gap: 16 }}>
         <div className="lang-switcher" ref={switcherRef}>
           <button
             className="lang-trigger"
@@ -165,6 +165,25 @@ export default function Navbar() {
           RSVP
         </a>
       </div>
+
+      {/* Mobile RSVP — visible only on mobile */}
+      <a
+        href="#rsvp"
+        className="nav-mobile-rsvp"
+        style={{
+          fontFamily: "DM Sans, sans-serif",
+          fontSize: 10,
+          letterSpacing: "0.2em",
+          textTransform: "uppercase",
+          color: "#B8960C",
+          border: "1px solid rgba(184,150,12,0.4)",
+          padding: "6px 14px",
+          textDecoration: "none",
+          borderRadius: 2,
+        }}
+      >
+        RSVP
+      </a>
     </header>
   );
 }

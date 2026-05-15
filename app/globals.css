@@ -159,12 +159,6 @@
     height: 300px !important;
     margin-left: 0 !important;
   }
-  .mobile-marquee {
-    display: flex !important;
-  }
-  .navbar {
-    display: none !important;
-  }
 }
 
 @keyframes vinyl-spin {
@@ -290,19 +284,19 @@
   transform: translateY(-100%);
 }
 
-/* Hide nav links on mobile, show hamburger */
+/* Mobile nav — hide desktop elements, show mobile RSVP */
+.nav-mobile-rsvp {
+  display: none;
+}
+
 @media (max-width: 767px) {
-  .nav-links-row {
+  .nav-desktop-links,
+  .nav-desktop-right {
     display: none !important;
   }
 
-  .lang-switcher,
-  .rsvp-btn {
-    display: none !important;
-  }
-
-  .hamburger-btn {
-    display: flex !important;
+  .nav-mobile-rsvp {
+    display: inline-block !important;
   }
 }
 
