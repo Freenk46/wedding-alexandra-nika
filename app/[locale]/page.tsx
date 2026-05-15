@@ -1,7 +1,7 @@
 import HeroSection from "@/components/HeroSection";
 import StorySection from "@/components/StorySection";
 import GallerySection from "@/components/GallerySection";
-import JourneySection from "@/components/JourneySection";
+import EditorialSection from "@/components/EditorialSection";
 import RsvpSection from "@/components/RsvpSection";
 import DividerMarquee from "@/components/DividerMarquee";
 import Footer from "@/components/Footer";
@@ -37,7 +37,9 @@ export default function HomePage() {
       </div>
 
       <div style={{ position: 'relative', zIndex: 4, backgroundColor: 'var(--bg-primary)', transition: 'background-color 0.3s' }}>
-        <JourneySection />
+        <div style={{ borderRadius: '20px 20px 0 0', overflow: 'hidden', boxShadow: '0 -12px 60px rgba(0,0,0,0.2)' }}>
+          <EditorialSection />
+        </div>
       </div>
 
       <div style={{ position: 'relative', zIndex: 5, backgroundColor: 'var(--bg-primary)', transition: 'background-color 0.3s' }}>

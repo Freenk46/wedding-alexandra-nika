@@ -4,81 +4,103 @@ import gsap from 'gsap';
 
 export default function MusicPlayer() {
   const audioRef = useRef<HTMLAudioElement>(null);
-  const [playing, setPlaying] = useState(false);
-  const [volume] = useState(0.4);
-  const [mounted, setMounted] = useState(false);
+  const barsRef = useRef<HTMLDivElement[]>([]);
   const playerRef = useRef<HTMLDivElement>(null);
-  const recordRef = useRef<HTMLDivElement>(null);
+  const [playing, setPlaying] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const volume = 0.4;
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  useEffect(() => { setMounted(true); }, []);
 
   // Fade in on mount
   useEffect(() => {
     if (!mounted) return;
-    gsap.from(playerRef.current, {
-      y: 20,
-      opacity: 0,
-      duration: 0.8,
-      ease: 'power3.out',
-      delay: 2,
-    });
+    gsap.from(playerRef.current, { y: 20, opacity: 0, duration: 0.8, ease: 'power3.out', delay: 2 });
   }, [mounted]);
 
   // Auto-play on first user interaction
   useEffect(() => {
     if (!mounted) return;
-
     const startMusic = () => {
       const audio = audioRef.current;
       if (!audio || playing) return;
-
       audio.volume = volume;
-      audio.play()
-        .then(() => {
-          setPlaying(true);
-        })
-        .catch(() => {
-          // Autoplay blocked — user must press play manually
-        });
+      audio.play().then(() => setPlaying(true)).catch(() => {});
     };
-
     document.addEventListener('click', startMusic, { once: true });
     document.addEventListener('touchstart', startMusic, { once: true });
     document.addEventListener('scroll', startMusic, { once: true });
-
     return () => {
       document.removeEventListener('click', startMusic);
       document.removeEventListener('touchstart', startMusic);
       document.removeEventListener('scroll', startMusic);
     };
-  }, [mounted, playing, volume]);
+  }, [mounted, playing]);
 
-  // Vinyl Spin Animation
+  // Collapse on scroll
   useEffect(() => {
+    const onScroll = () => setExpanded(false);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  // Collapse on outside click
+  useEffect(() => {
+    if (!expanded) return;
+    const onClickOutside = (e: MouseEvent) => {
+      if (!playerRef.current?.contains(e.target as Node)) setExpanded(false);
+    };
+    document.addEventListener('mousedown', onClickOutside);
+    return () => document.removeEventListener('mousedown', onClickOutside);
+  }, [expanded]);
+
+  // GSAP expand / collapse
+  useEffect(() => {
+    const player = playerRef.current;
+    if (!player) return;
+    if (expanded) {
+      gsap.to(player, { width: 220, borderRadius: 4, duration: 0.4, ease: 'power3.out' });
+      gsap.to('.music-player-content', { opacity: 1, duration: 0.3, delay: 0.2 });
+    } else {
+      gsap.to('.music-player-content', { opacity: 0, duration: 0.15 });
+      gsap.to(player, { width: 44, borderRadius: '50%', duration: 0.4, ease: 'power3.inOut' });
+    }
+  }, [expanded]);
+
+  // Equalizer bar animation
+  useEffect(() => {
+    const bars = barsRef.current;
     if (playing) {
-      gsap.to(recordRef.current, {
-        rotation: 360,
-        duration: 4,
-        repeat: -1,
-        ease: 'none',
+      bars.forEach((bar, i) => {
+        if (!bar) return;
+        gsap.to(bar, {
+          scaleY: 1,
+          duration: 0.4 + i * 0.1,
+          ease: 'power1.inOut',
+          repeat: -1,
+          yoyo: true,
+          delay: i * 0.08,
+        });
       });
     } else {
-      gsap.killTweensOf(recordRef.current);
+      bars.forEach((bar) => {
+        if (!bar) return;
+        gsap.killTweensOf(bar);
+        gsap.to(bar, { scaleY: 0.2, duration: 0.2 });
+      });
     }
   }, [playing]);
 
   const togglePlay = () => {
     const audio = audioRef.current;
     if (!audio) return;
-
     if (playing) {
       audio.pause();
       setPlaying(false);
     } else {
       audio.volume = volume;
-      audio.play();
+      audio.play().catch(() => {});
       setPlaying(true);
     }
   };
@@ -87,97 +109,104 @@ export default function MusicPlayer() {
 
   return (
     <>
-      <audio
-        ref={audioRef}
-        src="/music/wedding.mp3"
-        loop
-        preload="auto"
-      />
+      <audio ref={audioRef} src="/music/wedding.mp3" loop preload="auto" />
 
       <div
         ref={playerRef}
-        onClick={togglePlay}
         style={{
           position: 'fixed',
-          bottom: 48,
-          right: 24,
+          bottom: 32,
+          left: 32,
           zIndex: 999,
+          width: 44,
+          height: 44,
+          borderRadius: '50%',
+          background: '#111',
           display: 'flex',
           alignItems: 'center',
-          background: 'var(--glass-bg)',
-          backdropFilter: 'blur(16px)',
-          WebkitBackdropFilter: 'blur(16px)',
-          padding: '8px 16px 8px 8px',
-          borderRadius: 100,
-          border: '1px solid var(--border-color)',
-          boxShadow: '0 10px 30px rgba(0,0,0,0.15)',
+          overflow: 'hidden',
           cursor: 'pointer',
-          transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+          border: '1px solid rgba(184,150,12,0.3)',
+          boxShadow: '0 4px 20px rgba(0,0,0,0.4)',
         }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = 'translateY(-2px)';
-          e.currentTarget.style.boxShadow = '0 12px 40px rgba(0,0,0,0.2)';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = 'translateY(0)';
-          e.currentTarget.style.boxShadow = '0 10px 30px rgba(0,0,0,0.15)';
-        }}
+        onClick={() => setExpanded((prev) => !prev)}
       >
-        {/* Spinning Record */}
-        <div
-          ref={recordRef}
-          style={{
-            width: 36,
-            height: 36,
+        {/* Vinyl icon — always visible */}
+        <div style={{
+          width: 44,
+          height: 44,
+          flexShrink: 0,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+          <div style={{
+            width: 28,
+            height: 28,
             borderRadius: '50%',
-            background: 'conic-gradient(from 0deg, #111, #333, #111, #333, #111)',
-            border: '2px solid var(--accent)',
+            border: '2px solid #B8960C',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            flexShrink: 0,
-            boxShadow: '0 2px 10px rgba(0,0,0,0.3)',
-            marginRight: 12,
+            animation: playing ? 'vinyl-spin 3s linear infinite' : 'none',
+          }}>
+            <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#B8960C' }} />
+          </div>
+        </div>
+
+        {/* Expanded content */}
+        <div
+          className="music-player-content"
+          style={{
+            opacity: 0,
+            display: 'flex',
+            alignItems: 'center',
+            gap: 10,
+            paddingRight: 14,
+            whiteSpace: 'nowrap',
           }}
+          onClick={(e) => e.stopPropagation()}
         >
-          <div style={{ width: 10, height: 10, borderRadius: '50%', background: 'var(--accent)', border: '2px solid #111' }} />
-        </div>
+          {/* Play / Pause */}
+          <button
+            onClick={togglePlay}
+            style={{ background: 'none', border: 'none', color: '#EAE6DD', cursor: 'pointer', padding: 0, display: 'flex', alignItems: 'center', flexShrink: 0 }}
+          >
+            {playing ? (
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+                <rect x="3" y="2" width="4" height="12" rx="1" />
+                <rect x="9" y="2" width="4" height="12" rx="1" />
+              </svg>
+            ) : (
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M3 2l11 6-11 6V2z" />
+              </svg>
+            )}
+          </button>
 
-        {/* Track Info */}
-        <div style={{ display: 'flex', flexDirection: 'column', marginRight: 16 }}>
-           <span style={{ fontFamily: 'var(--font-montserrat), sans-serif', fontSize: 9, letterSpacing: '0.15em', color: 'var(--text-secondary)', textTransform: 'uppercase', marginBottom: 2 }}>
-             {playing ? 'Now Playing' : 'Paused'}
-           </span>
-           <span style={{ fontFamily: 'var(--font-playfair), serif', fontSize: 13, color: 'var(--text-primary)', letterSpacing: '0.05em' }}>
-             A × N Wedding
-           </span>
-        </div>
-
-        {/* Equalizer */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 3, height: 16 }}>
-           {[0.6, 0.9, 0.5, 0.8].map((dur, i) => (
+          {/* Equalizer bars */}
+          <div style={{ display: 'flex', gap: 2, alignItems: 'center', height: 16 }}>
+            {[...Array(4)].map((_, i) => (
               <div
                 key={i}
+                ref={(el) => { if (el) barsRef.current[i] = el; }}
                 style={{
-                  width: 2,
-                  height: '100%',
-                  background: 'var(--accent)',
+                  width: 3,
+                  height: 14,
+                  background: '#B8960C',
                   borderRadius: 2,
                   transformOrigin: 'bottom',
-                  animation: playing ? `eq ${dur}s ease-in-out infinite alternate ${i * 0.1}s` : 'none',
-                  transform: playing ? 'scaleY(0.3)' : 'scaleY(0.2)',
-                  opacity: playing ? 1 : 0.4,
+                  transform: 'scaleY(0.2)',
                 }}
               />
-           ))}
-        </div>
+            ))}
+          </div>
 
-        <style>{`
-          @keyframes eq {
-            0% { transform: scaleY(0.3); }
-            100% { transform: scaleY(1); }
-          }
-        `}</style>
+          {/* Label */}
+          <span style={{ fontFamily: 'Caveat, cursive', fontSize: 13, color: 'rgba(234,230,221,0.6)' }}>
+            A × N
+          </span>
+        </div>
       </div>
     </>
   );

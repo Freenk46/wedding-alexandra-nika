@@ -20,12 +20,6 @@ export default function DividerMarquee() {
         {Array(6).fill('ALEXANDRA × NIKA × 21.10.2026 × ERA HALL × BATUMI × ').join('')}
       </div>
 
-      <style>{`
-        @keyframes marquee {
-          from { transform: translateX(0); }
-          to   { transform: translateX(-50%); }
-        }
-      `}</style>
     </div>
   );
 }

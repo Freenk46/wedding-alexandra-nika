@@ -5,7 +5,6 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
-
 gsap.registerPlugin(SplitText);
 
 const THRESHOLD = 90;
@@ -39,7 +38,7 @@ export default function HeroSection() {
         transform: `translate(-50%,-50%) rotate(${tilt}deg) scale(0)`,
         fontFamily: "var(--font-great-vibes), cursive",
         fontSize: `${size}px`,
-        color: "var(--accent)",
+        color: "#B8960C",
         textShadow: "0 0 12px var(--accent-glow)",
         pointerEvents: "none",
         zIndex: "400",
@@ -196,13 +195,28 @@ export default function HeroSection() {
         className="hero-photo absolute inset-0 flex items-center justify-center"
         style={{ zIndex: 3 }}
       >
-        <div className="hero-photo-wrap" style={{ position: "relative" }}>
+        <div
+          className="hero-photo-wrap"
+          style={{
+            position: "absolute",
+            left: "50%",
+            bottom: 0,
+            top: "auto",
+            transform: "translateX(-50%)",
+            width: "42vw",
+            height: "82vh",
+            zIndex: 3,
+          }}
+        >
           <Image
             src="/img/1.png"
             alt="Alexandra and Nika"
             fill
-            sizes="(max-width: 768px) 70vw, 35vw"
-            style={{ objectFit: "cover", objectPosition: "top" }}
+            style={{
+              objectFit: "contain",
+              objectPosition: "center center",
+            }}
+            sizes="(max-width: 768px) 92vw, 52vw"
             priority
           />
         </div>
@@ -240,13 +254,16 @@ export default function HeroSection() {
         >
           21 · 10 · 2026 · ERA HALL · BATUMI
         </p>
+      </div>
+
+      {/* Calendar link — kept outside SplitText scope to prevent char-splitting */}
+      <div className="hero-calendar-wrap absolute inset-x-0 text-center" style={{ bottom: "5%", zIndex: 4 }}>
         <a
           href="/alexandra-nika-2026.ics"
           download="alexandra-nika-2026.ics"
           className="font-body uppercase"
           style={{
             display: "inline-block",
-            marginTop: 10,
             fontSize: "clamp(0.55rem, 0.9vw, 0.7rem)",
             letterSpacing: "0.3em",
             color: "var(--text-secondary)",
@@ -280,6 +297,20 @@ export default function HeroSection() {
         </span>
         <span className="hero-scroll-line" aria-hidden />
       </div>
+
+      {/* Bottom fade into StorySection */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: "35%",
+          background: "linear-gradient(to bottom, transparent 0%, #B8960C22 60%, #EAE6DD 100%)",
+          pointerEvents: "none",
+          zIndex: 5,
+        }}
+      />
     </section>
   );
 }

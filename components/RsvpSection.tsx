@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
+import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { fireConfetti } from "@/lib/confetti";
@@ -12,15 +13,26 @@ const GOOGLE_SCRIPT_URL = process.env.NEXT_PUBLIC_GOOGLE_SCRIPT_URL ?? "";
 
 type FormState = "idle" | "submitting" | "success" | "error";
 
-const BASE_FIELD: React.CSSProperties = {
+const labelStyle: React.CSSProperties = {
+  position: "absolute",
+  top: -8,
+  left: 0,
+  fontSize: 9,
+  letterSpacing: "0.2em",
+  textTransform: "uppercase",
+  color: "#B8960C",
+  fontFamily: "DM Sans, sans-serif",
+};
+
+const fieldStyle: React.CSSProperties = {
   width: "100%",
   background: "transparent",
   border: "none",
-  borderBottom: "1px solid var(--border-color)",
-  padding: "12px 0",
-  fontFamily: "var(--font-montserrat), sans-serif",
-  fontSize: 15,
-  color: "var(--text-primary)",
+  borderBottom: "1px solid rgba(17,17,17,0.25)",
+  padding: "16px 0 8px",
+  fontFamily: "DM Sans, sans-serif",
+  fontSize: 14,
+  color: "#111",
   outline: "none",
 };
 
@@ -29,41 +41,28 @@ export default function RsvpSection() {
   const tHero = useTranslations("hero");
   const tLoc = useTranslations("location");
   const sectionRef = useRef<HTMLElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
+  const leftRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
-  const fieldRefs = useRef<(HTMLInputElement | HTMLTextAreaElement)[]>([]);
+  const rightRef = useRef<HTMLDivElement>(null);
   const [attending, setAttending] = useState<"yes" | "no" | null>(null);
   const [status, setStatus] = useState<FormState>("idle");
-  const [submitHover, setSubmitHover] = useState(false);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.from(titleRef.current, {
-        x: -60, opacity: 0, duration: 0.9, ease: "power3.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 70%",
-          toggleActions: "play none none reverse",
-        },
+      const trigger = {
+        trigger: sectionRef.current,
+        start: "top 75%",
+        toggleActions: "play none none reverse",
+      };
+
+      gsap.from(leftRef.current, {
+        x: -50, opacity: 0, duration: 1, ease: "power3.out",
+        scrollTrigger: trigger,
       });
 
-      gsap.from(fieldRefs.current.filter(Boolean), {
-        x: 40, opacity: 0, duration: 0.6, ease: "power3.out", stagger: 0.1,
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 60%",
-          toggleActions: "play none none reverse",
-        },
-      });
-
-      fieldRefs.current.forEach((field) => {
-        if (!field) return;
-        field.addEventListener("focus", () =>
-          gsap.to(field, { borderBottomColor: "var(--accent)", duration: 0.3 })
-        );
-        field.addEventListener("blur", () =>
-          gsap.to(field, { borderBottomColor: "var(--border-color)", duration: 0.3 })
-        );
+      gsap.from(rightRef.current, {
+        x: 50, opacity: 0, duration: 1, ease: "power3.out", delay: 0.2,
+        scrollTrigger: trigger,
       });
     }, sectionRef);
 
@@ -83,10 +82,7 @@ export default function RsvpSection() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!GOOGLE_SCRIPT_URL) {
-      setStatus("error");
-      return;
-    }
+    if (!GOOGLE_SCRIPT_URL) { setStatus("error"); return; }
     setStatus("submitting");
     const form = e.currentTarget;
     const data = new FormData(form);
@@ -105,243 +101,250 @@ export default function RsvpSection() {
     }
   };
 
-  const addFieldRef = (el: HTMLInputElement | HTMLTextAreaElement | null, i: number) => {
-    if (el) fieldRefs.current[i] = el;
-  };
-
   return (
-    <section id="rsvp" ref={sectionRef} className="rsvp-section">
+    <section
+      id="rsvp"
+        ref={sectionRef}
+        style={{
+          display: "grid",
+          gridTemplateColumns: "60% 40%",
+          minHeight: "100vh",
+          position: "relative",
+        }}
+      >
+        {/* ── LEFT — image with black strip ────────────── */}
+        <div ref={leftRef} style={{ position: "relative", overflow: "hidden" }}>
+          <Image
+            src="/Journey/petra.jpg"
+            alt="ERA Hall, Batumi"
+            fill
+            style={{ objectFit: "cover", objectPosition: "center" }}
+            sizes="60vw"
+          />
 
-      {/* ── LEFT — title side ──────────────────────────── */}
-      <div className="rsvp-left">
-        {/* Dot grid */}
-        <div style={{
-          position: "absolute", inset: 0,
-          backgroundImage: "radial-gradient(circle, var(--border-color) 1px, transparent 1px)",
-          backgroundSize: "28px 28px",
-          pointerEvents: "none",
-        }} />
-
-        {/* Ghost RSVP — hidden on mobile via .rsvp-deco */}
-        <div className="rsvp-deco" style={{
-          position: "absolute", bottom: -20, left: -10,
-          fontFamily: "var(--font-playfair), serif",
-          fontSize: "clamp(140px, 22vw, 300px)",
-          lineHeight: 0.85,
-          color: "var(--border-subtle)",
-          userSelect: "none", pointerEvents: "none",
-        }}>
-        </div>
-
-        {/* Rotated watermark — hidden on mobile */}
-        <span className="rsvp-deco" style={{
-          position: "absolute", top: "40%", right: 24,
-          fontFamily: "var(--font-great-vibes), cursive",
-          fontSize: 24, color: "var(--border-color)",
-          transform: "rotate(90deg)", letterSpacing: "0.1em",
-          whiteSpace: "nowrap", pointerEvents: "none",
-        }}>
-          ALEXANDRA × NIKA × 2026
-        </span>
-
-        {/* Top label — hidden on mobile */}
-        <p className="rsvp-deco" style={{
-          fontFamily: "var(--font-montserrat), sans-serif",
-          fontSize: 11, letterSpacing: "0.25em", textTransform: "uppercase",
-          color: "var(--accent)", position: "relative",
-        }}>
-          21 · 10 · 2026
-        </p>
-
-        {/* Main title */}
-        <div style={{ position: "relative" }}>
-          <h2 ref={titleRef} className="rsvp-h2" style={{
-            fontFamily: "var(--font-playfair), serif",
-            fontSize: "clamp(64px, 8vw, 110px)",
-            lineHeight: 0.9, color: "var(--text-primary)",
-            letterSpacing: "-0.01em", marginBottom: 24,
-            whiteSpace: "pre-line", textShadow: "0 2px 10px rgba(0,0,0,0.1)",
-          }}>
-            {t("headline")}
-          </h2>
-          <p style={{
-            fontFamily: "var(--font-great-vibes), cursive",
-            fontSize: 32, color: "var(--accent)", textShadow: "0 2px 8px rgba(0,0,0,0.1)",
-          }}>
-            {t("tagline")}
-          </p>
-        </div>
-
-        {/* Venue info — hidden on mobile */}
-        <div className="rsvp-deco" style={{ position: "relative" }}>
-          <p style={{
-            fontFamily: "var(--font-montserrat), sans-serif",
-            fontSize: 13, color: "var(--text-secondary)", lineHeight: 1.7,
-          }}>
-            {tLoc("venue")}<br />
-            {tLoc("address")}
-          </p>
-        </div>
-      </div>
-
-      {/* ── RIGHT — form side ──────────────────────────── */}
-      <div className="rsvp-right">
-        {status === "success" ? (
+          {/* Black vertical strip */}
           <div style={{
-            display: "flex", flexDirection: "column",
-            alignItems: "center", justifyContent: "center",
-            height: "100%", gap: 24,
+            position: "absolute",
+            left: "35%",
+            top: 0,
+            bottom: 0,
+            width: "28%",
+            background: "rgba(10,10,10,0.92)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 2,
           }}>
-            <span style={{
-              fontFamily: "var(--font-great-vibes), cursive",
-              fontSize: 90, color: "var(--accent)", textShadow: "0 0 16px var(--accent-glow)",
-            }}>
-              YES!
-            </span>
+            {/* Gold line */}
+            <div style={{
+              position: "absolute",
+              top: "10%",
+              bottom: "10%",
+              left: "50%",
+              width: 1,
+              background: "linear-gradient(to bottom, transparent, #B8960C, transparent)",
+            }} />
+            {/* Vertical text */}
             <p style={{
-              fontFamily: "var(--font-playfair), serif",
-              fontSize: 32, color: "var(--text-primary)", letterSpacing: "0.05em",
-              textAlign: "center",
+              fontFamily: "DM Sans, sans-serif",
+              fontSize: 10,
+              letterSpacing: "0.3em",
+              textTransform: "uppercase",
+              color: "#B8960C",
+              writingMode: "vertical-rl",
+              transform: "rotate(180deg)",
+              zIndex: 1,
+              margin: 0,
             }}>
-              {t("tagline").replace(/[♡]/g, "").trim()}
+              ALEXANDRA × NIKA · 21.10.2026 · ERA HALL · BATUMI
             </p>
-            <p style={{
-              fontFamily: "var(--font-montserrat), sans-serif",
-              fontSize: 14, color: "var(--text-secondary)", textAlign: "center",
-            }}>
-              {tLoc("venue")} · {tHero("date")}
-            </p>
-            <a
-              href="/alexandra-nika-2026.ics"
-              download="alexandra-nika-2026.ics"
-              style={{
-                display: "inline-flex", alignItems: "center", gap: 8,
-                marginTop: 8,
-                fontFamily: "var(--font-montserrat), sans-serif",
-                fontSize: 11, letterSpacing: "0.22em", textTransform: "uppercase",
-                color: "var(--accent)", textDecoration: "none",
-                border: "1px solid var(--border-color)",
-                padding: "12px 20px",
-                minHeight: 44,
-                transition: "background 0.25s, color 0.25s",
-              }}
-              onMouseEnter={(e) => { e.currentTarget.style.background = "var(--accent)"; e.currentTarget.style.color = "var(--text-inverted)"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "var(--accent)"; }}
-            >
-              ♡ {tHero("addToCalendar")}
-            </a>
           </div>
-        ) : (
-          <form ref={formRef} onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 32 }}>
+        </div>
 
-            <input
-              ref={(el) => addFieldRef(el, 0)}
-              name="name" required
-              aria-label={t("name")}
-              placeholder={t("name")}
-              style={BASE_FIELD}
-            />
-
-            <input
-              ref={(el) => addFieldRef(el, 1)}
-              name="guests" type="number" min="1" max="10" defaultValue={1}
-              aria-label={t("guests")}
-              placeholder={t("guests")}
-              style={BASE_FIELD}
-            />
-
-            <div>
-              <p style={{
-                fontFamily: "var(--font-montserrat), sans-serif",
-                fontSize: 11, letterSpacing: "0.22em", textTransform: "uppercase",
-                color: "var(--text-secondary)", marginBottom: 12,
+        {/* ── RIGHT — form ─────────────────────────────── */}
+        <div
+          ref={rightRef}
+          style={{
+            background: "#F5F1E8",
+            padding: "60px 48px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            borderLeft: "1px solid rgba(184,150,12,0.2)",
+          }}
+        >
+          {status === "success" ? (
+            <div style={{
+              display: "flex", flexDirection: "column",
+              alignItems: "center", justifyContent: "center",
+              height: "100%", gap: 20, textAlign: "center",
+            }}>
+              <span style={{
+                fontFamily: "Caveat, cursive",
+                fontSize: 90, color: "#B8960C",
               }}>
-                {t("attending")}
+                YES!
+              </span>
+              <p style={{
+                fontFamily: "DM Sans, sans-serif",
+                fontSize: 18, color: "#111", letterSpacing: "0.05em",
+              }}>
+                {t("tagline").replace(/[♡]/g, "").trim()}
               </p>
-              <div style={{ display: "flex", gap: 12 }}>
-                {(["yes", "no"] as const).map((val) => {
-                  const sel = attending === val;
-                  return (
+              <p style={{
+                fontFamily: "DM Sans, sans-serif",
+                fontSize: 13, color: "rgba(17,17,17,0.5)",
+              }}>
+                {tLoc("venue")} · {tHero("date")}
+              </p>
+              <a
+                href="/alexandra-nika-2026.ics"
+                download="alexandra-nika-2026.ics"
+                style={{
+                  marginTop: 8,
+                  fontFamily: "DM Sans, sans-serif",
+                  fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase",
+                  color: "#B8960C", textDecoration: "none",
+                  border: "1px solid rgba(184,150,12,0.4)",
+                  padding: "12px 20px",
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = "#B8960C"; e.currentTarget.style.color = "#F5F1E8"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#B8960C"; }}
+              >
+                ♡ {tHero("addToCalendar")}
+              </a>
+            </div>
+          ) : (
+            <>
+              <h2 style={{
+                fontFamily: "var(--font-bebas, 'Bebas Neue', sans-serif)",
+                fontSize: "clamp(48px, 5vw, 72px)",
+                color: "#111",
+                letterSpacing: "0.05em",
+                marginBottom: 40,
+                textAlign: "center",
+              }}>
+                {t("title")}
+              </h2>
+
+              <form ref={formRef} onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column" }}>
+                {/* Name + Guests row */}
+                <div className="rsvp-fields-grid" style={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr",
+                  gap: "24px 20px",
+                  marginBottom: 24,
+                }}>
+                  <div style={{ position: "relative" }}>
+                    <label style={labelStyle}>{t("name")}</label>
+                    <input name="name" required style={fieldStyle} />
+                  </div>
+                  <div style={{ position: "relative" }}>
+                    <label style={labelStyle}>{t("guests")}</label>
+                    <input name="guests" type="number" min="1" max="10" defaultValue={1} style={fieldStyle} />
+                  </div>
+                </div>
+
+                {/* Attending */}
+                <div style={{ marginBottom: 24 }}>
+                  <label style={{
+                    fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase",
+                    color: "#B8960C", fontFamily: "DM Sans, sans-serif",
+                    display: "block", marginBottom: 12,
+                  }}>
+                    {t("attending")}
+                  </label>
+                  <div style={{ display: "flex", gap: 12 }}>
                     <button
-                      key={val}
                       type="button"
-                      onClick={() => setAttending(val)}
-                      aria-pressed={sel}
+                      onClick={() => setAttending("yes")}
                       style={{
-                        flex: 1,
-                        padding: "18px 12px",
-                        minHeight: 64,
-                        fontFamily: "var(--font-montserrat), sans-serif",
-                        fontSize: 11,
-                        letterSpacing: "0.22em",
-                        textTransform: "uppercase",
-                        lineHeight: 1.4,
-                        background: sel ? (val === "yes" ? "var(--accent)" : "transparent") : "transparent",
-                        border: sel ? (val === "yes" ? "1px solid var(--accent)" : "1px solid var(--text-secondary)") : "1px solid var(--border-color)",
-                        color: sel ? (val === "yes" ? "var(--text-inverted)" : "var(--text-primary)") : "var(--text-secondary)",
-                        cursor: "pointer",
-                        transition: "all 0.25s ease",
+                        flex: 1, padding: "12px",
+                        fontFamily: "DM Sans, sans-serif", fontSize: 11,
+                        letterSpacing: "0.2em", textTransform: "uppercase",
+                        border: "1px solid",
+                        borderColor: attending === "yes" ? "#B8960C" : "rgba(17,17,17,0.2)",
+                        background: attending === "yes" ? "#B8960C" : "transparent",
+                        color: attending === "yes" ? "#fff" : "rgba(17,17,17,0.5)",
+                        cursor: "pointer", transition: "all 0.3s",
                       }}
                     >
-                      {val === "yes" ? t("yes") : t("no")}
+                      {t("yes")}
                     </button>
-                  );
-                })}
-                <input type="hidden" name="attending" value={attending ?? ""} />
-              </div>
-            </div>
+                    <button
+                      type="button"
+                      onClick={() => setAttending("no")}
+                      style={{
+                        flex: 1, padding: "12px",
+                        fontFamily: "DM Sans, sans-serif", fontSize: 11,
+                        letterSpacing: "0.2em", textTransform: "uppercase",
+                        border: "1px solid",
+                        borderColor: attending === "no" ? "#B8960C" : "rgba(17,17,17,0.2)",
+                        background: attending === "no" ? "#B8960C" : "transparent",
+                        color: attending === "no" ? "#fff" : "rgba(17,17,17,0.5)",
+                        cursor: "pointer", transition: "all 0.3s",
+                        position: "relative", zIndex: 10,
+                      }}
+                    >
+                      {t("no")}
+                    </button>
+                    <input type="hidden" name="attending" value={attending ?? ""} />
+                  </div>
+                </div>
 
-            <input
-              ref={(el) => addFieldRef(el, 2)}
-              name="dietary"
-              aria-label={t("dietary")}
-              placeholder={t("dietary")}
-              style={BASE_FIELD}
-            />
+                {/* Message */}
+                <div style={{ position: "relative", marginBottom: 32 }}>
+                  <label style={{
+                    fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase",
+                    color: "#B8960C", fontFamily: "DM Sans, sans-serif",
+                    display: "block", marginBottom: 8,
+                  }}>
+                    {t("message")}
+                  </label>
+                  <textarea
+                    name="message"
+                    rows={3}
+                    style={{ ...fieldStyle, resize: "none" }}
+                  />
+                </div>
 
-            <textarea
-              ref={(el) => addFieldRef(el, 3)}
-              name="message" rows={3}
-              aria-label={t("message")}
-              placeholder={t("message")}
-              style={{ ...BASE_FIELD, resize: "none" }}
-            />
+                {/* Confetti hint */}
+                <p style={{
+                  fontFamily: "Caveat, cursive", fontSize: 16,
+                  color: "rgba(17,17,17,0.4)", textAlign: "center", marginBottom: 20,
+                }}>
+                  {t("subtitle")}
+                </p>
 
-            {status === "error" && (
-              <p style={{
-                fontFamily: "var(--font-montserrat), sans-serif",
-                fontSize: 13, color: "#F05235",
-              }}>
-                {t("error")}
-              </p>
-            )}
+                {status === "error" && (
+                  <p style={{ fontFamily: "DM Sans, sans-serif", fontSize: 13, color: "#F05235", marginBottom: 12 }}>
+                    {t("error")}
+                  </p>
+                )}
 
-            <button
-              type="submit"
-              disabled={!attending || status === "submitting"}
-              onMouseEnter={() => setSubmitHover(true)}
-              onMouseLeave={() => setSubmitHover(false)}
-              style={{
-                width: "100%",
-                background: submitHover && attending ? "var(--accent)" : "transparent",
-                color: submitHover && attending ? "var(--text-inverted)" : "var(--accent)",
-                border: "1px solid var(--border-color)",
-                padding: "18px",
-                minHeight: 56,
-                fontFamily: "var(--font-montserrat), sans-serif",
-                fontSize: 11, letterSpacing: "0.25em", textTransform: "uppercase",
-                cursor: !attending || status === "submitting" ? "not-allowed" : "pointer",
-                opacity: !attending || status === "submitting" ? 0.4 : 1,
-                transition: "background 0.3s, color 0.3s",
-                marginTop: 8,
-              }}
-            >
-              {status === "submitting" ? "..." : t("submit")}
-            </button>
+                {/* Submit */}
+                <button
+                  type="submit"
+                  disabled={!attending || status === "submitting"}
+                  style={{
+                    width: "100%", background: "#111", color: "#F5F1E8",
+                    border: "none", padding: "18px",
+                    fontFamily: "DM Sans, sans-serif", fontSize: 11,
+                    letterSpacing: "0.25em", textTransform: "uppercase",
+                    cursor: !attending || status === "submitting" ? "not-allowed" : "pointer",
+                    opacity: !attending || status === "submitting" ? 0.4 : 1,
+                    transition: "background 0.3s",
+                  }}
+                  onMouseEnter={(e) => { if (attending) e.currentTarget.style.background = "#B8960C"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = "#111"; }}
+                >
+                  {status === "submitting" ? "..." : t("submit")}
+                </button>
+              </form>
+            </>
+          )}
+        </div>
+      </section>
 
-          </form>
-        )}
-      </div>
-    </section>
   );
 }

@@ -1,172 +1,161 @@
 'use client';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import gsap from 'gsap';
-import ScrollTrigger from 'gsap/ScrollTrigger';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const images = [
-  { src: '/img/2.png', align: 'left'   },
-  { src: '/img/3.png', align: 'right'  },
-  { src: '/img/4.png', align: 'center' },
-];
-
 export default function GallerySection() {
-  const sectionRef  = useRef<HTMLElement>(null);
-  const itemRefs    = useRef<HTMLDivElement[]>([]);
-  const [labelVisible, setLabelVisible] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => {
-      const section = sectionRef.current;
-      if (!section) return;
-      const { top, bottom } = section.getBoundingClientRect();
-      setLabelVisible(top <= 0 && bottom >= window.innerHeight);
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+  const sectionRef = useRef<HTMLElement>(null);
+  const mainImageRef = useRef<HTMLDivElement>(null);
+  const secondaryImageRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Deco parallax — all devices
-      images.forEach((_, i) => {
-        const deco = document.querySelector(`.deco-lines-${i}`);
-        if (!deco) return;
-        gsap.fromTo(deco,
-          { y: -120 },
-          {
-            y: 60, ease: 'none',
-            scrollTrigger: {
-              trigger: deco,
-              start: 'top bottom', end: 'bottom center', scrub: 0.8,
-            },
-          }
-        );
+      if (!mainImageRef.current) return;
+      if (!secondaryImageRef.current) return;
+
+      const trigger = {
+        trigger: sectionRef.current,
+        start: 'top 80%',
+        toggleActions: 'play none none reverse',
+      };
+
+      gsap.from(mainImageRef.current, {
+        scale: 1.06,
+        opacity: 0,
+        duration: 1.2,
+        ease: 'power3.out',
+        scrollTrigger: trigger,
       });
 
-      // Fade in on scroll — all devices
-      itemRefs.current.forEach((el) => {
-        if (!el) return;
-        gsap.fromTo(el,
-          { opacity: 0, y: 40 },
-          {
-            opacity: 1, y: 0, duration: 0.7, ease: 'power2.out',
-            scrollTrigger: {
-              trigger: el,
-              start: 'top 85%',
-              toggleActions: 'play none none reverse',
-            },
-          }
-        );
+      gsap.from(secondaryImageRef.current, {
+        x: -60,
+        opacity: 0,
+        duration: 1,
+        ease: 'power3.out',
+        delay: 0.3,
+        scrollTrigger: trigger,
       });
+
+      if (textRef.current) {
+        gsap.from(textRef.current, {
+          x: 40,
+          opacity: 0,
+          duration: 0.9,
+          ease: 'power3.out',
+          delay: 0.5,
+          scrollTrigger: trigger,
+        });
+      }
     }, sectionRef);
 
-    // Touch press animations
-    const cleanups: (() => void)[] = [];
-    itemRefs.current.forEach((el) => {
-      if (!el) return;
-      const onTouchStart = () => gsap.to(el, { scale: 0.97, duration: 0.2, ease: 'power2.out' });
-      const onTouchEnd   = () => gsap.to(el, { scale: 1, duration: 0.6, ease: 'elastic.out(1, 0.4)' });
-      el.addEventListener('touchstart', onTouchStart, { passive: true });
-      el.addEventListener('touchend', onTouchEnd);
-      cleanups.push(() => {
-        el.removeEventListener('touchstart', onTouchStart);
-        el.removeEventListener('touchend', onTouchEnd);
-      });
-    });
-
-    return () => {
-      ctx.revert();
-      cleanups.forEach(fn => fn());
-    };
+    return () => ctx.revert();
   }, []);
 
   return (
-    <>
-      <div style={{
-        position: 'fixed', top: '50%', left: '50%',
-        transform: 'translate(-50%, -50%)',
-        textAlign: 'center', zIndex: 20, pointerEvents: 'none',
-        opacity: labelVisible ? 1 : 0, transition: 'opacity 0.6s ease',
-      }}>
-        <p style={{
-          fontSize: 11, letterSpacing: '0.28em',
-          color: 'var(--text-muted)', textTransform: 'uppercase',
-          fontFamily: 'var(--font-montserrat), sans-serif', marginBottom: 16,
+    <section
+      id="gallery"
+      ref={sectionRef}
+      className="gallery-section"
+      style={{
+        background: '#EAE6DD',
+        minHeight: '100vh',
+        position: 'relative',
+        display: 'flex',
+        alignItems: 'center',
+        padding: '60px 4%',
+        overflow: 'hidden',
+      }}
+    >
+      {/* Main image — center, large */}
+      <div
+        ref={mainImageRef}
+        className="gallery-main-image"
+        style={{
+          position: 'relative',
+          width: '55%',
+          height: '75vh',
+          marginLeft: '20%',
+          flexShrink: 0,
+        }}
+      >
+        <Image
+          src="/img/4.png"
+          alt="Alexandra and Nika"
+          fill
+          style={{ objectFit: 'cover', objectPosition: 'center center' }}
+          sizes="52vw"
+        />
+
+        {/* Gold vertical bar — right edge */}
+        <div className="gallery-gold-bar" style={{
+          position: 'absolute',
+          right: 0,
+          top: 0,
+          bottom: 0,
+          width: 48,
+          background: 'linear-gradient(to bottom, #B8960C, #8B6914)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
         }}>
-          WHAT SAYING{' '}
-          <span style={{ color: 'var(--accent)', fontFamily: 'var(--font-great-vibes), cursive', fontSize: 26, textShadow: '0 0 10px var(--accent-glow)' }}>
-            &ldquo;YES!&rdquo;
-          </span>
-          {' '}LOOKS LIKE
-        </p>
-        <h2 style={{
-          fontFamily: 'var(--font-playfair), serif',
-          fontSize: 'clamp(48px, 10vw, 140px)',
-          color: 'var(--text-primary)', lineHeight: 0.9, letterSpacing: '-0.01em', textShadow: '0 4px 20px rgba(0,0,0,0.8)',
-        }}>
-          OUR<br />MOMENTS
-        </h2>
+          <p style={{
+            fontFamily: 'DM Sans, sans-serif',
+            fontSize: 10,
+            letterSpacing: '0.3em',
+            textTransform: 'uppercase',
+            color: '#EAE6DD',
+            writingMode: 'vertical-rl',
+            transform: 'rotate(180deg)',
+            margin: 0,
+          }}>
+            ALEXANDRA × NIKA
+          </p>
+        </div>
       </div>
 
-      <section ref={sectionRef} className="bg-bgPrimary transition-colors duration-300" style={{ padding: '0 0 80px' }}>
-        <div className="gallery-content">
-          {images.map((img, i) => (
-            <div
-              key={i}
-              ref={(el) => { if (el) itemRefs.current[i] = el; }}
-              style={{ position: 'relative' }}
-            >
-              <div
-                className="gallery-item-inner"
-                style={{
-                  marginLeft:  img.align === 'left'  ? '5%' : 'auto',
-                  marginRight: img.align === 'right' ? '5%' : 'auto',
-                }}
-              >
-                <Image
-                  src={img.src}
-                  alt={`moment-${i + 1}`}
-                  fill
-                  sizes="(max-width: 768px) 90vw, 36vw"
-                  style={{ objectFit: 'cover', objectPosition: 'center top', borderRadius: 4 }}
-                  priority={i < 2}
-                />
-                <div style={{
-                  position: 'absolute', top: 16, left: 20,
-                  fontFamily: 'var(--font-playfair), serif', fontSize: 16,
-                  color: 'var(--text-secondary)', letterSpacing: '0.15em',
-                  textShadow: '0 2px 4px rgba(0,0,0,0.8)',
-                }}>
-                  {String(i + 1).padStart(2, '0')}
-                </div>
+      {/* Secondary image — left, overlapping */}
+      <div
+        ref={secondaryImageRef}
+        className="gallery-secondary-image"
+        style={{
+          position: 'absolute',
+          left: '6%',
+          top: '50%',
+          transform: 'translateY(-50%)',
+          width: '22%',
+          height: '55vh',
+          border: '6px solid #B8960C',
+          zIndex: 4,
+          boxShadow: '8px 8px 40px rgba(0,0,0,0.2)',
+        }}
+      >
+        <Image
+          src="/img/6.jpg"
+          alt="Alexandra and Nika"
+          fill
+          style={{ objectFit: 'cover', objectPosition: 'center' }}
+          sizes="22vw"
+        />
+      </div>
 
-                {/* Decorative lines — hidden on mobile via .gallery-deco */}
-                <div
-                  className={`gallery-deco deco-lines-${i}`}
-                  style={{
-                    position: 'absolute', top: '-220px', left: '50%',
-                    transform: 'translateX(-50%)',
-                    width: '80%', height: '220px',
-                    display: 'flex', justifyContent: 'center',
-                    alignItems: 'flex-start', gap: '48px',
-                    pointerEvents: 'none', zIndex: 10,
-                  }}
-                >
-                  {[190, 140, 210, 100, 160].map((h, j) => (
-                    <div key={j} style={{
-                      width: '1px', height: h, background: 'var(--border-color)',
-                      marginTop: [0, 50, 10, 90, 35][j], flexShrink: 0,
-                    }} />
-                  ))}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-    </>
+      {/* Bottom left label */}
+      <div className="gallery-bottom-label" style={{
+        position: 'absolute',
+        bottom: 32,
+        left: '6%',
+        fontFamily: 'DM Sans, sans-serif',
+        fontSize: 10,
+        letterSpacing: '0.25em',
+        textTransform: 'uppercase',
+        color: 'rgba(17,17,17,0.4)',
+      }}>
+        ENGAGEMENT SHOOT
+      </div>
+
+    </section>
   );
 }

@@ -65,6 +65,32 @@ export default async function LocaleLayout({
       <body className="bg-bgPrimary text-textPrimary antialiased transition-colors duration-300">
         <NextIntlClientProvider messages={messages}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            {/* Mobile-only marquee strip */}
+            <div className="mobile-marquee" style={{
+              display: 'none',
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              right: 0,
+              height: 32,
+              background: '#111',
+              zIndex: 999,
+              overflow: 'hidden',
+              alignItems: 'center',
+            }}>
+              <div style={{
+                display: 'flex',
+                whiteSpace: 'nowrap',
+                animation: 'marquee 18s linear infinite',
+                fontFamily: 'DM Sans, sans-serif',
+                fontSize: 10,
+                letterSpacing: '0.2em',
+                textTransform: 'uppercase',
+                color: 'rgba(184,150,12,0.8)',
+              }}>
+                {Array(8).fill('DEVELOPED BY KHSOLUTIONS · WEB DEVELOPMENT · KHSOLUTIONS · ').join('')}
+              </div>
+            </div>
             {children}
             <MusicPlayer />
           </ThemeProvider>
