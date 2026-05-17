@@ -1,60 +1,73 @@
 {
+  "lang": {
+    "choose": "Choose language",
+    "ka": "ქართული",
+    "en": "English",
+    "ru": "Русский"
+  },
   "nav": {
-    "story": "Our Story",
-    "gallery": "Gallery",
-    "journey": "Journey",
-    "program": "Program",
-    "location": "Location",
+    "invitation": "Invitation",
+    "whereWhen": "Where & When",
     "rsvp": "RSVP"
   },
   "hero": {
-    "join": "Join us to celebrate",
-    "date": "October 21, 2026",
-    "time": "18:00",
+    "invite": "You are invited to our special day",
+    "venue": "ERA HALL · BATUMI · GEORGIA · 21 OCT 2026",
     "addToCalendar": "Add to Calendar",
-    "countdown": {
-      "days": "Days",
-      "hours": "Hours",
-      "minutes": "Minutes",
-      "seconds": "Seconds"
-    }
+    "date": "October 21, 2026",
+    "time": "18:00"
   },
-  "story": {
-    "title": "Our Story",
-    "content": "Two souls, one journey. From the first glance to forever — our love story is written in the stars and sealed in Batumi."
+  "invitation": {
+    "label": "Our Invitation.",
+    "body": "We joyfully invite you\nto share with us\nthis special day —\nAlexandra & Nika's Wedding.",
+    "date_label": "21 · 10 · 2026",
+    "body_right": "October 21, 2026 —\nin Batumi, ERA Hall,\nsurrounded by all\nthose dear to us.",
+    "rsvp_btn": "Send RSVP",
+    "batumi": "BATUMI"
   },
-  "gallery": {
-    "title": "Gallery"
+  "schedule": {
+    "day": "Day",
+    "day_sub": "Date",
+    "ceremony": "Wedding Ceremony",
+    "ceremony_sub": "Ceremony",
+    "reception": "Reception",
+    "reception_sub": "Banquet",
+    "calendar": "+ ADD TO CALENDAR"
   },
-  "program": {
-    "title": "Event Program",
-    "items": [
-      { "time": "18:00", "label": "Guest Arrival & Cocktails" },
-      { "time": "19:00", "label": "Ceremony" },
-      { "time": "20:00", "label": "Dinner & Celebrations" },
-      { "time": "23:00", "label": "Dancing & Festivities" }
-    ]
-  },
-  "location": {
-    "title": "Location",
-    "venue": "Restaurant ERA",
-    "address": "Afsarosis 41, Batumi, Georgia",
-    "directions": "Get Directions"
+  "venue": {
+    "label": "Place",
+    "label_sub": "Venue",
+    "address": "Batumi, Adjara, Georgia",
+    "maps": "View on Google Maps",
+    "date": "21 OCT 2026",
+    "day_name": "Wednesday",
+    "time1": "18:00",
+    "time1_label": "Doors Open",
+    "time2": "19:30",
+    "time2_label": "Reception",
+    "city": "BATUMI · GEORGIA"
   },
   "rsvp": {
     "title": "RSVP",
     "headline": "Save\nour Day",
-    "tagline": "Can't wait! ♡",
-    "subtitle": "Please confirm your attendance by September 1, 2026",
     "name": "Full Name",
     "guests": "Number of Guests",
-    "attending": "Will you attend?",
-    "yes": "Joyfully Accept",
-    "no": "Regretfully Decline",
-    "dietary": "Dietary Requirements",
-    "message": "Message to the Couple",
+    "attend": "Will you attend?",
+    "accept": "Joyfully Accept",
+    "decline": "Regretfully Decline",
+    "message": "Message to the Couple (optional)",
+    "deadline": "Please confirm your attendance by September 1, 2026",
     "submit": "Send RSVP",
+    "tagline": "Can't wait! ♡",
     "success": "Thank you! We can't wait to celebrate with you.",
     "error": "Something went wrong. Please try again."
+  },
+  "footer": {
+    "tagline": "FROM BATUMI WITH LOVE",
+    "copyright": "©2026 Alexandra & Nika"
+  },
+  "location": {
+    "venue": "Restaurant ERA",
+    "address": "Afsarosis 41, Batumi, Georgia"
   }
 }

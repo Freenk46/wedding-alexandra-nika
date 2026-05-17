@@ -1,152 +1,36 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef } from "react";
-import Image from "next/image";
+import { useLayoutEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
 import gsap from "gsap";
-import { SplitText } from "gsap/SplitText";
-gsap.registerPlugin(SplitText);
-
-const THRESHOLD = 90;
 
 export default function HeroSection() {
   const t = useTranslations("hero");
   const heroRef = useRef<HTMLElement>(null);
-  const dotRef = useRef<HTMLDivElement>(null);
-  const scrollCueRef = useRef<HTMLDivElement>(null);
+  const line1Ref = useRef<HTMLHeadingElement>(null);
+  const line2Ref = useRef<HTMLHeadingElement>(null);
+  const line3Ref = useRef<HTMLHeadingElement>(null);
+  const subtitleRef = useRef<HTMLDivElement>(null);
+  const videoColRef = useRef<HTMLDivElement>(null);
+  const rsvpCardRef = useRef<HTMLAnchorElement>(null);
 
-  // Mouse trail + touch tap → spawn YES!
-  useEffect(() => {
-    const el = heroRef.current;
-    const dot = dotRef.current;
-    if (!el) return;
-
-    let lastX = 0, lastY = 0;
-
-    const spawnYes = (x: number, y: number) => {
-      const yes = document.createElement("div");
-      const size = Math.random() * 44 + 28;
-      const tilt = Math.random() * 70 - 35;
-      const offX = Math.random() * 56 - 28;
-      const fall = Math.random() * 80 + 80;
-      const delay = Math.random() * 500 + 600;
-
-      Object.assign(yes.style, {
-        position: "absolute",
-        left: `${x + offX}px`,
-        top: `${y}px`,
-        transform: `translate(-50%,-50%) rotate(${tilt}deg) scale(0)`,
-        fontFamily: "var(--font-great-vibes), cursive",
-        fontSize: `${size}px`,
-        color: "#B8960C",
-        textShadow: "0 0 12px var(--accent-glow)",
-        pointerEvents: "none",
-        zIndex: "400",
-        opacity: "0",
-        willChange: "transform, opacity",
-        transition: "transform 0.25s cubic-bezier(0.34,1.56,0.64,1), opacity 0.2s ease",
-      });
-      yes.textContent = "YES!";
-      el.appendChild(yes);
-
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          yes.style.transform = `translate(-50%,-50%) rotate(${tilt}deg) scale(1)`;
-          yes.style.opacity = "1";
-        });
-      });
-
-      setTimeout(() => {
-        yes.style.transition = "transform 0.7s cubic-bezier(0.2,0,0.6,1), opacity 0.7s ease";
-        yes.style.transform = `translate(-50%,${fall}px) rotate(${tilt}deg) scale(0.4)`;
-        yes.style.opacity = "0";
-        setTimeout(() => yes.remove(), 800);
-      }, delay);
-    };
-
-    // Desktop: distance-throttled mousemove trail
-    const onMove = (e: MouseEvent) => {
-      const r = el.getBoundingClientRect();
-      const x = e.clientX - r.left;
-      const y = e.clientY - r.top;
-
-      if (dot) dot.style.transform = `translate(${x - 5}px, ${y - 5}px)`;
-
-      if (Math.hypot(x - lastX, y - lastY) >= THRESHOLD) {
-        lastX = x; lastY = y;
-        spawnYes(x, y);
-      }
-    };
-
-    // Mobile: each tap spawns YES!
-    const onTouchStart = (e: TouchEvent) => {
-      const touch = e.touches[0];
-      if (!touch) return;
-      const r = el.getBoundingClientRect();
-      spawnYes(touch.clientX - r.left, touch.clientY - r.top);
-    };
-
-    el.addEventListener("mousemove", onMove);
-    el.addEventListener("touchstart", onTouchStart, { passive: true });
-
-    return () => {
-      el.removeEventListener("mousemove", onMove);
-      el.removeEventListener("touchstart", onTouchStart);
-    };
-  }, []);
-
-  // Fade out scroll cue once the user starts scrolling
-  useEffect(() => {
-    const cue = scrollCueRef.current;
-    if (!cue) return;
-    const onScroll = () => {
-      const y = window.scrollY;
-      const opacity = Math.max(0, 1 - y / 120);
-      cue.style.opacity = String(opacity);
-      cue.style.pointerEvents = opacity < 0.05 ? "none" : "auto";
-    };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  // Page-load animation
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
-      const split1 = new SplitText(".hero-title-line1", { type: "chars" });
-      const split2 = new SplitText(".hero-title-line2", { type: "chars" });
-      const split3 = new SplitText(".hero-title-line3", { type: "chars" });
-
-      gsap.set([split1.chars, split2.chars, split3.chars], {
-        opacity: 0, y: 80, rotateX: 90,
+      gsap.set([line1Ref.current, line2Ref.current, line3Ref.current], {
+        opacity: 0, x: -30,
       });
-      gsap.set(".hero-bottom", { opacity: 0, y: -20 });
+      gsap.set(subtitleRef.current, { opacity: 0, x: -20 });
+      gsap.set(videoColRef.current, { opacity: 0 });
+      gsap.set(rsvpCardRef.current, { opacity: 0, x: 20 });
 
-      gsap.fromTo(".hero-photo",
-        { scale: 1.08 },
-        { scale: 1, duration: 2, ease: "power2.out", delay: 0.1 }
-      );
+      const tl = gsap.timeline({ delay: 0.2 });
 
-      const tl = gsap.timeline({ delay: 0.4 });
-
-      tl.to(split1.chars, {
-        opacity: 1, y: 0, rotateX: 0, duration: 0.6, ease: "power3.out",
-        stagger: { amount: 0.6, from: "start" },
-      }, 0.2);
-
-      tl.to(split2.chars, {
-        opacity: 1, y: 0, rotateX: 0, duration: 0.5, ease: "power3.out",
-        stagger: { amount: 0.5, from: "start" },
-      }, 0.6);
-
-      tl.to(split3.chars, {
-        opacity: 1, y: 0, rotateX: 0, duration: 0.4, ease: "power2.out",
-        stagger: { amount: 0.4, from: "start" },
-      }, 1.0);
-
-      tl.to(".hero-bottom", { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 1.3);
-
-      return () => { split1.revert(); split2.revert(); split3.revert(); };
+      tl.to(videoColRef.current, { opacity: 1, duration: 1.6, ease: "power2.out" }, 0);
+      tl.to(line1Ref.current, { opacity: 1, x: 0, duration: 0.9, ease: "power3.out" }, 0.5);
+      tl.to(line2Ref.current, { opacity: 1, x: 0, duration: 0.9, ease: "power3.out" }, 0.7);
+      tl.to(line3Ref.current, { opacity: 1, x: 0, duration: 0.85, ease: "power3.out" }, 0.9);
+      tl.to(subtitleRef.current, { opacity: 1, x: 0, duration: 0.7, ease: "power2.out" }, 1.2);
+      tl.to(rsvpCardRef.current, { opacity: 1, x: 0, duration: 0.7, ease: "power2.out" }, 1.3);
     }, heroRef);
 
     return () => ctx.revert();
@@ -156,161 +40,179 @@ export default function HeroSection() {
     <section
       ref={heroRef}
       id="hero"
-      className="relative h-screen overflow-hidden bg-bgPrimary transition-colors duration-300"
-      style={{
-        background: "radial-gradient(circle at center, var(--bg-secondary) 0%, var(--bg-primary) 100%)",
-        perspective: "1000px",
-        cursor: "none",
-      }}
+      style={{ position: "relative", background: "var(--bg-dark)" }}
     >
-      {/* Cursor dot — CSS hides on mobile */}
-      <div
-        ref={dotRef}
-        className="hero-cursor-dot pointer-events-none absolute"
-        style={{
-          top: 0, left: 0, width: 10, height: 10,
-          borderRadius: "50%", backgroundColor: "var(--accent)",
-          boxShadow: "0 0 10px var(--accent-glow)",
-          transform: "translate(-100px, -100px)",
-          zIndex: 52, willChange: "transform",
-        }}
-      />
+      {/* ── Three-column wrapper ── */}
+      <div className="hero-wrapper">
 
-      {/* Row 1: ALEXANDRA × NIKA */}
-      <div
-        className="hero-title-line1 absolute inset-x-0 top-[12%] px-4 text-center"
-        style={{ zIndex: 2, transformStyle: "preserve-3d", overflow: "hidden" }}
-      >
-        <h1
-          suppressHydrationWarning
-          className="font-display leading-none tracking-widest uppercase text-accent whitespace-nowrap drop-shadow-md"
-          style={{ fontSize: "clamp(2.1rem, 9vw, 16rem)" }}
-        >
-          ALEXANDRA × NIKA
-        </h1>
-      </div>
+        {/* ── LEFT PANEL — titles ── */}
+        <div className="hero-side" style={{ justifyContent: "center", padding: "clamp(32px, 5vw, 72px) clamp(24px, 4vw, 56px)" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+            <h1
+              ref={line1Ref}
+              style={{
+                fontFamily: "var(--font-great-vibes), cursive",
+                fontSize: "clamp(52px, 6vw, 108px)",
+                color: "#f5f0e8",
+                lineHeight: 1.1,
+                margin: 0,
+              }}
+            >
+              Wedding
+            </h1>
+            <h2
+              ref={line2Ref}
+              style={{
+                fontFamily: "var(--font-great-vibes), cursive",
+                fontSize: "clamp(42px, 5vw, 90px)",
+                color: "#c9a96e",
+                lineHeight: 1.05,
+                margin: 0,
+                paddingLeft: "clamp(8px, 1vw, 14px)",
+              }}
+            >
+              Invitation
+            </h2>
+            <h3
+              ref={line3Ref}
+              style={{
+                fontFamily: "var(--font-great-vibes), cursive",
+                fontSize: "clamp(28px, 3.2vw, 58px)",
+                color: "rgba(245,240,232,0.65)",
+                lineHeight: 1.2,
+                margin: 0,
+                paddingLeft: "clamp(4px, 0.5vw, 8px)",
+              }}
+            >
+              Alexandra × Nika
+            </h3>
+          </div>
 
-      {/* Couple photo */}
-      <div
-        className="hero-photo absolute inset-0 flex items-center justify-center"
-        style={{ zIndex: 3 }}
-      >
-        <div
-          className="hero-photo-wrap"
-          style={{
-            position: "absolute",
-            left: "50%",
-            bottom: 0,
-            top: "auto",
-            transform: "translateX(-50%)",
-            width: "42vw",
-            height: "82vh",
-            zIndex: 3,
-          }}
-        >
-          <Image
-            src="/img/1.png"
-            alt="Alexandra and Nika"
-            fill
+          {/* Subtitle block */}
+          <div
+            ref={subtitleRef}
             style={{
-              objectFit: "contain",
-              objectPosition: "center center",
+              marginTop: "clamp(28px, 4vw, 52px)",
+              display: "flex",
+              flexDirection: "column",
+              gap: 8,
             }}
-            sizes="(max-width: 768px) 92vw, 52vw"
-            priority
-          />
+          >
+            <p style={{
+              fontFamily: "var(--font-dm-sans), DM Sans, sans-serif",
+              fontSize: "clamp(10px, 1vw, 12px)",
+              fontStyle: "italic",
+              color: "rgba(245,240,232,0.8)",
+              margin: 0,
+              fontWeight: 300,
+            }}>
+              {t("invite")}
+            </p>
+            <div style={{ width: 28, height: 1, background: "rgba(201,169,110,0.5)" }} />
+            <p style={{
+              fontFamily: "var(--font-dm-sans), DM Sans, sans-serif",
+              fontSize: "clamp(6px, 0.7vw, 7.5px)",
+              letterSpacing: "4px",
+              textTransform: "uppercase",
+              color: "rgba(245,240,232,0.28)",
+              margin: 0,
+              fontWeight: 300,
+            }}>
+              {t("venue")}
+            </p>
+          </div>
         </div>
+
+        {/* ── CENTER PANEL — video ── */}
+        <div ref={videoColRef} className="hero-video-container">
+          <video
+            className="hero-video"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            poster="/img/1.png"
+          >
+            <source src="/videos/hero.mp4" type="video/mp4" />
+          </video>
+        </div>
+
+        {/* ── RIGHT PANEL — RSVP card at bottom ── */}
+        <div className="hero-side" style={{ justifyContent: "flex-end", alignItems: "flex-end" }}>
+          <a
+            ref={rsvpCardRef}
+            href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Alexandra+%C3%97+Nika+Wedding&dates=20261021T180000/20261021T230000&location=ERA+Hall,+Batumi,+Georgia&details=Alexandra+%C3%97+Nika+Wedding+Ceremony+and+Reception"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              background: "#c9a96e",
+              padding: "11px 16px",
+              color: "#1a1208",
+              textDecoration: "none",
+              fontSize: "9px",
+              letterSpacing: "2px",
+              fontWeight: "500",
+              fontFamily: "var(--font-dm-sans), DM Sans, sans-serif",
+              transition: "filter 0.2s",
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.filter = "brightness(1.1)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.filter = "brightness(1)"; }}
+          >
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <rect x="1" y="2" width="12" height="11" rx="1.5" stroke="#1a1208" strokeWidth="1" />
+              <line x1="1" y1="5" x2="13" y2="5" stroke="#1a1208" strokeWidth="1" />
+              <line x1="4" y1="1" x2="4" y2="3.5" stroke="#1a1208" strokeWidth="1" />
+              <line x1="10" y1="1" x2="10" y2="3.5" stroke="#1a1208" strokeWidth="1" />
+            </svg>
+            {t("addToCalendar")}
+          </a>
+        </div>
+
       </div>
 
-      {/* Row 2: ARE SAYING YES! */}
+      {/* ── Mobile text overlay (hidden on desktop via CSS) ── */}
       <div
-        className="hero-title-line2 absolute inset-x-0 flex items-baseline justify-center gap-[0.25em] px-4"
-        style={{ bottom: "17%", zIndex: 4, transformStyle: "preserve-3d", overflow: "hidden" }}
-      >
-        <span
-          suppressHydrationWarning
-          className="font-display leading-none tracking-widest uppercase text-textPrimary whitespace-nowrap drop-shadow-md"
-          style={{ fontSize: "clamp(1.8rem, 8vw, 13rem)" }}
-        >
-          ARE SAYING
-        </span>
-        <span
-          suppressHydrationWarning
-          className="font-hand leading-none drop-shadow-lg"
-          style={{ fontSize: "clamp(1.8rem, 7.5vw, 11rem)", color: "var(--accent)" }}
-        >
-          YES!
-        </span>
-      </div>
-
-      {/* Row 3: date · venue */}
-      <div
-        className="hero-title-line3 absolute inset-x-0 text-center"
-        style={{ bottom: "8%", zIndex: 4, transformStyle: "preserve-3d", overflow: "hidden" }}
-      >
-        <p
-          className="font-body uppercase text-textSecondary"
-          style={{ fontSize: "clamp(0.5rem, 1.2vw, 0.875rem)", letterSpacing: "0.25em" }}
-        >
-          21 · 10 · 2026 · ERA HALL · BATUMI
-        </p>
-      </div>
-
-      {/* Calendar link — kept outside SplitText scope to prevent char-splitting */}
-      <div className="hero-calendar-wrap absolute inset-x-0 text-center" style={{ bottom: "5%", zIndex: 4 }}>
-        <a
-          href="/alexandra-nika-2026.ics"
-          download="alexandra-nika-2026.ics"
-          className="font-body uppercase"
-          style={{
-            display: "inline-block",
-            fontSize: "clamp(0.55rem, 0.9vw, 0.7rem)",
-            letterSpacing: "0.3em",
-            color: "var(--text-secondary)",
-            textDecoration: "none",
-            borderBottom: "1px solid var(--border-color)",
-            paddingBottom: 2,
-            transition: "color 0.2s, border-color 0.2s, text-shadow 0.2s",
-          }}
-          onMouseEnter={(e) => { e.currentTarget.style.color = "var(--accent)"; e.currentTarget.style.borderColor = "var(--accent)"; e.currentTarget.style.textShadow = "0 0 8px var(--accent-glow)"; }}
-          onMouseLeave={(e) => { e.currentTarget.style.color = "var(--text-secondary)"; e.currentTarget.style.borderColor = "var(--border-color)"; e.currentTarget.style.textShadow = "none"; }}
-        >
-          ♡ {t("addToCalendar")}
-        </a>
-      </div>
-
-      {/* Animated scroll cue — fades out as user scrolls */}
-      <div
-        ref={scrollCueRef}
-        className="hero-bottom hero-scroll-cue absolute inset-x-0 flex flex-col items-center"
-        style={{ bottom: "2%", zIndex: 4, gap: 10, transition: "opacity 0.3s ease" }}
-      >
-        <span
-          className="font-body uppercase"
-          style={{
-            fontSize: "clamp(0.55rem, 0.9vw, 0.7rem)",
-            letterSpacing: "0.35em",
-            color: "rgba(234,230,221,0.75)",
-          }}
-        >
-          scroll
-        </span>
-        <span className="hero-scroll-line" aria-hidden />
-      </div>
-
-      {/* Bottom fade into StorySection */}
-      <div
+        className="hero-mobile-text"
         style={{
+          display: "none",
           position: "absolute",
-          bottom: 0,
+          top: "55%",
           left: 0,
           right: 0,
-          height: "35%",
-          background: "linear-gradient(to bottom, transparent 0%, #B8960C22 60%, #EAE6DD 100%)",
+          transform: "translateY(-50%)",
+          flexDirection: "column",
+          alignItems: "center",
+          padding: "0 24px",
           pointerEvents: "none",
-          zIndex: 5,
+          zIndex: 2,
         }}
-      />
+      >
+        <h1 style={{
+          fontFamily: "var(--font-great-vibes), cursive",
+          fontSize: "clamp(72px, 18vw, 112px)",
+          color: "#f5f0e8", lineHeight: 1.1, margin: 0, textAlign: "center",
+        }}>
+          Wedding
+        </h1>
+        <h2 style={{
+          fontFamily: "var(--font-great-vibes), cursive",
+          fontSize: "clamp(56px, 14vw, 90px)",
+          color: "#c9a96e", lineHeight: 1.05, margin: 0, textAlign: "center",
+        }}>
+          Invitation
+        </h2>
+        <h3 style={{
+          fontFamily: "var(--font-great-vibes), cursive",
+          fontSize: "clamp(36px, 9vw, 58px)",
+          color: "rgba(245,240,232,0.65)", lineHeight: 1.2, margin: 0, textAlign: "center",
+        }}>
+          Alexandra × Nika
+        </h3>
+      </div>
     </section>
   );
 }

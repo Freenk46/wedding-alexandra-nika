@@ -1,10 +1,13 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 export default function Footer() {
+  const t = useTranslations("footer");
   return (
     <footer
       style={{
-        background: "linear-gradient(to bottom, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-primary) 100%)",
+        background: "var(--bg-dark)",
         padding: "80px 32px 32px",
         position: "relative",
         overflow: "hidden",
@@ -75,9 +78,9 @@ export default function Footer() {
           paddingRight: 56,
         }}
       >
-        <span>©2026 Alexandra &amp; Nika</span>
+        <span>{t("copyright")}</span>
         <span>
-          From Batumi with love{" "}
+          {t("tagline")}{" "}
           <span
             style={{
               color: "var(--accent)",

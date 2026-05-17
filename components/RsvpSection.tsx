@@ -32,7 +32,7 @@ const fieldStyle: React.CSSProperties = {
   padding: "16px 0 8px",
   fontFamily: "DM Sans, sans-serif",
   fontSize: 14,
-  color: "#111",
+  color: "var(--text-primary)",
   outline: "none",
 };
 
@@ -45,6 +45,7 @@ export default function RsvpSection() {
   const formRef = useRef<HTMLFormElement>(null);
   const rightRef = useRef<HTMLDivElement>(null);
   const [attending, setAttending] = useState<"yes" | "no" | null>(null);
+  const [guests, setGuests] = useState(1);
   const [status, setStatus] = useState<FormState>("idle");
 
   useEffect(() => {
@@ -86,7 +87,7 @@ export default function RsvpSection() {
     setStatus("submitting");
     const form = e.currentTarget;
     const data = new FormData(form);
-    const payload = Object.fromEntries(data.entries());
+    const payload = { ...Object.fromEntries(data.entries()), guests };
     try {
       await fetch(GOOGLE_SCRIPT_URL, {
         method: "POST", mode: "no-cors",
@@ -96,6 +97,7 @@ export default function RsvpSection() {
       setStatus("success");
       form.reset();
       setAttending(null);
+      setGuests(1);
     } catch {
       setStatus("error");
     }
@@ -165,7 +167,7 @@ export default function RsvpSection() {
         <div
           ref={rightRef}
           style={{
-            background: "#F5F1E8",
+            background: "var(--bg-secondary)",
             padding: "60px 48px",
             display: "flex",
             flexDirection: "column",
@@ -219,7 +221,7 @@ export default function RsvpSection() {
               <h2 style={{
                 fontFamily: "var(--font-bebas, 'Bebas Neue', sans-serif)",
                 fontSize: "clamp(48px, 5vw, 72px)",
-                color: "#111",
+                color: "var(--text-primary)",
                 letterSpacing: "0.05em",
                 marginBottom: 40,
                 textAlign: "center",
@@ -228,20 +230,44 @@ export default function RsvpSection() {
               </h2>
 
               <form ref={formRef} onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column" }}>
-                {/* Name + Guests row */}
-                <div className="rsvp-fields-grid" style={{
-                  display: "grid",
-                  gridTemplateColumns: "1fr 1fr",
-                  gap: "24px 20px",
-                  marginBottom: 24,
-                }}>
-                  <div style={{ position: "relative" }}>
-                    <label style={labelStyle}>{t("name")}</label>
-                    <input name="name" required style={fieldStyle} />
-                  </div>
-                  <div style={{ position: "relative" }}>
-                    <label style={labelStyle}>{t("guests")}</label>
-                    <input name="guests" type="number" min="1" max="10" defaultValue={1} style={fieldStyle} />
+                {/* Name field */}
+                <div style={{ position: "relative", marginBottom: 24 }}>
+                  <label style={labelStyle}>{t("name")}</label>
+                  <input name="name" required style={fieldStyle} />
+                </div>
+
+                {/* Guests bubbles */}
+                <div style={{ marginBottom: 24 }}>
+                  <label style={{
+                    fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase",
+                    color: "#B8960C", fontFamily: "DM Sans, sans-serif",
+                    display: "block", marginBottom: 12, fontWeight: 300,
+                  }}>
+                    {t("guests")}
+                  </label>
+                  <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+                    {[1, 2, 3, 4, 5].map((num) => (
+                      <button
+                        key={num}
+                        type="button"
+                        onClick={() => setGuests(num)}
+                        style={{
+                          width: "40px", height: "40px", borderRadius: "50%",
+                          border: guests === num ? "1.5px solid var(--gold)" : "1px solid rgba(201,169,110,0.25)",
+                          background: guests === num ? "var(--gold)" : "transparent",
+                          color: guests === num ? "#1a1208" : "var(--gold)",
+                          fontSize: "12px",
+                          fontWeight: guests === num ? 500 : 300,
+                          cursor: "pointer",
+                          transition: "all 0.2s ease",
+                          fontFamily: "DM Sans, sans-serif",
+                          letterSpacing: "0.5px",
+                          minHeight: "unset", minWidth: "unset",
+                        }}
+                      >
+                        {num}
+                      </button>
+                    ))}
                   </div>
                 </div>
 
@@ -252,7 +278,7 @@ export default function RsvpSection() {
                     color: "#B8960C", fontFamily: "DM Sans, sans-serif",
                     display: "block", marginBottom: 12,
                   }}>
-                    {t("attending")}
+                    {t("attend")}
                   </label>
                   <div style={{ display: "flex", gap: 12 }}>
                     <button
@@ -269,7 +295,7 @@ export default function RsvpSection() {
                         cursor: "pointer", transition: "all 0.3s",
                       }}
                     >
-                      {t("yes")}
+                      {t("accept")}
                     </button>
                     <button
                       type="button"
@@ -286,7 +312,7 @@ export default function RsvpSection() {
                         position: "relative", zIndex: 10,
                       }}
                     >
-                      {t("no")}
+                      {t("decline")}
                     </button>
                     <input type="hidden" name="attending" value={attending ?? ""} />
                   </div>
@@ -313,7 +339,7 @@ export default function RsvpSection() {
                   fontFamily: "Caveat, cursive", fontSize: 16,
                   color: "rgba(17,17,17,0.4)", textAlign: "center", marginBottom: 20,
                 }}>
-                  {t("subtitle")}
+                  {t("deadline")}
                 </p>
 
                 {status === "error" && (
@@ -327,16 +353,17 @@ export default function RsvpSection() {
                   type="submit"
                   disabled={!attending || status === "submitting"}
                   style={{
-                    width: "100%", background: "#111", color: "#F5F1E8",
+                    width: "100%", background: "#c9a96e", color: "#1a1208",
                     border: "none", padding: "18px",
                     fontFamily: "DM Sans, sans-serif", fontSize: 11,
-                    letterSpacing: "0.25em", textTransform: "uppercase",
+                    fontWeight: 500,
+                    letterSpacing: "3px", textTransform: "uppercase",
                     cursor: !attending || status === "submitting" ? "not-allowed" : "pointer",
-                    opacity: !attending || status === "submitting" ? 0.4 : 1,
-                    transition: "background 0.3s",
+                    opacity: !attending || status === "submitting" ? 0.45 : 1,
+                    transition: "background 0.3s, color 0.3s",
                   }}
-                  onMouseEnter={(e) => { if (attending) e.currentTarget.style.background = "#B8960C"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = "#111"; }}
+                  onMouseEnter={(e) => { if (attending) { e.currentTarget.style.background = "#1a1208"; e.currentTarget.style.color = "#c9a96e"; } }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = "#c9a96e"; e.currentTarget.style.color = "#1a1208"; }}
                 >
                   {status === "submitting" ? "..." : t("submit")}
                 </button>

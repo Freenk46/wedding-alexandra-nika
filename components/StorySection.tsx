@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useRef } from 'react';
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
@@ -8,22 +9,21 @@ import DrawSVGPlugin from 'gsap/DrawSVGPlugin';
 gsap.registerPlugin(ScrollTrigger, DrawSVGPlugin);
 
 const FLOATING = [
-  { text: '♡', top: '12%', left: '18%', size: 32, color: 'var(--accent)', rot: -15, font: 'var(--font-great-vibes), cursive' },
-  { text: 'YES!', top: '20%', right: '15%', size: 28, color: 'var(--accent)', rot: 12, font: 'var(--font-great-vibes), cursive' },
+  { text: '♡', top: '12%', left: '18%', size: 32, color: '#c9a96e', rot: -15, font: 'var(--font-great-vibes), cursive' },
   { text: '♡', top: '55%', left: '12%', size: 20, color: 'var(--text-primary)', rot: 8, font: 'var(--font-great-vibes), cursive' },
-  { text: '21.10', bottom: '20%', right: '18%', size: 18, color: 'var(--text-secondary)', rot: -8, font: 'var(--font-montserrat), sans-serif', spacing: '0.2em' },
-  { text: '✦', top: '35%', left: '22%', size: 24, color: 'var(--accent)', rot: 0, font: 'serif' },
+  { text: '21.10', bottom: '20%', right: '18%', size: 18, color: 'rgba(74,64,53,0.5)', rot: -8, font: 'var(--font-dm-sans), DM Sans, sans-serif', spacing: '0.2em' },
+  { text: '✦', top: '35%', left: '22%', size: 24, color: '#c9a96e', rot: 0, font: 'serif' },
   { text: '✦', bottom: '30%', right: '20%', size: 16, color: 'var(--text-primary)', rot: 20, font: 'serif' },
-  { text: 'BATUMI', bottom: '15%', left: '15%', size: 13, color: 'var(--text-secondary)', rot: -5, font: 'var(--font-montserrat), sans-serif', spacing: '0.2em' },
+  { text: 'BATUMI', bottom: '15%', left: '15%', size: 13, color: 'rgba(74,64,53,0.5)', rot: -5, font: 'var(--font-dm-sans), DM Sans, sans-serif', spacing: '0.2em' },
 ] as const;
 
 export default function StorySection() {
+  const t = useTranslations("invitation");
   const sectionRef = useRef<HTMLElement>(null);
   const photoRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLDivElement>(null);
   const floatingRefs = useRef<HTMLDivElement[]>([]);
   const svgPath1Ref = useRef<SVGPathElement>(null);
-  const svgArrow1Ref = useRef<SVGPathElement>(null);
   const svgPath2Ref = useRef<SVGPathElement>(null);
   const svgPath3Ref = useRef<SVGPathElement>(null);
   const svgCircleRef = useRef<SVGCircleElement>(null);
@@ -69,8 +69,8 @@ export default function StorySection() {
         });
       });
 
-      gsap.from([svgPath1Ref.current, svgArrow1Ref.current], {
-        drawSVG: '0%', duration: 1, ease: 'power2.out', stagger: 0.3,
+      gsap.from(svgPath1Ref.current, {
+        drawSVG: '0%', duration: 1, ease: 'power2.out',
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top 70%', toggleActions: 'play none none reverse',
@@ -190,32 +190,34 @@ export default function StorySection() {
 
   return (
     <section
-      id="story"
+      id="invitation"
       ref={sectionRef}
-      className="story-section bg-bgPrimary transition-colors duration-300"
-      style={{ position: 'relative', overflow: 'hidden' }}
+      className="story-section"
+      style={{ position: 'relative', overflow: 'visible', background: 'var(--bg-primary)' }}
     >
       {/* Dot grid */}
       <div style={{
         position: 'absolute', inset: 0,
-        backgroundImage: 'radial-gradient(circle, var(--border-color) 1px, transparent 1px)',
-        backgroundSize: '32px 32px',
+        backgroundImage: 'radial-gradient(circle, #c9a96e 0.8px, transparent 0.8px)',
+        backgroundSize: '28px 28px',
+        opacity: 0.22,
         pointerEvents: 'none', zIndex: 0,
       }} />
 
-      {/* Giant background title */}
+      {/* Ghost watermark — INVIT / ATION */}
       <div
         ref={titleRef}
         style={{
-          position: 'absolute', top: '8vh', left: 0, right: 0,
-          fontFamily: 'var(--font-playfair), serif',
-          fontSize: 'clamp(80px, 20vw, 280px)',
-          lineHeight: 0.85, letterSpacing: '-0.01em',
+          position: 'absolute', top: '-10px', left: '-20px',
+          fontFamily: 'var(--font-dm-serif), DM Serif Display, serif',
+          fontSize: 'clamp(90px, 17vw, 190px)',
+          lineHeight: 0.85,
+          color: 'rgba(180,170,155,0.18)',
           userSelect: 'none', pointerEvents: 'none', zIndex: 1,
         }}
       >
-        <div style={{ color: 'var(--border-subtle)' }}>OUR</div>
-        <div style={{ WebkitTextStroke: '2px var(--border-color)', color: 'transparent' }}>STORY</div>
+        <div>INVIT</div>
+        <div>ATION</div>
       </div>
 
       {/* Accent circles */}
@@ -223,18 +225,18 @@ export default function StorySection() {
         position: 'absolute', top: '50%', left: '50%',
         transform: 'translate(-50%, -45%)',
         width: 'clamp(320px, 45vw, 600px)', height: 'clamp(320px, 45vw, 600px)',
-        border: '1px solid var(--border-color)', borderRadius: '50%',
+        border: '1px solid rgba(201,169,110,0.2)', borderRadius: '50%',
         zIndex: 2, pointerEvents: 'none',
       }} />
       <div className="story-deco" style={{
         position: 'absolute', top: '50%', left: '50%',
         transform: 'translate(-45%, -48%)',
         width: 'clamp(260px, 36vw, 480px)', height: 'clamp(260px, 36vw, 480px)',
-        border: '1px solid var(--border-subtle)', borderRadius: '50%',
+        border: '1px solid rgba(201,169,110,0.12)', borderRadius: '50%',
         zIndex: 2, pointerEvents: 'none',
       }} />
 
-      {/* SVG decorations */}
+      {/* SVG decorations (arrow removed) */}
       <svg
         className="story-svg-deco"
         style={{
@@ -246,11 +248,10 @@ export default function StorySection() {
         viewBox="0 0 600 700"
         fill="none"
       >
-        <path ref={svgPath1Ref} d="M420 80 Q480 40 500 120" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" />
-        <path ref={svgArrow1Ref} d="M495 115 L500 120 L493 124" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" />
-        <path ref={svgPath2Ref} d="M160 520 Q200 510 240 520 Q280 530 320 520 Q360 510 400 520" stroke="var(--text-secondary)" strokeWidth="1.5" strokeLinecap="round" />
-        <path ref={svgPath3Ref} d="M140 200 L120 200 L120 500 L140 500" stroke="var(--accent)" strokeWidth="1.5" strokeLinecap="round" />
-        <circle ref={svgCircleRef} cx="300" cy="350" r="220" stroke="var(--text-secondary)" strokeWidth="0.5" strokeDasharray="4 8" opacity="0.4" />
+        <path ref={svgPath1Ref} d="M420 80 Q480 40 500 120" stroke="#c9a96e" strokeWidth="2" strokeLinecap="round" />
+        <path ref={svgPath2Ref} d="M160 520 Q200 510 240 520 Q280 530 320 520 Q360 510 400 520" stroke="rgba(74,64,53,0.4)" strokeWidth="1.5" strokeLinecap="round" />
+        <path ref={svgPath3Ref} d="M140 200 L120 200 L120 500 L140 500" stroke="#c9a96e" strokeWidth="1.5" strokeLinecap="round" />
+        <circle ref={svgCircleRef} cx="300" cy="350" r="220" stroke="rgba(74,64,53,0.3)" strokeWidth="0.5" strokeDasharray="4 8" opacity="0.4" />
       </svg>
 
       {/* Floating elements */}
@@ -283,11 +284,12 @@ export default function StorySection() {
       }}>
         <div
           ref={photoRef}
-          className="story-polaroid glass-panel"
+          className="story-polaroid"
           style={{
             width: 'clamp(240px, 28vw, 380px)',
             padding: '16px 16px 56px',
-            boxShadow: '0 20px 50px rgba(0,0,0,0.5), inset 0 0 0 1px var(--border-color)',
+            background: '#fff',
+            boxShadow: '0 4px 24px rgba(0,0,0,0.10)',
             transformStyle: 'preserve-3d',
             willChange: 'transform',
           }}
@@ -303,10 +305,12 @@ export default function StorySection() {
             />
           </div>
           <p style={{
-            textAlign: 'center', fontFamily: 'var(--font-great-vibes), cursive',
-            fontSize: 28, color: 'var(--accent)', marginTop: 12, textShadow: '0 0 10px var(--accent-glow)',
+            textAlign: 'center',
+            fontFamily: 'var(--font-great-vibes), cursive',
+            fontSize: 28, color: '#c9a96e',
+            marginTop: 12,
           }}>
-            Alexandra & Nika ♡
+            Alexandra &amp; Nika ♡
           </p>
         </div>
       </div>
@@ -314,71 +318,82 @@ export default function StorySection() {
       {/* Text columns */}
       <div className="story-grid">
 
+        {/* LEFT column */}
         <div>
           <p style={{
-            fontFamily: 'var(--font-montserrat), sans-serif', fontSize: 11,
-            letterSpacing: '0.25em', textTransform: 'uppercase',
-            color: 'var(--accent)', marginBottom: 20,
+            fontFamily: 'var(--font-dm-sans), DM Sans, sans-serif',
+            fontSize: 10,
+            letterSpacing: '3px', textTransform: 'uppercase',
+            color: '#c9a96e', marginBottom: 16, fontWeight: 300,
           }}>
-            ჩვენი დასაწყისი
+            {t("label")}
           </p>
           <p style={{
-            fontFamily: 'var(--font-montserrat), sans-serif',
-            fontSize: 'clamp(15px, 1.5vw, 18px)', lineHeight: 1.75,
-            color: 'var(--text-primary)', maxWidth: 400,
+            fontFamily: 'var(--font-dm-sans), DM Sans, sans-serif',
+            fontSize: 'clamp(14px, 1.4vw, 17px)', lineHeight: 2.1,
+            color: 'var(--text-primary)', maxWidth: 400, fontWeight: 300,
+            whiteSpace: 'pre-line',
           }}>
-            ჩვენი ისტორია დაიწყო ბათუმში —
-            ერთი შეხვედრით, რომელმაც
-            ყველაფერი შეცვალა.
-            ალექსანდრა და ნიკა —
-            ორი ადამიანი, ერთი გზა.
+            {t("body")}
+          </p>
+          <div style={{ width: 32, height: 1, background: 'rgba(201,169,110,0.5)', margin: '20px 0 12px' }} />
+          <p style={{
+            fontFamily: 'var(--font-dm-sans), DM Sans, sans-serif',
+            fontSize: 9, letterSpacing: '2px', textTransform: 'uppercase',
+            color: 'rgba(74,64,53,0.35)', fontWeight: 300,
+          }}>
+            {t("batumi")}
           </p>
         </div>
 
+        {/* RIGHT column */}
         <div className="story-right-col" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
           <p style={{
-            fontFamily: 'var(--font-montserrat), sans-serif', fontSize: 11,
-            letterSpacing: '0.25em', textTransform: 'uppercase',
-            color: 'var(--accent)', marginBottom: 20,
+            fontFamily: 'var(--font-dm-sans), DM Sans, sans-serif',
+            fontSize: 10,
+            letterSpacing: '3px', textTransform: 'uppercase',
+            color: '#c9a96e', marginBottom: 16, fontWeight: 300,
           }}>
-            21 · 10 · 2026
+            {t("date_label")}
           </p>
           <p className="story-right-text" style={{
-            fontFamily: 'var(--font-montserrat), sans-serif',
-            fontSize: 'clamp(15px, 1.5vw, 18px)', lineHeight: 1.75,
-            color: 'var(--text-primary)', maxWidth: 400, textAlign: 'right',
+            fontFamily: 'var(--font-dm-sans), DM Sans, sans-serif',
+            fontSize: 'clamp(13px, 1.3vw, 16px)', lineHeight: 2.4,
+            color: 'var(--text-primary)', maxWidth: 400, textAlign: 'right', fontWeight: 300,
+            whiteSpace: 'pre-line',
           }}>
-            21 ოქტომბერი 2026 — ჩვენ ვამბობთ{' '}
-            <span style={{ fontFamily: 'var(--font-great-vibes), cursive', fontSize: 28, color: 'var(--accent)', textShadow: '0 0 10px var(--accent-glow)' }}>
-              &ldquo;YES!&rdquo;
-            </span>{' '}
-            ბათუმში, ERA Hall-ში,
-            ყველა ჩვენთვის ძვირფასი
-            ადამიანის გარემოცვაში.
+            {t("body_right")}
           </p>
 
-          <div style={{
-            marginTop: 40, display: 'flex', alignItems: 'center', gap: 12,
-            background: 'var(--accent)', color: 'var(--text-inverted)',
-            padding: '14px 28px', cursor: 'pointer', borderRadius: 2,
-            boxShadow: '0 4px 14px var(--accent-glow)', transition: 'transform 0.2s, background 0.3s, color 0.3s',
-          }} onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.05)'; e.currentTarget.style.background = 'var(--text-primary)'; e.currentTarget.style.color = 'var(--bg-primary)'}} onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.background = 'var(--accent)'; e.currentTarget.style.color = 'var(--text-inverted)'}}>
-            <div style={{
-              width: 28, height: 28, borderRadius: '50%',
-              overflow: 'hidden', position: 'relative', flexShrink: 0,
-            }}>
-              <Image src="/img/1.png" alt="couple" fill sizes="28px" style={{ objectFit: 'cover' }} />
-            </div>
-            <span style={{
-              fontFamily: 'var(--font-montserrat), sans-serif', fontSize: 11, fontWeight: 600,
+          <a
+            href="#rsvp"
+            style={{
+              marginTop: 40,
+              display: 'inline-flex', alignItems: 'center', gap: 12,
+              background: '#c9a96e', color: '#1a1208',
+              padding: '11px 22px', cursor: 'pointer', borderRadius: 2,
+              textDecoration: 'none',
+              fontFamily: 'var(--font-dm-sans), DM Sans, sans-serif',
+              fontSize: 11, fontWeight: 500,
               letterSpacing: '0.15em', textTransform: 'uppercase',
-            }}>
-              RSVP გამაგზავნე
-            </span>
-          </div>
+              transition: 'transform 0.2s, background 0.3s',
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.05)'; e.currentTarget.style.background = '#1a1208'; (e.currentTarget as HTMLAnchorElement).style.color = '#c9a96e'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.background = '#c9a96e'; (e.currentTarget as HTMLAnchorElement).style.color = '#1a1208'; }}
+          >
+            {t("rsvp_btn")}
+          </a>
         </div>
 
       </div>
+
+      {/* Gold bottom border */}
+      <div style={{
+        position: 'absolute',
+        bottom: 0, left: 0, right: 0,
+        height: 3,
+        background: '#c9a96e',
+      }} />
     </section>
   );
 }

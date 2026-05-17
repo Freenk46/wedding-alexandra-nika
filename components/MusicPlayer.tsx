@@ -19,24 +19,24 @@ export default function MusicPlayer() {
     gsap.from(playerRef.current, { y: 20, opacity: 0, duration: 0.8, ease: 'power3.out', delay: 2 });
   }, [mounted]);
 
-  // Auto-play on first user interaction
-  useEffect(() => {
-    if (!mounted) return;
-    const startMusic = () => {
-      const audio = audioRef.current;
-      if (!audio || playing) return;
-      audio.volume = volume;
-      audio.play().then(() => setPlaying(true)).catch(() => {});
-    };
-    document.addEventListener('click', startMusic, { once: true });
-    document.addEventListener('touchstart', startMusic, { once: true });
-    document.addEventListener('scroll', startMusic, { once: true });
-    return () => {
-      document.removeEventListener('click', startMusic);
-      document.removeEventListener('touchstart', startMusic);
-      document.removeEventListener('scroll', startMusic);
-    };
-  }, [mounted, playing]);
+  // Auto-play on first user interaction — disabled
+  // useEffect(() => {
+  //   if (!mounted) return;
+  //   const startMusic = () => {
+  //     const audio = audioRef.current;
+  //     if (!audio || playing) return;
+  //     audio.volume = volume;
+  //     audio.play().then(() => setPlaying(true)).catch(() => {});
+  //   };
+  //   document.addEventListener('click', startMusic, { once: true });
+  //   document.addEventListener('touchstart', startMusic, { once: true });
+  //   document.addEventListener('scroll', startMusic, { once: true });
+  //   return () => {
+  //     document.removeEventListener('click', startMusic);
+  //     document.removeEventListener('touchstart', startMusic);
+  //     document.removeEventListener('scroll', startMusic);
+  //   };
+  // }, [mounted, playing]);
 
   // Collapse on scroll
   useEffect(() => {
