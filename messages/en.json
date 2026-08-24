@@ -5,14 +5,19 @@
     "en": "English",
     "ru": "Русский"
   },
-  "nav": {
-    "invitation": "Invitation",
-    "whereWhen": "Where & When",
-    "rsvp": "RSVP"
+  "countdown": {
+    "title": "Countdown",
+    "subtitle": "until the big day",
+    "days": "Days",
+    "hours": "Hours",
+    "minutes": "Min",
+    "seconds": "Sec"
   },
   "hero": {
-    "invite": "You are invited to our special day",
-    "venue": "ERA HALL · BATUMI · GEORGIA · 21 OCT 2026",
+    "eyebrowLine1": "You are cordially invited to",
+    "eyebrowLine2": "celebrate the wedding of",
+    "bodyInvite": "We joyfully invite you to celebrate with us one of the most special days of our lives. Your presence would mean the world to us.",
+    "scroll": "Scroll",
     "addToCalendar": "Add to Calendar",
     "date": "October 21, 2026",
     "time": "18:00"
@@ -26,6 +31,10 @@
     "batumi": "BATUMI"
   },
   "schedule": {
+    "scratchHint": "Scratch all three circles to continue",
+    "scratchTitle": "Reveal",
+    "scratchCaption": "Scratch to discover the date",
+    "announce": "We're getting married!",
     "day": "Day",
     "day_sub": "Date",
     "ceremony": "Wedding Ceremony",
@@ -35,20 +44,16 @@
     "calendar": "+ ADD TO CALENDAR"
   },
   "venue": {
-    "label": "Place",
-    "label_sub": "Venue",
-    "address": "Batumi, Adjara, Georgia",
     "maps": "View on Google Maps",
     "date": "21 OCT 2026",
     "day_name": "Wednesday",
     "time1": "18:00",
     "time1_label": "Doors Open",
     "time2": "19:30",
-    "time2_label": "Reception",
-    "city": "BATUMI · GEORGIA"
+    "time2_label": "Reception"
   },
   "rsvp": {
-    "title": "RSVP",
+    "title": "Confirm your attendance",
     "headline": "Save\nour Day",
     "name": "Full Name",
     "guests": "Number of Guests",
@@ -64,9 +69,12 @@
   },
   "footer": {
     "tagline": "FROM BATUMI WITH LOVE",
-    "copyright": "©2026 Alexandra & Nika"
+    "copyright": "©2026 Alexandra & Nika",
+    "thankYouTitle": "Thank You",
+    "thankYouBody": "For joining us on this special day. Your presence is the best gift we could receive."
   },
   "location": {
+    "title": "The celebration will take place at",
     "venue": "Restaurant ERA",
     "address": "Afsarosis 41, Batumi, Georgia"
   }

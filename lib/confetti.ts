@@ -1,5 +1,18 @@
 import confetti from "canvas-confetti";
 
+export function fireGoldConfetti(x: number, y: number, particleCount = 26) {
+  confetti({
+    particleCount,
+    spread: 60,
+    startVelocity: 16,
+    gravity: 1,
+    scalar: 0.7,
+    ticks: 220,
+    origin: { x, y },
+    colors: ["#c9a96e", "#f5f0e8", "#e9c67f", "#8a6f3f"],
+  });
+}
+
 export function fireConfetti() {
   // Center burst
   confetti({

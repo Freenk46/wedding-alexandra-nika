@@ -5,14 +5,19 @@
     "en": "English",
     "ru": "Русский"
   },
-  "nav": {
-    "invitation": "მოწვევა",
-    "whereWhen": "სად და როდის",
-    "rsvp": "დადასტურება"
+  "countdown": {
+    "title": "Countdown",
+    "subtitle": "ჩვენს დიდ დღემდე",
+    "days": "დღე",
+    "hours": "საათი",
+    "minutes": "წუთი",
+    "seconds": "წამი"
   },
   "hero": {
-    "invite": "გიწვევთ ჩვენს განსაკუთრებულ დღეზე",
-    "venue": "ERA HALL · BATUMI · GEORGIA · 21 OCT 2026",
+    "eyebrowLine1": "გულითადად გიწვევთ",
+    "eyebrowLine2": "ჩვენი ქორწილის ზეიმზე",
+    "bodyInvite": "სიხარულით გიწვევთ, გაიზიაროთ ჩვენთან ჩვენი ცხოვრების ერთ-ერთი ყველაზე განსაკუთრებული დღე. თქვენი თანდასწრება დიდი პატივი იქნება ჩვენთვის.",
+    "scroll": "ჩამოსქროლეთ",
     "addToCalendar": "კალენდარში დამატება",
     "date": "21 ოქტომბერი, 2026",
     "time": "18:00"
@@ -26,6 +31,10 @@
     "batumi": "BATUMI"
   },
   "schedule": {
+    "scratchHint": "გადაფხიკეთ სამივე წრე გასაგრძელებლად",
+    "scratchTitle": "გახსენი",
+    "scratchCaption": "გადაფხიკეთ თარიღის გასაგებად",
+    "announce": "ჩვენ ვქორწინდებით!",
     "day": "Day",
     "day_sub": "თარიღი",
     "ceremony": "Wedding Ceremony",
@@ -35,20 +44,16 @@
     "calendar": "+ ADD TO CALENDAR"
   },
   "venue": {
-    "label": "Place",
-    "label_sub": "ადგილი",
-    "address": "ბათუმი, აჭარა, საქართველო",
     "maps": "Google Maps-ზე ნახვა",
     "date": "21 OCT 2026",
     "day_name": "ოთხშაბათი",
     "time1": "18:00",
     "time1_label": "კარიბჭის გახსნა",
     "time2": "19:30",
-    "time2_label": "ბანკეტი",
-    "city": "BATUMI · GEORGIA"
+    "time2_label": "ბანკეტი"
   },
   "rsvp": {
-    "title": "დადასტურება",
+    "title": "დაადასტურეთ დასწრება",
     "headline": "დაადასტურე\nდასწრება",
     "name": "სახელი და გვარი",
     "guests": "სტუმრების რაოდენობა",
@@ -64,9 +69,12 @@
   },
   "footer": {
     "tagline": "FROM BATUMI WITH LOVE",
-    "copyright": "©2026 Alexandra & Nika"
+    "copyright": "©2026 Alexandra & Nika",
+    "thankYouTitle": "მადლობა",
+    "thankYouBody": "რომ ჩვენთან ერთად ხართ ამ განსაკუთრებულ დღეს. თქვენი თანდასწრება ჩვენთვის ყველაზე ძვირფასი საჩუქარია."
   },
   "location": {
+    "title": "ზეიმი გაიმართება",
     "venue": "რესტორანი ERA",
     "address": "აფსაროსის 41, ბათუმი, საქართველო"
   }

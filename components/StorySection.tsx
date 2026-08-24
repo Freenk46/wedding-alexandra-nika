@@ -1,24 +1,21 @@
 'use client';
 import { useEffect, useRef } from 'react';
-import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import DrawSVGPlugin from 'gsap/DrawSVGPlugin';
+import CornerFlower from './CornerFlower';
 
 gsap.registerPlugin(ScrollTrigger, DrawSVGPlugin);
 
 const FLOATING = [
   { text: '♡', top: '12%', left: '18%', size: 32, color: '#c9a96e', rot: -15, font: 'var(--font-great-vibes), cursive' },
-  { text: '♡', top: '55%', left: '12%', size: 20, color: 'var(--text-primary)', rot: 8, font: 'var(--font-great-vibes), cursive' },
-  { text: '21.10', bottom: '20%', right: '18%', size: 18, color: 'rgba(74,64,53,0.5)', rot: -8, font: 'var(--font-dm-sans), DM Sans, sans-serif', spacing: '0.2em' },
+  { text: '♡', top: '55%', left: '12%', size: 20, color: '#3a2a12', rot: 8, font: 'var(--font-great-vibes), cursive' },
   { text: '✦', top: '35%', left: '22%', size: 24, color: '#c9a96e', rot: 0, font: 'serif' },
-  { text: '✦', bottom: '30%', right: '20%', size: 16, color: 'var(--text-primary)', rot: 20, font: 'serif' },
-  { text: 'BATUMI', bottom: '15%', left: '15%', size: 13, color: 'rgba(74,64,53,0.5)', rot: -5, font: 'var(--font-dm-sans), DM Sans, sans-serif', spacing: '0.2em' },
+  { text: '✦', bottom: '30%', right: '20%', size: 16, color: '#3a2a12', rot: 20, font: 'serif' },
 ] as const;
 
 export default function StorySection() {
-  const t = useTranslations("invitation");
   const sectionRef = useRef<HTMLElement>(null);
   const photoRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLDivElement>(null);
@@ -192,9 +189,12 @@ export default function StorySection() {
     <section
       id="invitation"
       ref={sectionRef}
-      className="story-section"
-      style={{ position: 'relative', overflow: 'visible', background: 'var(--bg-primary)' }}
+      className="story-section paper-section"
+      style={{ overflow: 'visible' }}
     >
+      <CornerFlower src="/img/1.png" corner="tl" />
+      <CornerFlower src="/img/7.png" corner="br" />
+
       {/* Dot grid */}
       <div style={{
         position: 'absolute', inset: 0,
@@ -216,8 +216,7 @@ export default function StorySection() {
           userSelect: 'none', pointerEvents: 'none', zIndex: 1,
         }}
       >
-        <div>INVIT</div>
-        <div>ATION</div>
+   
       </div>
 
       {/* Accent circles */}
@@ -267,7 +266,6 @@ export default function StorySection() {
             right: 'right' in f ? f.right : undefined,
             fontSize: f.size, color: f.color, fontFamily: f.font,
             transform: `rotate(${f.rot}deg)`,
-            letterSpacing: 'spacing' in f ? f.spacing : undefined,
             pointerEvents: 'none', zIndex: 4, userSelect: 'none',
           }}
         >
@@ -315,77 +313,7 @@ export default function StorySection() {
         </div>
       </div>
 
-      {/* Text columns */}
-      <div className="story-grid">
-
-        {/* LEFT column */}
-        <div>
-          <p style={{
-            fontFamily: 'var(--font-dm-sans), DM Sans, sans-serif',
-            fontSize: 10,
-            letterSpacing: '3px', textTransform: 'uppercase',
-            color: '#c9a96e', marginBottom: 16, fontWeight: 300,
-          }}>
-            {t("label")}
-          </p>
-          <p style={{
-            fontFamily: 'var(--font-dm-sans), DM Sans, sans-serif',
-            fontSize: 'clamp(14px, 1.4vw, 17px)', lineHeight: 2.1,
-            color: 'var(--text-primary)', maxWidth: 400, fontWeight: 300,
-            whiteSpace: 'pre-line',
-          }}>
-            {t("body")}
-          </p>
-          <div style={{ width: 32, height: 1, background: 'rgba(201,169,110,0.5)', margin: '20px 0 12px' }} />
-          <p style={{
-            fontFamily: 'var(--font-dm-sans), DM Sans, sans-serif',
-            fontSize: 9, letterSpacing: '2px', textTransform: 'uppercase',
-            color: 'rgba(74,64,53,0.35)', fontWeight: 300,
-          }}>
-            {t("batumi")}
-          </p>
-        </div>
-
-        {/* RIGHT column */}
-        <div className="story-right-col" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-          <p style={{
-            fontFamily: 'var(--font-dm-sans), DM Sans, sans-serif',
-            fontSize: 10,
-            letterSpacing: '3px', textTransform: 'uppercase',
-            color: '#c9a96e', marginBottom: 16, fontWeight: 300,
-          }}>
-            {t("date_label")}
-          </p>
-          <p className="story-right-text" style={{
-            fontFamily: 'var(--font-dm-sans), DM Sans, sans-serif',
-            fontSize: 'clamp(13px, 1.3vw, 16px)', lineHeight: 2.4,
-            color: 'var(--text-primary)', maxWidth: 400, textAlign: 'right', fontWeight: 300,
-            whiteSpace: 'pre-line',
-          }}>
-            {t("body_right")}
-          </p>
-
-          <a
-            href="#rsvp"
-            style={{
-              marginTop: 40,
-              display: 'inline-flex', alignItems: 'center', gap: 12,
-              background: '#c9a96e', color: '#1a1208',
-              padding: '11px 22px', cursor: 'pointer', borderRadius: 2,
-              textDecoration: 'none',
-              fontFamily: 'var(--font-dm-sans), DM Sans, sans-serif',
-              fontSize: 11, fontWeight: 500,
-              letterSpacing: '0.15em', textTransform: 'uppercase',
-              transition: 'transform 0.2s, background 0.3s',
-            }}
-            onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.05)'; e.currentTarget.style.background = '#1a1208'; (e.currentTarget as HTMLAnchorElement).style.color = '#c9a96e'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.background = '#c9a96e'; (e.currentTarget as HTMLAnchorElement).style.color = '#1a1208'; }}
-          >
-            {t("rsvp_btn")}
-          </a>
-        </div>
-
-      </div>
+      
 
       {/* Gold bottom border */}
       <div style={{

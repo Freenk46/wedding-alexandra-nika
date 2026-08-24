@@ -1,34 +1,37 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import CornerFlower from "./CornerFlower";
 
 export default function Footer() {
   const t = useTranslations("footer");
   return (
     <footer
+      className="paper-section"
       style={{
-        background: "var(--bg-dark)",
-        padding: "80px 32px 32px",
+        padding: "clamp(3rem, 6vw, 5rem) clamp(1.5rem, 4vw, 3rem)",
         position: "relative",
         overflow: "hidden",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
       }}
     >
-      {/* Giant name — full width */}
-      <div
-        className="footer-name"
-        style={{
-          fontFamily: "var(--font-playfair), serif",
-          fontSize: "clamp(36px, 10vw, 200px)",
-          lineHeight: 0.9,
-          color: "var(--border-subtle)",
-          WebkitTextStroke: "1px var(--border-color)",
-          letterSpacing: "-0.01em",
-          whiteSpace: "nowrap",
-          overflow: "hidden",
-          marginBottom: 48,
-        }}
-      >
-        ALEXANDRA × NIKA
+      <CornerFlower src="/img/9.png" corner="tl" />
+      <CornerFlower src="/img/4.png" corner="tr" />
+
+      <div className="thankyou-frame">
+        <div className="thankyou-inner">
+          <span className="thankyou-scallop thankyou-scallop--top" />
+          <span className="thankyou-scallop thankyou-scallop--bottom" />
+          <span className="thankyou-scallop thankyou-scallop--left" />
+          <span className="thankyou-scallop thankyou-scallop--right" />
+
+          <h2 className="thankyou-title">{t("thankYouTitle")}</h2>
+          <p className="thankyou-body">{t("thankYouBody")}</p>
+          <p className="thankyou-names">Alexandra &amp; Nika</p>
+        </div>
       </div>
 
       {/* Back to top */}
@@ -37,8 +40,8 @@ export default function Footer() {
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         style={{
           position: "absolute",
-          bottom: 32,
-          right: 32,
+          bottom: 24,
+          right: 24,
           width: 40,
           height: 40,
           background: "var(--bg-secondary)",
@@ -61,38 +64,19 @@ export default function Footer() {
         ↑
       </button>
 
-      {/* Bottom row */}
-      <div
-        className="footer-bottom"
+      {/* Copyright */}
+      <p
         style={{
-          display: "flex",
-          flexDirection: "row",
-          flexWrap: "wrap",
-          justifyContent: "space-between",
-          alignItems: "flex-end",
-          gap: 8,
+          marginTop: "clamp(24px, 4vw, 36px)",
           fontFamily: "var(--font-montserrat), sans-serif",
-          fontSize: 13,
-          color: "var(--text-primary)",
-          opacity: 0.7,
-          paddingRight: 56,
+          fontSize: 11,
+          letterSpacing: "0.1em",
+          color: "#3a2a12",
+          opacity: 0.4,
         }}
       >
-        <span>{t("copyright")}</span>
-        <span>
-          {t("tagline")}{" "}
-          <span
-            style={{
-              color: "var(--accent)",
-              fontFamily: "var(--font-great-vibes), cursive",
-              fontSize: 18,
-              opacity: 1,
-            }}
-          >
-            ♡
-          </span>
-        </span>
-      </div>
+        {t("copyright")}
+      </p>
     </footer>
   );
 }

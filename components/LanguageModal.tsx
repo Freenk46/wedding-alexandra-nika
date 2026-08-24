@@ -31,7 +31,13 @@ export default function LanguageModal({ alwaysShow = false }: Props) {
   useEffect(() => {
     setMounted(true);
     const saved = getLangCookie();
-    if (!saved || alwaysShow) setShow(true);
+    if (!saved || alwaysShow) {
+      setShow(true);
+      document.body.style.overflow = "hidden";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [alwaysShow]);
 
   const choose = (lang: string) => {

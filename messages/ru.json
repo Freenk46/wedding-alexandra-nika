@@ -5,14 +5,19 @@
     "en": "English",
     "ru": "Русский"
   },
-  "nav": {
-    "invitation": "Приглашение",
-    "whereWhen": "Где и когда",
-    "rsvp": "Подтверждение"
+  "countdown": {
+    "title": "Countdown",
+    "subtitle": "до большого дня",
+    "days": "Дней",
+    "hours": "Часов",
+    "minutes": "Мин",
+    "seconds": "Сек"
   },
   "hero": {
-    "invite": "Приглашаем вас на наш особенный день",
-    "venue": "ERA HALL · БАТУМИ · ГРУЗИЯ · 21 ОКТ 2026",
+    "eyebrowLine1": "Мы рады пригласить вас",
+    "eyebrowLine2": "на нашу свадьбу",
+    "bodyInvite": "С радостью приглашаем вас разделить с нами один из самых особенных дней нашей жизни. Ваше присутствие будет много значить для нас.",
+    "scroll": "Прокрутите",
     "addToCalendar": "Добавить в календарь",
     "date": "21 октября 2026",
     "time": "18:00"
@@ -26,6 +31,10 @@
     "batumi": "БАТУМИ"
   },
   "schedule": {
+    "scratchHint": "Сотрите все три круга, чтобы продолжить",
+    "scratchTitle": "Открыть",
+    "scratchCaption": "Сотрите, чтобы узнать дату",
+    "announce": "Мы женимся!",
     "day": "Day",
     "day_sub": "Дата",
     "ceremony": "Wedding Ceremony",
@@ -35,20 +44,16 @@
     "calendar": "+ ДОБАВИТЬ В КАЛЕНДАРЬ"
   },
   "venue": {
-    "label": "Place",
-    "label_sub": "Место",
-    "address": "Батуми, Аджария, Грузия",
     "maps": "Открыть в Google Maps",
     "date": "21 ОКТ 2026",
     "day_name": "Среда",
     "time1": "18:00",
     "time1_label": "Открытие дверей",
     "time2": "19:30",
-    "time2_label": "Банкет",
-    "city": "БАТУМИ · ГРУЗИЯ"
+    "time2_label": "Банкет"
   },
   "rsvp": {
-    "title": "Подтверждение",
+    "title": "Подтвердите присутствие",
     "headline": "Будь\nс нами",
     "name": "Имя и фамилия",
     "guests": "Количество гостей",
@@ -64,9 +69,12 @@
   },
   "footer": {
     "tagline": "FROM BATUMI WITH LOVE",
-    "copyright": "©2026 Alexandra & Nika"
+    "copyright": "©2026 Alexandra & Nika",
+    "thankYouTitle": "Спасибо",
+    "thankYouBody": "Что разделили с нами этот особенный день. Ваше присутствие — лучший подарок для нас."
   },
   "location": {
+    "title": "Праздник состоится в",
     "venue": "Ресторан ERA",
     "address": "ул. Апсаросис 41, Батуми, Грузия"
   }
