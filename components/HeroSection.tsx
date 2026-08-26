@@ -34,9 +34,9 @@ export default function HeroSection() {
           {t("eyebrowLine2")}
         </p>
         <h1 className="invite-names">
-          Alexandra
-          <span>&amp;</span>
           Nika
+          <span>&amp;</span>
+          Alexandra
         </h1>
         <p className="invite-body">{t("bodyInvite")}</p>
         <div className="invite-scroll">

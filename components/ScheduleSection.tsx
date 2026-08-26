@@ -145,7 +145,7 @@ export default function ScheduleSection() {
       {revealed && (
         <div className="schedule-calendar-cta" style={{ marginTop: 'clamp(3rem, 6vw, 5rem)', display: 'flex', justifyContent: 'center' }}>
           <a
-            href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Alexandra+%C3%97+Nika+Wedding&dates=20261021T180000/20261021T230000&location=ERA+Hall,+Batumi,+Georgia&details=Alexandra+%C3%97+Nika+Wedding+Ceremony+and+Reception"
+            href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Nika+%C3%97+Alexandra+Wedding&dates=20261021T180000/20261021T230000&location=ERA+Hall,+Batumi,+Georgia&details=Nika+%C3%97+Alexandra+Wedding+Ceremony+and+Reception"
             target="_blank"
             rel="noopener noreferrer"
             style={{

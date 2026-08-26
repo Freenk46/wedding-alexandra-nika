@@ -1,7 +1,6 @@
 import HeroSection from "@/components/HeroSection";
 import StorySection from "@/components/StorySection";
 import ScheduleSection from "@/components/ScheduleSection";
-import CountdownSection from "@/components/CountdownSection";
 import LocationSection from "@/components/LocationSection";
 import PhotoSection from "@/components/PhotoSection";
 import RsvpSection from "@/components/RsvpSection";
@@ -32,7 +31,6 @@ export default function HomePage() {
       <div style={{ position: 'relative', zIndex: 3, backgroundColor: '#141414', transition: 'background-color 0.3s' }}>
         <div style={{ borderRadius: '20px 20px 0 0', overflow: 'hidden', boxShadow: '0 -12px 60px rgba(0,0,0,0.3)' }}>
           <ScheduleSection />
-          <CountdownSection />
           <LocationSection />
           <PhotoSection />
         </div>

@@ -35,14 +35,6 @@ export default function PhotoSection() {
         y: 12, opacity: 0, duration: 0.8, delay: 0.4, ease: 'power2.out',
         scrollTrigger: { trigger: sectionRef.current, start: 'top 70%', toggleActions: 'play none none reverse' },
       });
-      gsap.from('.photo-leaf--left', {
-        opacity: 0, x: -20, y: 20, duration: 1, delay: 0.5, ease: 'power2.out',
-        scrollTrigger: { trigger: sectionRef.current, start: 'top 70%', toggleActions: 'play none none reverse' },
-      });
-      gsap.from('.photo-leaf--right', {
-        opacity: 0, x: 20, y: 20, duration: 1, delay: 0.6, ease: 'power2.out',
-        scrollTrigger: { trigger: sectionRef.current, start: 'top 70%', toggleActions: 'play none none reverse' },
-      });
     });
     return () => ctx.revert();
   }, []);
@@ -71,28 +63,11 @@ export default function PhotoSection() {
         <CornerFlourish className="photo-frame-corner photo-frame-corner--br" />
         <CornerFlourish className="photo-frame-corner photo-frame-corner--bl" />
 
-        <Image
-          src="/img/palm_leaf_1.png"
-          alt=""
-          width={240}
-          height={240}
-          aria-hidden="true"
-          className="photo-leaf photo-leaf--left"
-        />
-        <Image
-          src="/img/palm_leaf_2.png"
-          alt=""
-          width={240}
-          height={240}
-          aria-hidden="true"
-          className="photo-leaf photo-leaf--right"
-        />
-
         <div className="photo-frame">
           <div className="photo-frame-img">
             <Image
               src="/img/6.jpg"
-              alt="Alexandra and Nika"
+              alt="Nika and Alexandra"
               fill
               sizes="(max-width: 768px) 70vw, 380px"
               style={{ objectFit: 'cover' }}
@@ -101,7 +76,7 @@ export default function PhotoSection() {
         </div>
       </div>
 
-      <p className="photo-caption">Alexandra &amp; Nika ♡</p>
+      <p className="photo-caption">Nika &amp; Alexandra ♡</p>
     </section>
   );
 }

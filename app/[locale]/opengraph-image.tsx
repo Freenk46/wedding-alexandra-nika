@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
-export const alt = "Alexandra × Nika — October 21, 2026 · ERA Hall · Batumi";
+export const alt = "Nika × Alexandra — October 21, 2026 · ERA Hall · Batumi";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -46,7 +46,7 @@ export default async function Image() {
             textAlign: "center",
           }}
         >
-          ALEXANDRA
+          NIKA
         </div>
 
         <div
@@ -70,7 +70,7 @@ export default async function Image() {
             textAlign: "center",
           }}
         >
-          NIKA
+          ALEXANDRA
         </div>
 
         <div

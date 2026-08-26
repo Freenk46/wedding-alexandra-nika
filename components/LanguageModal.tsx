@@ -79,7 +79,7 @@ export default function LanguageModal({ alwaysShow = false }: Props) {
             marginBottom: "0.5rem",
           }}
         >
-          Alexandra × Nika
+          Nika × Alexandra
         </div>
 
         {/* Date */}

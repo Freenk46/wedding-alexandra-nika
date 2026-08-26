@@ -84,7 +84,7 @@ export default function GallerySection() {
       >
         <Image
           src="/img/4.png"
-          alt="Alexandra and Nika"
+          alt="Nika and Alexandra"
           fill
           style={{ objectFit: 'cover', objectPosition: 'center center' }}
           sizes="52vw"
@@ -112,7 +112,7 @@ export default function GallerySection() {
             transform: 'rotate(180deg)',
             margin: 0,
           }}>
-            ALEXANDRA × NIKA
+            NIKA × ALEXANDRA
           </p>
         </div>
       </div>
@@ -135,7 +135,7 @@ export default function GallerySection() {
       >
         <Image
           src="/img/6.jpg"
-          alt="Alexandra and Nika"
+          alt="Nika and Alexandra"
           fill
           style={{ objectFit: 'cover', objectPosition: 'center' }}
           sizes="22vw"

@@ -30,7 +30,7 @@ export default function Footer() {
 
           <h2 className="thankyou-title">{t("thankYouTitle")}</h2>
           <p className="thankyou-body">{t("thankYouBody")}</p>
-          <p className="thankyou-names">Alexandra &amp; Nika</p>
+          <p className="thankyou-names">Nika &amp; Alexandra</p>
         </div>
       </div>
 

@@ -249,36 +249,6 @@
   }
 }
 
-/* ─── Palm leaves draping over the photo's bottom corners
-   (white-bg photos, multiply-blended — same technique as .corner-flower) ─── */
-.photo-leaf {
-  position: absolute;
-  z-index: 3;
-  bottom: -8%;
-  width: clamp(100px, 24vw, 190px);
-  height: auto;
-  mix-blend-mode: multiply;
-  pointer-events: none;
-  user-select: none;
-}
-
-.photo-leaf--left {
-  left: 4%;
-  transform-origin: bottom center;
-  transform: rotate(-30deg);
-}
-
-.photo-leaf--right {
-  right: 4%;
-  transform-origin: bottom center;
-  transform: rotate(30deg) scaleX(-1);
-}
-
-@media (max-width: 640px) {
-  .photo-leaf {
-    width: clamp(76px, 32vw, 130px);
-  }
-}
 
 .invite-frame {
   position: absolute;

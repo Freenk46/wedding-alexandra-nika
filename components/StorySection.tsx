@@ -295,7 +295,7 @@ export default function StorySection() {
           <div style={{ position: 'relative', width: '100%', aspectRatio: '4/5', overflow: 'hidden' }}>
             <Image
               src="/img/5.jpg"
-              alt="Alexandra and Nika"
+              alt="Nika and Alexandra"
               fill
               sizes="(max-width: 768px) 80vw, 32vw"
               style={{ objectFit: 'cover', objectPosition: 'center top' }}
@@ -308,7 +308,7 @@ export default function StorySection() {
             fontSize: 28, color: '#c9a96e',
             marginTop: 12,
           }}>
-            Alexandra &amp; Nika ♡
+            Nika &amp; Alexandra ♡
           </p>
         </div>
       </div>
