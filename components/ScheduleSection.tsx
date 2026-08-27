@@ -96,7 +96,8 @@ export default function ScheduleSection() {
   }, [revealed]);
 
   const items = [
-    { value: '3 OCT 2026', caption: tS('day_sub') },
+    { value: '3 OCT', caption: tS('day_sub') },
+    { value: '2026', caption: tS('year_sub') },
     { value: '17:30', caption: tS('reception_sub') },
   ];
 
