@@ -1,14 +1,14 @@
 'use client';
 import { useEffect, useState } from 'react';
 
-type Flourish = 'bow' | 'chain' | 'spiralWave' | 'heartCharm' | 'coil';
+type Flourish = 'bell' | 'wineGlass' | 'heart' | 'rings' | 'bouquet';
 
 const ANCHORS: { id: string; flourish: Flourish }[] = [
-  { id: 'where-when', flourish: 'bow' },
-  { id: 'thread-anchor-location', flourish: 'chain' },
-  { id: 'thread-anchor-photo', flourish: 'spiralWave' },
-  { id: 'rsvp', flourish: 'heartCharm' },
-  { id: 'thread-anchor-footer', flourish: 'coil' },
+  { id: 'where-when', flourish: 'bell' },
+  { id: 'thread-anchor-location', flourish: 'wineGlass' },
+  { id: 'thread-anchor-photo', flourish: 'heart' },
+  { id: 'rsvp', flourish: 'rings' },
+  { id: 'thread-anchor-footer', flourish: 'bouquet' },
 ];
 
 // A full-circle loop that enters and exits at the same point (cx, cy), bulging to the right.
@@ -18,40 +18,58 @@ function loop(cx: number, cy: number, r: number) {
 
 function flourishSegment(type: Flourish, cx: number, cy: number): { d: string; exitY: number } {
   switch (type) {
-    // Two generous loops side by side, like a tied ribbon bow.
-    case 'bow': {
-      const r = 30;
-      const d = loop(cx - r, cy, r) + loop(cx + r, cy, r);
+    // A wedding bell: small hanging hook, then the domed body flaring to a wide rim.
+    case 'bell': {
+      const top = cy - 40;
+      const d =
+        loop(cx, top, 6) +
+        ` C ${cx - 3} ${top + 2}, ${cx - 16} ${top + 10}, ${cx - 17} ${top + 30}` +
+        ` C ${cx - 18} ${top + 42}, ${cx - 24} ${top + 46}, ${cx - 24} ${top + 53}` +
+        ` Q ${cx} ${top + 62} ${cx + 24} ${top + 53}` +
+        ` C ${cx + 24} ${top + 46}, ${cx + 18} ${top + 42}, ${cx + 17} ${top + 30}` +
+        ` C ${cx + 16} ${top + 10}, ${cx + 3} ${top + 2}, ${cx} ${top}`;
+      return { d, exitY: top };
+    }
+    // A wine glass: bowl, stem, base — entry/exit at the bowl's converging point.
+    case 'wineGlass': {
+      const d =
+        ` C ${cx - 2} ${cy - 4}, ${cx - 15} ${cy - 14}, ${cx - 15} ${cy - 24}` +
+        ` L ${cx + 15} ${cy - 24}` +
+        ` C ${cx + 15} ${cy - 14}, ${cx + 2} ${cy - 4}, ${cx} ${cy}` +
+        ` L ${cx} ${cy + 20}` +
+        ` Q ${cx - 12} ${cy + 23} ${cx - 11} ${cy + 28}` +
+        ` Q ${cx} ${cy + 31} ${cx + 11} ${cy + 28}` +
+        ` Q ${cx + 12} ${cy + 23} ${cx} ${cy + 20}`;
+      return { d, exitY: cy + 20 };
+    }
+    // A larger heart, entry/exit at the bottom cusp.
+    case 'heart': {
+      const d =
+        ` C ${cx - 19} ${cy - 18}, ${cx - 10} ${cy - 32}, ${cx} ${cy - 21}` +
+        ` C ${cx + 10} ${cy - 32}, ${cx + 19} ${cy - 18}, ${cx} ${cy}`;
       return { d, exitY: cy };
     }
-    // Three beaded loops in a row — small, large, small — like a chain link.
-    case 'chain': {
-      const r1 = 15;
-      const r2 = 26;
-      const d = loop(cx - r1 - r2, cy, r1) + loop(cx, cy, r2) + loop(cx + r1 + r2, cy, r1);
+    // Two interlocked wedding rings.
+    case 'rings': {
+      const r = 17;
+      const offset = r * 1.3;
+      const d = loop(cx - offset, cy, r) + loop(cx + offset, cy, r);
       return { d, exitY: cy };
     }
-    // A flowing S-wave that curls into a small loop at the end.
-    case 'spiralWave': {
+    // A small bouquet: three flowers on crossing stems, gathered into a basket.
+    case 'bouquet': {
+      const top = cy - 26;
       const d =
-        ` Q ${cx + 34} ${cy + 18} ${cx} ${cy + 36}` +
-        ` Q ${cx - 34} ${cy + 54} ${cx} ${cy + 72}` +
-        loop(cx, cy + 72, 16);
-      return { d, exitY: cy + 72 };
-    }
-    // A larger heart with a small loop above it, like a pendant charm.
-    case 'heartCharm': {
-      const r = 10;
-      const d =
-        loop(cx, cy - 34, r) +
-        ` C ${cx - 28} ${cy - 12}, ${cx - 15} ${cy + 14}, ${cx} ${cy - 4}` +
-        ` C ${cx + 15} ${cy + 14}, ${cx + 28} ${cy - 12}, ${cx} ${cy - 34}`;
-      return { d, exitY: cy - 34 };
-    }
-    // A tightening three-turn coil, like a spring or a nautilus shell.
-    case 'coil': {
-      const d = loop(cx, cy, 32) + ` l 0 6` + loop(cx, cy + 38, 21) + ` l 0 5` + loop(cx, cy + 64, 11);
-      return { d, exitY: cy + 64 };
+        loop(cx, top, 9) +
+        ` L ${cx - 16} ${top + 12}` +
+        loop(cx - 16, top + 12, 8) +
+        ` L ${cx + 16} ${top + 12}` +
+        loop(cx + 16, top + 12, 8) +
+        ` L ${cx} ${top + 28}` +
+        ` L ${cx - 14} ${top + 48}` +
+        ` L ${cx + 14} ${top + 48}` +
+        ` L ${cx + 8} ${top + 28}`;
+      return { d, exitY: top + 48 };
     }
   }
 }
