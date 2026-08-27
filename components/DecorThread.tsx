@@ -19,29 +19,29 @@ function loop(cx: number, cy: number, r: number) {
 function flourishSegment(type: Flourish, cx: number, cy: number): { d: string; exitY: number } {
   switch (type) {
     case 'loop': {
-      const r = 13;
+      const r = 22;
       return { d: loop(cx, cy, r), exitY: cy };
     }
     case 'infinity': {
-      const r = 9;
+      const r = 15;
       const d =
         loop(cx - r, cy, r) +
         loop(cx + r, cy, r);
       return { d, exitY: cy };
     }
     case 'wave': {
-      const d = ` Q ${cx + 16} ${cy + 9} ${cx} ${cy + 18} Q ${cx - 16} ${cy + 27} ${cx} ${cy + 36}`;
-      return { d, exitY: cy + 36 };
+      const d = ` Q ${cx + 26} ${cy + 14} ${cx} ${cy + 28} Q ${cx - 26} ${cy + 42} ${cx} ${cy + 56}`;
+      return { d, exitY: cy + 56 };
     }
     case 'heart': {
       const d =
-        ` C ${cx - 12} ${cy - 11}, ${cx - 6} ${cy - 20}, ${cx} ${cy - 13}` +
-        ` C ${cx + 6} ${cy - 20}, ${cx + 12} ${cy - 11}, ${cx} ${cy}`;
+        ` C ${cx - 19} ${cy - 18}, ${cx - 10} ${cy - 32}, ${cx} ${cy - 21}` +
+        ` C ${cx + 10} ${cy - 32}, ${cx + 19} ${cy - 18}, ${cx} ${cy}`;
       return { d, exitY: cy };
     }
     case 'spiral': {
-      const d = loop(cx, cy, 13) + ` L ${cx} ${cy + 30}` + loop(cx, cy + 30, 7);
-      return { d, exitY: cy + 30 };
+      const d = loop(cx, cy, 22) + ` L ${cx} ${cy + 48}` + loop(cx, cy + 48, 12);
+      return { d, exitY: cy + 48 };
     }
   }
 }
@@ -55,7 +55,7 @@ export default function DecorThread() {
       if (!container) return;
       const containerRect = container.getBoundingClientRect();
       const width = containerRect.width;
-      const baseX = Math.max(28, Math.min(width * 0.1, 60));
+      const baseX = width * 0.5;
 
       const points: { cy: number; flourish: Flourish }[] = [];
       for (const a of ANCHORS) {
@@ -71,7 +71,7 @@ export default function DecorThread() {
       let curY = 0;
 
       points.forEach((p, i) => {
-        const wander = Math.sin(i * 1.7 + 0.6) * Math.min(width * 0.035, 26);
+        const wander = Math.sin(i * 1.7 + 0.6) * width * 0.28;
         const targetX = baseX + wander;
         const targetY = p.cy;
         const midY = curY + (targetY - curY) * 0.5;
@@ -115,8 +115,8 @@ export default function DecorThread() {
       <path
         d={geometry.d}
         fill="none"
-        stroke="rgba(201,169,110,0.55)"
-        strokeWidth={1.2}
+        stroke="rgba(201,169,110,0.6)"
+        strokeWidth={1.4}
         strokeLinecap="round"
         strokeLinejoin="round"
       />
