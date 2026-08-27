@@ -9,6 +9,7 @@ export default function MusicPlayer() {
   const [playing, setPlaying] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const userPausedRef = useRef(false);
   const volume = 0.4;
 
   useEffect(() => { setMounted(true); }, []);
@@ -28,12 +29,13 @@ export default function MusicPlayer() {
     audio.play().then(() => setPlaying(true)).catch(() => {});
   }, [mounted]);
 
-  // Fallback: auto-play on first user interaction, if immediate autoplay was blocked
+  // Fallback: auto-play on first user interaction, if immediate autoplay was blocked.
+  // Runs once — once the user has manually paused, it must never restart on its own.
   useEffect(() => {
     if (!mounted) return;
     const startMusic = () => {
       const audio = audioRef.current;
-      if (!audio || playing) return;
+      if (!audio || playing || userPausedRef.current) return;
       audio.volume = volume;
       audio.play().then(() => setPlaying(true)).catch(() => {});
     };
@@ -45,7 +47,7 @@ export default function MusicPlayer() {
       document.removeEventListener('touchstart', startMusic);
       document.removeEventListener('scroll', startMusic);
     };
-  }, [mounted, playing]);
+  }, [mounted]);
 
   // Collapse on scroll
   useEffect(() => {
@@ -107,10 +109,12 @@ export default function MusicPlayer() {
     if (playing) {
       audio.pause();
       setPlaying(false);
+      userPausedRef.current = true;
     } else {
       audio.volume = volume;
       audio.play().catch(() => {});
       setPlaying(true);
+      userPausedRef.current = false;
     }
   };
 

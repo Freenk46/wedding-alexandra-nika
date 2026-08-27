@@ -207,26 +207,9 @@
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-/* ─── Decorative thread tying Schedule → Footer into one continuous act ─── */
-.decor-thread {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 40px;
-  width: 1px;
-  background: linear-gradient(
-    to bottom,
-    transparent 0%,
-    rgba(201, 169, 110, 0.4) 6%,
-    rgba(201, 169, 110, 0.4) 94%,
-    transparent 100%
-  );
-  z-index: 10;
-  pointer-events: none;
-}
-
+/* ─── Decorative thread + section ornaments (Schedule → Footer) ─── */
 @media (max-width: 900px) {
-  .decor-thread {
+  .decor-thread-svg {
     display: none;
   }
 }

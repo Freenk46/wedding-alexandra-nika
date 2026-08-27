@@ -6,6 +6,7 @@ import PhotoSection from "@/components/PhotoSection";
 import RsvpSection from "@/components/RsvpSection";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import DecorThread from "@/components/DecorThread";
 
 export default function HomePage() {
   return (
@@ -27,16 +28,19 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Sections 3–7: a single decorative thread ties Schedule through Footer together */}
-      <div style={{ position: 'relative' }}>
-        <div className="decor-thread" aria-hidden="true" />
+      <div id="thread-container" style={{ position: 'relative' }}>
+        <DecorThread />
 
         {/* Where & When — dark sections */}
         <div style={{ position: 'relative', zIndex: 3, backgroundColor: '#eae6dd', transition: 'background-color 0.3s' }}>
           <div style={{ borderRadius: '20px 20px 0 0', overflow: 'hidden', boxShadow: '0 -12px 60px rgba(0,0,0,0.3)' }}>
             <ScheduleSection />
-            <LocationSection />
-            <PhotoSection />
+            <div id="thread-anchor-location">
+              <LocationSection />
+            </div>
+            <div id="thread-anchor-photo">
+              <PhotoSection />
+            </div>
           </div>
         </div>
 
@@ -49,7 +53,9 @@ export default function HomePage() {
 
         {/* Footer */}
         <div style={{ position: 'relative', zIndex: 5, backgroundColor: 'var(--bg-primary)', transition: 'background-color 0.3s' }}>
-          <Footer />
+          <div id="thread-anchor-footer">
+            <Footer />
+          </div>
         </div>
       </div>
     </main>
