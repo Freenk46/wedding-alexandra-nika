@@ -38,7 +38,7 @@
     "day": "Day",
     "day_sub": "Дата",
     "reception": "Reception",
-    "reception_sub": "Банкет",
+    "reception_sub": "Событие",
     "calendar": "+ ДОБАВИТЬ В КАЛЕНДАРЬ"
   },
   "venue": {
@@ -46,7 +46,7 @@
     "date": "3 ОКТ 2026",
     "day_name": "Суббота",
     "time1": "17:30",
-    "time1_label": "Банкет"
+    "time1_label": "Событие"
   },
   "rsvp": {
     "title": "Подтвердите присутствие",

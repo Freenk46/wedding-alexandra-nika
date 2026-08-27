@@ -38,7 +38,7 @@
     "day": "Day",
     "day_sub": "Date",
     "reception": "Reception",
-    "reception_sub": "Banquet",
+    "reception_sub": "Event",
     "calendar": "+ ADD TO CALENDAR"
   },
   "venue": {
@@ -46,7 +46,7 @@
     "date": "3 OCT 2026",
     "day_name": "Saturday",
     "time1": "17:30",
-    "time1_label": "Banquet"
+    "time1_label": "Event"
   },
   "rsvp": {
     "title": "Confirm your attendance",

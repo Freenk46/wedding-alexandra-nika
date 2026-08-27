@@ -213,7 +213,7 @@ export default function MusicPlayer() {
 
           {/* Label */}
           <span style={{ fontFamily: 'Caveat, cursive', fontSize: 13, color: 'rgba(234,230,221,0.6)' }}>
-            A × N
+            N × A
           </span>
         </div>
       </div>

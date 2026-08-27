@@ -96,7 +96,7 @@ export default function ScheduleSection() {
   }, [revealed]);
 
   const items = [
-    { value: '3 OCT', caption: tS('day_sub') },
+    { value: '3 OCT 2026', caption: tS('day_sub') },
     { value: '17:30', caption: tS('reception_sub') },
   ];
 
@@ -144,7 +144,7 @@ export default function ScheduleSection() {
       {revealed && (
         <div className="schedule-calendar-cta" style={{ marginTop: 'clamp(3rem, 6vw, 5rem)', display: 'flex', justifyContent: 'center' }}>
           <a
-            href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Nika+%C3%97+Alexandra+Wedding&dates=20261003T173000/20261003T230000&location=Dreamland+Oasis,+Batumi,+Georgia&details=Nika+%C3%97+Alexandra+Wedding+Banquet"
+            href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Nika+%C3%97+Alexandra+Wedding&dates=20261003T173000/20261003T230000&location=Dreamland+Oasis,+Batumi,+Georgia&details=Nika+%C3%97+Alexandra+Wedding+Event"
             target="_blank"
             rel="noopener noreferrer"
             style={{

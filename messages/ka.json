@@ -38,7 +38,7 @@
     "day": "Day",
     "day_sub": "თარიღი",
     "reception": "Reception",
-    "reception_sub": "ბანკეტი",
+    "reception_sub": "ღონისძიება",
     "calendar": "+ ADD TO CALENDAR"
   },
   "venue": {
@@ -46,7 +46,7 @@
     "date": "3 OCT 2026",
     "day_name": "შაბათი",
     "time1": "17:30",
-    "time1_label": "ბანკეტი"
+    "time1_label": "ღონისძიება"
   },
   "rsvp": {
     "title": "დაადასტურეთ დასწრება",
