@@ -6,7 +6,6 @@ import PhotoSection from "@/components/PhotoSection";
 import RsvpSection from "@/components/RsvpSection";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
-import DecorThread from "@/components/DecorThread";
 
 export default function HomePage() {
   return (
@@ -28,35 +27,25 @@ export default function HomePage() {
         </div>
       </div>
 
-      <div id="thread-container" style={{ position: 'relative' }}>
-        <DecorThread />
-
-        {/* Where & When — dark sections */}
-        <div style={{ position: 'relative', zIndex: 3, backgroundColor: '#eae6dd', transition: 'background-color 0.3s' }}>
-          <div style={{ borderRadius: '20px 20px 0 0', overflow: 'hidden', boxShadow: '0 -12px 60px rgba(0,0,0,0.3)' }}>
-            <ScheduleSection />
-            <div id="thread-anchor-location">
-              <LocationSection />
-            </div>
-            <div id="thread-anchor-photo">
-              <PhotoSection />
-            </div>
-          </div>
+      {/* Where & When — dark sections */}
+      <div style={{ position: 'relative', zIndex: 3, backgroundColor: '#eae6dd', transition: 'background-color 0.3s' }}>
+        <div style={{ borderRadius: '20px 20px 0 0', overflow: 'hidden', boxShadow: '0 -12px 60px rgba(0,0,0,0.3)' }}>
+          <ScheduleSection />
+          <LocationSection />
+          <PhotoSection />
         </div>
+      </div>
 
-        {/* RSVP */}
-        <div style={{ position: 'relative', zIndex: 4, backgroundColor: '#eae6dd', transition: 'background-color 0.3s' }}>
-          <div style={{ borderRadius: '20px 20px 0 0', overflow: 'hidden', boxShadow: '0 -12px 60px rgba(0,0,0,0.3)' }}>
-            <RsvpSection />
-          </div>
+      {/* RSVP */}
+      <div style={{ position: 'relative', zIndex: 4, backgroundColor: '#eae6dd', transition: 'background-color 0.3s' }}>
+        <div style={{ borderRadius: '20px 20px 0 0', overflow: 'hidden', boxShadow: '0 -12px 60px rgba(0,0,0,0.3)' }}>
+          <RsvpSection />
         </div>
+      </div>
 
-        {/* Footer */}
-        <div style={{ position: 'relative', zIndex: 5, backgroundColor: 'var(--bg-primary)', transition: 'background-color 0.3s' }}>
-          <div id="thread-anchor-footer">
-            <Footer />
-          </div>
-        </div>
+      {/* Footer */}
+      <div style={{ position: 'relative', zIndex: 5, backgroundColor: 'var(--bg-primary)', transition: 'background-color 0.3s' }}>
+        <Footer />
       </div>
     </main>
   );
