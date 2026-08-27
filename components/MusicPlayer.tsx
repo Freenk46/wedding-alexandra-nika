@@ -19,24 +19,33 @@ export default function MusicPlayer() {
     gsap.from(playerRef.current, { y: 20, opacity: 0, duration: 0.8, ease: 'power3.out', delay: 2 });
   }, [mounted]);
 
-  // Auto-play on first user interaction — disabled
-  // useEffect(() => {
-  //   if (!mounted) return;
-  //   const startMusic = () => {
-  //     const audio = audioRef.current;
-  //     if (!audio || playing) return;
-  //     audio.volume = volume;
-  //     audio.play().then(() => setPlaying(true)).catch(() => {});
-  //   };
-  //   document.addEventListener('click', startMusic, { once: true });
-  //   document.addEventListener('touchstart', startMusic, { once: true });
-  //   document.addEventListener('scroll', startMusic, { once: true });
-  //   return () => {
-  //     document.removeEventListener('click', startMusic);
-  //     document.removeEventListener('touchstart', startMusic);
-  //     document.removeEventListener('scroll', startMusic);
-  //   };
-  // }, [mounted, playing]);
+  // Try to auto-play immediately on load (browsers usually block this without prior interaction)
+  useEffect(() => {
+    if (!mounted) return;
+    const audio = audioRef.current;
+    if (!audio) return;
+    audio.volume = volume;
+    audio.play().then(() => setPlaying(true)).catch(() => {});
+  }, [mounted]);
+
+  // Fallback: auto-play on first user interaction, if immediate autoplay was blocked
+  useEffect(() => {
+    if (!mounted) return;
+    const startMusic = () => {
+      const audio = audioRef.current;
+      if (!audio || playing) return;
+      audio.volume = volume;
+      audio.play().then(() => setPlaying(true)).catch(() => {});
+    };
+    document.addEventListener('click', startMusic, { once: true });
+    document.addEventListener('touchstart', startMusic, { once: true });
+    document.addEventListener('scroll', startMusic, { once: true });
+    return () => {
+      document.removeEventListener('click', startMusic);
+      document.removeEventListener('touchstart', startMusic);
+      document.removeEventListener('scroll', startMusic);
+    };
+  }, [mounted, playing]);
 
   // Collapse on scroll
   useEffect(() => {

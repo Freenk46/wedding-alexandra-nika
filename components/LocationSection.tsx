@@ -145,16 +145,15 @@ export default function LocationSection() {
           fontSize: 12,
           letterSpacing: '2px',
           textTransform: 'uppercase',
-          color: '#1a1a1a',
-          opacity: 0.8,
-          borderBottom: '1px solid rgba(26, 26, 26, 0.4)',
+          color: 'var(--gold)',
+          border: '1px solid var(--gold)',
           textDecoration: 'none',
-          paddingBottom: 2,
+          padding: '12px 20px',
           fontWeight: 500,
-          transition: 'opacity 0.2s',
+          transition: 'background 0.2s, color 0.2s',
         }}
-        onMouseEnter={(e) => { e.currentTarget.style.opacity = '1'; }}
-        onMouseLeave={(e) => { e.currentTarget.style.opacity = '0.8'; }}
+        onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--gold)'; e.currentTarget.style.color = '#1a1208'; }}
+        onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--gold)'; }}
       >
         {tV("maps")} →
       </a>
