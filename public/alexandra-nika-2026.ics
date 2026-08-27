@@ -13,14 +13,14 @@ TZNAME:GET
 END:STANDARD
 END:VTIMEZONE
 BEGIN:VEVENT
-UID:alexandra-nika-2026-10-21@wedding.local
+UID:alexandra-nika-2026-10-03@wedding.local
 DTSTAMP:20260512T000000Z
-DTSTART;TZID=Asia/Tbilisi:20261021T180000
-DTEND;TZID=Asia/Tbilisi:20261022T000000
+DTSTART;TZID=Asia/Tbilisi:20261003T173000
+DTEND;TZID=Asia/Tbilisi:20261003T230000
 SUMMARY:Nika x Alexandra — Wedding
-DESCRIPTION:Join us to celebrate Nika and Alexandra's wedding at ERA Hall in Batumi.
-LOCATION:ERA Hall\, Afsarosis 41\, Batumi\, Georgia
-URL:https://era-hall.ge
+DESCRIPTION:Join us to celebrate Nika and Alexandra's wedding at Dreamland Oasis in Batumi.
+LOCATION:Dreamland Oasis\, Batumi\, Georgia
+URL:https://maps.app.goo.gl/6ZE36pXQEPvYJpLdA
 STATUS:CONFIRMED
 TRANSP:OPAQUE
 END:VEVENT

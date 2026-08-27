@@ -93,7 +93,7 @@ export default function LanguageModal({ alwaysShow = false }: Props) {
             fontWeight: 300,
           }}
         >
-          21 · OCT · 2026
+          3 · OCT · 2026
         </div>
 
         {/* Prompt */}

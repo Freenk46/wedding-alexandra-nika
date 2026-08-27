@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
-export const alt = "Nika × Alexandra — October 21, 2026 · ERA Hall · Batumi";
+export const alt = "Nika × Alexandra — October 3, 2026 · Dreamland Oasis · Batumi";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -33,7 +33,7 @@ export default async function Image() {
             marginBottom: 24,
           }}
         >
-          21 · 10 · 2026
+          3 · 10 · 2026
         </div>
 
         <div
@@ -82,7 +82,7 @@ export default async function Image() {
             marginTop: 36,
           }}
         >
-          ERA HALL · BATUMI
+          DREAMLAND OASIS · BATUMI
         </div>
       </div>
     ),

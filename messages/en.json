@@ -19,14 +19,14 @@
     "bodyInvite": "We joyfully invite you to celebrate with us one of the most special days of our lives. Your presence would mean the world to us.",
     "scroll": "Scroll",
     "addToCalendar": "Add to Calendar",
-    "date": "October 21, 2026",
-    "time": "18:00"
+    "date": "October 3, 2026",
+    "time": "17:30"
   },
   "invitation": {
     "label": "Our Invitation.",
     "body": "We joyfully invite you\nto share with us\nthis special day —\nNika & Alexandra's Wedding.",
-    "date_label": "21 · 10 · 2026",
-    "body_right": "October 21, 2026 —\nin Batumi, ERA Hall,\nsurrounded by all\nthose dear to us.",
+    "date_label": "3 · 10 · 2026",
+    "body_right": "October 3, 2026 —\nin Batumi, Dreamland Oasis,\nsurrounded by all\nthose dear to us.",
     "rsvp_btn": "Send RSVP",
     "batumi": "BATUMI"
   },
@@ -37,20 +37,16 @@
     "announce": "We're getting married!",
     "day": "Day",
     "day_sub": "Date",
-    "ceremony": "Wedding Ceremony",
-    "ceremony_sub": "Ceremony",
     "reception": "Reception",
     "reception_sub": "Banquet",
     "calendar": "+ ADD TO CALENDAR"
   },
   "venue": {
     "maps": "View on Google Maps",
-    "date": "21 OCT 2026",
-    "day_name": "Wednesday",
-    "time1": "18:00",
-    "time1_label": "Doors Open",
-    "time2": "19:30",
-    "time2_label": "Reception"
+    "date": "3 OCT 2026",
+    "day_name": "Saturday",
+    "time1": "17:30",
+    "time1_label": "Banquet"
   },
   "rsvp": {
     "title": "Confirm your attendance",
@@ -75,7 +71,7 @@
   },
   "location": {
     "title": "The celebration will take place at",
-    "venue": "Restaurant ERA",
-    "address": "Afsarosis 41, Batumi, Georgia"
+    "venue": "Dreamland Oasis",
+    "address": "Batumi, Georgia"
   }
 }

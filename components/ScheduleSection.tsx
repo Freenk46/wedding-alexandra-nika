@@ -61,7 +61,7 @@ export default function ScheduleSection() {
 
   const handleScratchComplete = () => {
     completedCountRef.current += 1;
-    if (completedCountRef.current < 3 || revealedRef.current) return;
+    if (completedCountRef.current < items.length || revealedRef.current) return;
 
     revealedRef.current = true;
 
@@ -96,9 +96,8 @@ export default function ScheduleSection() {
   }, [revealed]);
 
   const items = [
-    { value: '21 OCT', caption: tS('day_sub') },
-    { value: '18:00', caption: tS('ceremony_sub') },
-    { value: '19:30', caption: tS('reception_sub') },
+    { value: '3 OCT', caption: tS('day_sub') },
+    { value: '17:30', caption: tS('reception_sub') },
   ];
 
   return (
@@ -145,7 +144,7 @@ export default function ScheduleSection() {
       {revealed && (
         <div className="schedule-calendar-cta" style={{ marginTop: 'clamp(3rem, 6vw, 5rem)', display: 'flex', justifyContent: 'center' }}>
           <a
-            href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Nika+%C3%97+Alexandra+Wedding&dates=20261021T180000/20261021T230000&location=ERA+Hall,+Batumi,+Georgia&details=Nika+%C3%97+Alexandra+Wedding+Ceremony+and+Reception"
+            href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Nika+%C3%97+Alexandra+Wedding&dates=20261003T173000/20261003T230000&location=Dreamland+Oasis,+Batumi,+Georgia&details=Nika+%C3%97+Alexandra+Wedding+Banquet"
             target="_blank"
             rel="noopener noreferrer"
             style={{

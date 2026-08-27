@@ -41,17 +41,17 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "Nika × Alexandra | October 21, 2026",
+  title: "Nika × Alexandra | October 3, 2026",
   description: "Join us to celebrate our wedding in Batumi, Georgia",
   openGraph: {
-    title: "Nika × Alexandra · 21.10.2026",
-    description: "Join us to celebrate our wedding at ERA Hall, Batumi.",
+    title: "Nika × Alexandra · 03.10.2026",
+    description: "Join us to celebrate our wedding at Dreamland Oasis, Batumi.",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Nika × Alexandra · 21.10.2026",
-    description: "Join us to celebrate our wedding at ERA Hall, Batumi.",
+    title: "Nika × Alexandra · 03.10.2026",
+    description: "Join us to celebrate our wedding at Dreamland Oasis, Batumi.",
   },
 };
 

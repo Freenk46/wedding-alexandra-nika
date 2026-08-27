@@ -1,4 +1,4 @@
-const SHEET_ID = '1zCY4TVlupgGNMBZFhDG8wqU_otYocTKaizqt4-moJoA';
+const SHEET_ID = 'PASTE_YOUR_SPREADSHEET_ID_HERE';
 const SHEET_NAME = 'RSVP';
 
 function doPost(e) {

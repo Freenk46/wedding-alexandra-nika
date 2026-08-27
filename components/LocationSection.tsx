@@ -102,7 +102,7 @@ export default function LocationSection() {
           margin: '0 0 1rem',
         }}
       >
-        ERA<br />HALL
+        DREAMLAND<br />OASIS
       </h2>
 
       {/* Address */}
@@ -125,7 +125,6 @@ export default function LocationSection() {
         {[
           { gold: tV('date'), geo: tV('day_name') },
           { gold: tV('time1'), geo: tV('time1_label') },
-          { gold: tV('time2'), geo: tV('time2_label') },
         ].map(({ gold, geo }) => (
           <div key={gold} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <span style={{ fontFamily: 'var(--font-dm-sans), DM Sans, sans-serif', fontSize: 13, letterSpacing: '1.5px', textTransform: 'uppercase', color: '#1a1a1a', opacity: 0.95, fontWeight: 500 }}>{gold}</span>
@@ -136,7 +135,7 @@ export default function LocationSection() {
 
       {/* Google Maps link */}
       <a
-        href="https://www.google.com/maps/place/Era+Banquet+Hall/@41.5816842,41.5785035,18z"
+        href="https://maps.app.goo.gl/6ZE36pXQEPvYJpLdA"
         target="_blank"
         rel="noopener noreferrer"
         style={{
