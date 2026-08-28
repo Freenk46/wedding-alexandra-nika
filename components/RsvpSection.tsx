@@ -9,8 +9,6 @@ import CornerFlower from "./CornerFlower";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const GOOGLE_SCRIPT_URL = process.env.NEXT_PUBLIC_GOOGLE_SCRIPT_URL ?? "";
-
 type FormState = "idle" | "submitting" | "success" | "error";
 
 const labelStyle: React.CSSProperties = {
@@ -88,17 +86,18 @@ export default function RsvpSection() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!GOOGLE_SCRIPT_URL) { setStatus("error"); return; }
     setStatus("submitting");
     const form = e.currentTarget;
     const data = new FormData(form);
     const payload = { ...Object.fromEntries(data.entries()), guests };
     try {
-      await fetch(GOOGLE_SCRIPT_URL, {
-        method: "POST", mode: "no-cors",
+      const res = await fetch("/api/rsvp", {
+        method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
+      const result = await res.json().catch(() => ({ success: false }));
+      if (!res.ok || !result.success) throw new Error("submit_failed");
       setStatus("success");
       form.reset();
       setAttending(null);
