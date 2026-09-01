@@ -1,24 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { safeLocalStorage, getCookie, setCookie } from "@/lib/safeStorage";
 
 const LANGS = [
   { code: "ka", label: "ქართული" },
   { code: "en", label: "English" },
   { code: "ru", label: "Русский" },
 ] as const;
-
-function getLangCookie(): string | null {
-  if (typeof document === "undefined") return null;
-  const match = document.cookie
-    .split(";")
-    .find((c) => c.trim().startsWith("lang="));
-  return match ? match.trim().slice(5) : null;
-}
-
-function setLangCookie(lang: string) {
-  document.cookie = `lang=${lang}; path=/; max-age=31536000; SameSite=Lax`;
-}
 
 interface Props {
   alwaysShow?: boolean;
@@ -30,7 +19,7 @@ export default function LanguageModal({ alwaysShow = false }: Props) {
 
   useEffect(() => {
     setMounted(true);
-    const saved = getLangCookie();
+    const saved = getCookie("lang");
     if (!saved || alwaysShow) {
       setShow(true);
       document.body.style.overflow = "hidden";
@@ -41,8 +30,8 @@ export default function LanguageModal({ alwaysShow = false }: Props) {
   }, [alwaysShow]);
 
   const choose = (lang: string) => {
-    localStorage.setItem("lang", lang);
-    setLangCookie(lang);
+    safeLocalStorage.set("lang", lang);
+    setCookie("lang", lang);
     setShow(false);
     window.location.href = `/${lang}`;
   };

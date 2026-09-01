@@ -4,6 +4,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useLocale } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
 import { useThemeContext } from "@/components/ThemeProvider";
+import { safeLocalStorage, setCookie } from "@/lib/safeStorage";
 import gsap from "gsap";
 
 const LOCALES = [
@@ -23,8 +24,8 @@ export default function Navbar() {
   const switcherRef = useRef<HTMLDivElement>(null);
 
   const switchLocale = (next: string) => {
-    document.cookie = `lang=${next}; path=/; max-age=31536000; SameSite=Lax`;
-    localStorage.setItem("lang", next);
+    setCookie("lang", next);
+    safeLocalStorage.set("lang", next);
     const segments = pathname.split("/");
     segments[1] = next;
     router.push(segments.join("/"));
